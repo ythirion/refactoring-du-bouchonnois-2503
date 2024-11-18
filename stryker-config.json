@@ -1,0 +1,14 @@
+{
+  "stryker-config":
+  {
+    "project": "Bouchonnois/Bouchonnois.csproj",
+    "project-info": {
+      "name":  "github.com/ythirion/refactoring-du-bouchonnois-2501",
+      "version": "main"
+    },
+    "test-projects": 
+    [
+      "Bouchonnois.Tests/Bouchonnois.Tests.csproj"
+    ]
+  }
+}
