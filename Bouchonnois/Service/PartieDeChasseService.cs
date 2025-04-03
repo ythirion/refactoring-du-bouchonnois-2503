@@ -24,14 +24,10 @@ namespace Bouchonnois.Service
                 throw new ImpossibleDeDémarrerUnePartieSansGalinettes();
             }
 
-            var partieDeChasse = new PartieDeChasse()
-            {
-                Id = Guid.NewGuid(),
-                Status = PartieStatus.EnCours,
-                Chasseurs = new List<Chasseur>(),
-                Terrain = new Terrain(nom: terrainDeChasse.nom, terrainDeChasse.nbGalinettes),
-                Events = new List<Event>()
-            };
+            var partieDeChasse = new PartieDeChasse(id: Guid.NewGuid(), status: PartieStatus.EnCours,
+                chasseurs: new List<Chasseur>(),
+                terrain: new Terrain(nom: terrainDeChasse.nom, terrainDeChasse.nbGalinettes),
+                events: new List<Event>());
 
             foreach (var chasseur in chasseurs)
             {

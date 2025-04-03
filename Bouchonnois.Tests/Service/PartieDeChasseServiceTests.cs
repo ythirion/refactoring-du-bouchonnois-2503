@@ -100,19 +100,13 @@ namespace Bouchonnois.Tests.Service
                 var id = Guid.NewGuid();
                 var repository = new PartieDeChasseRepositoryForTests();
 
-                repository.Add(new PartieDeChasse
-                {
-                    Id = id,
-                    Chasseurs = new List<Chasseur>
+                repository.Add(new PartieDeChasse(id: id, chasseurs: new List<Chasseur>
                     {
                         new(nom: "Dédé", ballesRestantes: 20),
                         new(nom: "Bernard", ballesRestantes: 8),
                         new(nom: "Robert", ballesRestantes: 12),
-                    },
-                    Terrain = new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3),
-                    Status = PartieStatus.EnCours,
-                    Events = new List<Event>()
-                });
+                    }, terrain: new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3), status: PartieStatus.EnCours,
+                    events: new List<Event>()));
 
                 var service = new PartieDeChasseService(repository, () => DateTime.Now);
 
@@ -154,19 +148,13 @@ namespace Bouchonnois.Tests.Service
                 var id = Guid.NewGuid();
                 var repository = new PartieDeChasseRepositoryForTests();
 
-                repository.Add(new PartieDeChasse
-                {
-                    Id = id,
-                    Chasseurs = new List<Chasseur>
+                repository.Add(new PartieDeChasse(id: id, chasseurs: new List<Chasseur>
                     {
                         new(nom: "Dédé", ballesRestantes: 20),
                         new(nom: "Bernard", ballesRestantes: 0),
                         new(nom: "Robert", ballesRestantes: 12),
-                    },
-                    Terrain = new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3),
-                    Status = PartieStatus.EnCours,
-                    Events = new List<Event>()
-                });
+                    }, terrain: new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3), status: PartieStatus.EnCours,
+                    events: new List<Event>()));
 
                 var service = new PartieDeChasseService(repository, () => DateTime.Now);
                 var tirerSansBalle = () => service.TirerSurUneGalinette(id, "Bernard");
@@ -181,18 +169,12 @@ namespace Bouchonnois.Tests.Service
                 var id = Guid.NewGuid();
                 var repository = new PartieDeChasseRepositoryForTests();
 
-                repository.Add(new PartieDeChasse
+                repository.Add(new PartieDeChasse(id: id, chasseurs: new List<Chasseur>
                 {
-                    Id = id,
-                    Chasseurs = new List<Chasseur>
-                    {
-                        new(nom: "Dédé", ballesRestantes: 20),
-                        new(nom: "Bernard", ballesRestantes: 8),
-                        new(nom: "Robert", ballesRestantes: 12),
-                    },
-                    Terrain = new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 0),
-                    Status = PartieStatus.EnCours
-                });
+                    new(nom: "Dédé", ballesRestantes: 20),
+                    new(nom: "Bernard", ballesRestantes: 8),
+                    new(nom: "Robert", ballesRestantes: 12),
+                }, terrain: new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 0), status: PartieStatus.EnCours));
 
                 var service = new PartieDeChasseService(repository, () => DateTime.Now);
                 var tirerAlorsQuePasDeGalinettes = () => service.TirerSurUneGalinette(id, "Bernard");
@@ -208,18 +190,12 @@ namespace Bouchonnois.Tests.Service
                 var id = Guid.NewGuid();
                 var repository = new PartieDeChasseRepositoryForTests();
 
-                repository.Add(new PartieDeChasse
+                repository.Add(new PartieDeChasse(id: id, chasseurs: new List<Chasseur>
                 {
-                    Id = id,
-                    Chasseurs = new List<Chasseur>
-                    {
-                        new(nom: "Dédé", ballesRestantes: 20),
-                        new(nom: "Bernard", ballesRestantes: 8),
-                        new(nom: "Robert", ballesRestantes: 12),
-                    },
-                    Terrain = new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3),
-                    Status = PartieStatus.EnCours
-                });
+                    new(nom: "Dédé", ballesRestantes: 20),
+                    new(nom: "Bernard", ballesRestantes: 8),
+                    new(nom: "Robert", ballesRestantes: 12),
+                }, terrain: new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3), status: PartieStatus.EnCours));
 
                 var service = new PartieDeChasseService(repository, () => DateTime.Now);
                 var chasseurInconnuVeutTirer = () => service.TirerSurUneGalinette(id, "Chasseur inconnu");
@@ -235,19 +211,13 @@ namespace Bouchonnois.Tests.Service
                 var id = Guid.NewGuid();
                 var repository = new PartieDeChasseRepositoryForTests();
 
-                repository.Add(new PartieDeChasse
-                {
-                    Id = id,
-                    Chasseurs = new List<Chasseur>
+                repository.Add(new PartieDeChasse(id: id, chasseurs: new List<Chasseur>
                     {
                         new(nom: "Dédé", ballesRestantes: 20),
                         new(nom: "Bernard", ballesRestantes: 8),
                         new(nom: "Robert", ballesRestantes: 12),
-                    },
-                    Terrain = new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3),
-                    Status = PartieStatus.Apéro,
-                    Events = new List<Event>()
-                });
+                    }, terrain: new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3), status: PartieStatus.Apéro,
+                    events: new List<Event>()));
 
                 var service = new PartieDeChasseService(repository, () => DateTime.Now);
                 var tirerEnPleinApéro = () => service.TirerSurUneGalinette(id, "Chasseur inconnu");
@@ -262,19 +232,13 @@ namespace Bouchonnois.Tests.Service
                 var id = Guid.NewGuid();
                 var repository = new PartieDeChasseRepositoryForTests();
 
-                repository.Add(new PartieDeChasse
-                {
-                    Id = id,
-                    Chasseurs = new List<Chasseur>
+                repository.Add(new PartieDeChasse(id: id, chasseurs: new List<Chasseur>
                     {
                         new(nom: "Dédé", ballesRestantes: 20),
                         new(nom: "Bernard", ballesRestantes: 8),
                         new(nom: "Robert", ballesRestantes: 12),
-                    },
-                    Terrain = new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3),
-                    Status = PartieStatus.Terminée,
-                    Events = new List<Event>()
-                });
+                    }, terrain: new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3), status: PartieStatus.Terminée,
+                    events: new List<Event>()));
 
                 var service = new PartieDeChasseService(repository, () => DateTime.Now);
                 var tirerQuandTerminée = () => service.TirerSurUneGalinette(id, "Chasseur inconnu");
@@ -292,19 +256,13 @@ namespace Bouchonnois.Tests.Service
                 var id = Guid.NewGuid();
                 var repository = new PartieDeChasseRepositoryForTests();
 
-                repository.Add(new PartieDeChasse
-                {
-                    Id = id,
-                    Chasseurs = new List<Chasseur>
+                repository.Add(new PartieDeChasse(id: id, chasseurs: new List<Chasseur>
                     {
                         new(nom: "Dédé", ballesRestantes: 20),
                         new(nom: "Bernard", ballesRestantes: 8),
                         new(nom: "Robert", ballesRestantes: 12),
-                    },
-                    Terrain = new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3),
-                    Status = PartieStatus.EnCours,
-                    Events = new List<Event>()
-                });
+                    }, terrain: new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3), status: PartieStatus.EnCours,
+                    events: new List<Event>()));
 
                 var service = new PartieDeChasseService(repository, () => DateTime.Now);
 
@@ -346,19 +304,13 @@ namespace Bouchonnois.Tests.Service
                 var id = Guid.NewGuid();
                 var repository = new PartieDeChasseRepositoryForTests();
 
-                repository.Add(new PartieDeChasse
-                {
-                    Id = id,
-                    Chasseurs = new List<Chasseur>
+                repository.Add(new PartieDeChasse(id: id, chasseurs: new List<Chasseur>
                     {
                         new(nom: "Dédé", ballesRestantes: 20),
                         new(nom: "Bernard", ballesRestantes: 0),
                         new(nom: "Robert", ballesRestantes: 12),
-                    },
-                    Terrain = new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3),
-                    Status = PartieStatus.EnCours,
-                    Events = new List<Event>()
-                });
+                    }, terrain: new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3), status: PartieStatus.EnCours,
+                    events: new List<Event>()));
 
                 var service = new PartieDeChasseService(repository, () => DateTime.Now);
                 var tirerSansBalle = () => service.Tirer(id, "Bernard");
@@ -373,18 +325,12 @@ namespace Bouchonnois.Tests.Service
                 var id = Guid.NewGuid();
                 var repository = new PartieDeChasseRepositoryForTests();
 
-                repository.Add(new PartieDeChasse
+                repository.Add(new PartieDeChasse(id: id, chasseurs: new List<Chasseur>
                 {
-                    Id = id,
-                    Chasseurs = new List<Chasseur>
-                    {
-                        new(nom: "Dédé", ballesRestantes: 20),
-                        new(nom: "Bernard", ballesRestantes: 8),
-                        new(nom: "Robert", ballesRestantes: 12),
-                    },
-                    Terrain = new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3),
-                    Status = PartieStatus.EnCours
-                });
+                    new(nom: "Dédé", ballesRestantes: 20),
+                    new(nom: "Bernard", ballesRestantes: 8),
+                    new(nom: "Robert", ballesRestantes: 12),
+                }, terrain: new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3), status: PartieStatus.EnCours));
 
                 var service = new PartieDeChasseService(repository, () => DateTime.Now);
                 var chasseurInconnuVeutTirer = () => service.Tirer(id, "Chasseur inconnu");
@@ -400,19 +346,13 @@ namespace Bouchonnois.Tests.Service
                 var id = Guid.NewGuid();
                 var repository = new PartieDeChasseRepositoryForTests();
 
-                repository.Add(new PartieDeChasse
-                {
-                    Id = id,
-                    Chasseurs = new List<Chasseur>
+                repository.Add(new PartieDeChasse(id: id, chasseurs: new List<Chasseur>
                     {
                         new(nom: "Dédé", ballesRestantes: 20),
                         new(nom: "Bernard", ballesRestantes: 8),
                         new(nom: "Robert", ballesRestantes: 12),
-                    },
-                    Terrain = new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3),
-                    Status = PartieStatus.Apéro,
-                    Events = new List<Event>()
-                });
+                    }, terrain: new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3), status: PartieStatus.Apéro,
+                    events: new List<Event>()));
 
                 var service = new PartieDeChasseService(repository, () => DateTime.Now);
                 var tirerEnPleinApéro = () => service.Tirer(id, "Chasseur inconnu");
@@ -427,19 +367,13 @@ namespace Bouchonnois.Tests.Service
                 var id = Guid.NewGuid();
                 var repository = new PartieDeChasseRepositoryForTests();
 
-                repository.Add(new PartieDeChasse
-                {
-                    Id = id,
-                    Chasseurs = new List<Chasseur>
+                repository.Add(new PartieDeChasse(id: id, chasseurs: new List<Chasseur>
                     {
                         new(nom: "Dédé", ballesRestantes: 20),
                         new(nom: "Bernard", ballesRestantes: 8),
                         new(nom: "Robert", ballesRestantes: 12),
-                    },
-                    Terrain = new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3),
-                    Status = PartieStatus.Terminée,
-                    Events = new List<Event>()
-                });
+                    }, terrain: new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3), status: PartieStatus.Terminée,
+                    events: new List<Event>()));
 
                 var service = new PartieDeChasseService(repository, () => DateTime.Now);
                 var tirerQuandTerminée = () => service.Tirer(id, "Chasseur inconnu");
@@ -457,19 +391,13 @@ namespace Bouchonnois.Tests.Service
                 var id = Guid.NewGuid();
                 var repository = new PartieDeChasseRepositoryForTests();
 
-                repository.Add(new PartieDeChasse
-                {
-                    Id = id,
-                    Chasseurs = new List<Chasseur>
+                repository.Add(new PartieDeChasse(id: id, chasseurs: new List<Chasseur>
                     {
                         new(nom: "Dédé", ballesRestantes: 20),
                         new(nom: "Bernard", ballesRestantes: 8),
                         new(nom: "Robert", ballesRestantes: 12),
-                    },
-                    Terrain = new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3),
-                    Status = PartieStatus.EnCours,
-                    Events = new List<Event>()
-                });
+                    }, terrain: new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3), status: PartieStatus.EnCours,
+                    events: new List<Event>()));
 
                 var service = new PartieDeChasseService(repository, () => DateTime.Now);
                 service.PrendreLapéro(id);
@@ -510,18 +438,12 @@ namespace Bouchonnois.Tests.Service
                 var id = Guid.NewGuid();
                 var repository = new PartieDeChasseRepositoryForTests();
 
-                repository.Add(new PartieDeChasse
+                repository.Add(new PartieDeChasse(id: id, chasseurs: new List<Chasseur>
                 {
-                    Id = id,
-                    Chasseurs = new List<Chasseur>
-                    {
-                        new(nom: "Dédé", ballesRestantes: 20),
-                        new(nom: "Bernard", ballesRestantes: 8),
-                        new(nom: "Robert", ballesRestantes: 12),
-                    },
-                    Terrain = new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3),
-                    Status = PartieStatus.Apéro
-                });
+                    new(nom: "Dédé", ballesRestantes: 20),
+                    new(nom: "Bernard", ballesRestantes: 8),
+                    new(nom: "Robert", ballesRestantes: 12),
+                }, terrain: new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3), status: PartieStatus.Apéro));
 
                 var service = new PartieDeChasseService(repository, () => DateTime.Now);
                 var prendreLApéroQuandOnPrendDéjàLapéro = () => service.PrendreLapéro(id);
@@ -537,18 +459,12 @@ namespace Bouchonnois.Tests.Service
                 var id = Guid.NewGuid();
                 var repository = new PartieDeChasseRepositoryForTests();
 
-                repository.Add(new PartieDeChasse
+                repository.Add(new PartieDeChasse(id: id, chasseurs: new List<Chasseur>
                 {
-                    Id = id,
-                    Chasseurs = new List<Chasseur>
-                    {
-                        new(nom: "Dédé", ballesRestantes: 20),
-                        new(nom: "Bernard", ballesRestantes: 8),
-                        new(nom: "Robert", ballesRestantes: 12),
-                    },
-                    Terrain = new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3),
-                    Status = PartieStatus.Terminée
-                });
+                    new(nom: "Dédé", ballesRestantes: 20),
+                    new(nom: "Bernard", ballesRestantes: 8),
+                    new(nom: "Robert", ballesRestantes: 12),
+                }, terrain: new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3), status: PartieStatus.Terminée));
 
                 var service = new PartieDeChasseService(repository, () => DateTime.Now);
                 var prendreLapéroQuandTerminée = () => service.PrendreLapéro(id);
@@ -567,19 +483,13 @@ namespace Bouchonnois.Tests.Service
                 var id = Guid.NewGuid();
                 var repository = new PartieDeChasseRepositoryForTests();
 
-                repository.Add(new PartieDeChasse
-                {
-                    Id = id,
-                    Chasseurs = new List<Chasseur>
+                repository.Add(new PartieDeChasse(id: id, chasseurs: new List<Chasseur>
                     {
                         new(nom: "Dédé", ballesRestantes: 20),
                         new(nom: "Bernard", ballesRestantes: 8),
                         new(nom: "Robert", ballesRestantes: 12),
-                    },
-                    Terrain = new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3),
-                    Status = PartieStatus.Apéro,
-                    Events = new List<Event>()
-                });
+                    }, terrain: new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3), status: PartieStatus.Apéro,
+                    events: new List<Event>()));
 
                 var service = new PartieDeChasseService(repository, () => DateTime.Now);
                 service.ReprendreLaPartie(id);
@@ -620,18 +530,12 @@ namespace Bouchonnois.Tests.Service
                 var id = Guid.NewGuid();
                 var repository = new PartieDeChasseRepositoryForTests();
 
-                repository.Add(new PartieDeChasse
+                repository.Add(new PartieDeChasse(id: id, chasseurs: new List<Chasseur>
                 {
-                    Id = id,
-                    Chasseurs = new List<Chasseur>
-                    {
-                        new(nom: "Dédé", ballesRestantes: 20),
-                        new(nom: "Bernard", ballesRestantes: 8),
-                        new(nom: "Robert", ballesRestantes: 12),
-                    },
-                    Terrain = new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3),
-                    Status = PartieStatus.EnCours
-                });
+                    new(nom: "Dédé", ballesRestantes: 20),
+                    new(nom: "Bernard", ballesRestantes: 8),
+                    new(nom: "Robert", ballesRestantes: 12),
+                }, terrain: new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3), status: PartieStatus.EnCours));
 
                 var service = new PartieDeChasseService(repository, () => DateTime.Now);
                 var reprendreLaPartieQuandChasseEnCours = () => service.ReprendreLaPartie(id);
@@ -648,18 +552,12 @@ namespace Bouchonnois.Tests.Service
                 var id = Guid.NewGuid();
                 var repository = new PartieDeChasseRepositoryForTests();
 
-                repository.Add(new PartieDeChasse
+                repository.Add(new PartieDeChasse(id: id, chasseurs: new List<Chasseur>
                 {
-                    Id = id,
-                    Chasseurs = new List<Chasseur>
-                    {
-                        new(nom: "Dédé", ballesRestantes: 20),
-                        new(nom: "Bernard", ballesRestantes: 8),
-                        new(nom: "Robert", ballesRestantes: 12),
-                    },
-                    Terrain = new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3),
-                    Status = PartieStatus.Terminée
-                });
+                    new(nom: "Dédé", ballesRestantes: 20),
+                    new(nom: "Bernard", ballesRestantes: 8),
+                    new(nom: "Robert", ballesRestantes: 12),
+                }, terrain: new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3), status: PartieStatus.Terminée));
 
                 var service = new PartieDeChasseService(repository, () => DateTime.Now);
                 var prendreLapéroQuandTerminée = () => service.ReprendreLaPartie(id);
@@ -679,19 +577,13 @@ namespace Bouchonnois.Tests.Service
                 var id = Guid.NewGuid();
                 var repository = new PartieDeChasseRepositoryForTests();
 
-                repository.Add(new PartieDeChasse
-                {
-                    Id = id,
-                    Chasseurs = new List<Chasseur>
+                repository.Add(new PartieDeChasse(id: id, chasseurs: new List<Chasseur>
                     {
                         new(nom: "Dédé", ballesRestantes: 20),
                         new(nom: "Bernard", ballesRestantes: 8),
                         new(nom: "Robert", ballesRestantes: 12, nbGalinettes: 2),
-                    },
-                    Terrain = new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3),
-                    Status = PartieStatus.EnCours,
-                    Events = new List<Event>()
-                });
+                    }, terrain: new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3), status: PartieStatus.EnCours,
+                    events: new List<Event>()));
 
                 var service = new PartieDeChasseService(repository, () => DateTime.Now);
                 var meilleurChasseur = service.TerminerLaPartie(id);
@@ -721,17 +613,11 @@ namespace Bouchonnois.Tests.Service
                 var id = Guid.NewGuid();
                 var repository = new PartieDeChasseRepositoryForTests();
 
-                repository.Add(new PartieDeChasse
-                {
-                    Id = id,
-                    Chasseurs = new List<Chasseur>
+                repository.Add(new PartieDeChasse(id: id, chasseurs: new List<Chasseur>
                     {
                         new(nom: "Robert", ballesRestantes: 12, nbGalinettes: 2)
-                    },
-                    Terrain = new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3),
-                    Status = PartieStatus.EnCours,
-                    Events = new List<Event>()
-                });
+                    }, terrain: new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3), status: PartieStatus.EnCours,
+                    events: new List<Event>()));
 
                 var service = new PartieDeChasseService(repository, () => DateTime.Now);
                 var meilleurChasseur = service.TerminerLaPartie(id);
@@ -755,19 +641,13 @@ namespace Bouchonnois.Tests.Service
                 var id = Guid.NewGuid();
                 var repository = new PartieDeChasseRepositoryForTests();
 
-                repository.Add(new PartieDeChasse
-                {
-                    Id = id,
-                    Chasseurs = new List<Chasseur>
+                repository.Add(new PartieDeChasse(id: id, chasseurs: new List<Chasseur>
                     {
                         new(nom: "Dédé", ballesRestantes: 20, nbGalinettes: 2),
                         new(nom: "Bernard", ballesRestantes: 8, nbGalinettes: 2),
                         new(nom: "Robert", ballesRestantes: 12),
-                    },
-                    Terrain = new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3),
-                    Status = PartieStatus.EnCours,
-                    Events = new List<Event>()
-                });
+                    }, terrain: new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3), status: PartieStatus.EnCours,
+                    events: new List<Event>()));
 
                 var service = new PartieDeChasseService(repository, () => DateTime.Now);
                 var meilleurChasseur = service.TerminerLaPartie(id);
@@ -797,19 +677,13 @@ namespace Bouchonnois.Tests.Service
                 var id = Guid.NewGuid();
                 var repository = new PartieDeChasseRepositoryForTests();
 
-                repository.Add(new PartieDeChasse
-                {
-                    Id = id,
-                    Chasseurs = new List<Chasseur>
+                repository.Add(new PartieDeChasse(id: id, chasseurs: new List<Chasseur>
                     {
                         new(nom: "Dédé", ballesRestantes: 20),
                         new(nom: "Bernard", ballesRestantes: 8),
                         new(nom: "Robert", ballesRestantes: 12),
-                    },
-                    Terrain = new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3),
-                    Status = PartieStatus.EnCours,
-                    Events = new List<Event>()
-                });
+                    }, terrain: new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3), status: PartieStatus.EnCours,
+                    events: new List<Event>()));
 
                 var service = new PartieDeChasseService(repository, () => DateTime.Now);
                 var meilleurChasseur = service.TerminerLaPartie(id);
@@ -839,19 +713,13 @@ namespace Bouchonnois.Tests.Service
                 var id = Guid.NewGuid();
                 var repository = new PartieDeChasseRepositoryForTests();
 
-                repository.Add(new PartieDeChasse
-                {
-                    Id = id,
-                    Chasseurs = new List<Chasseur>
+                repository.Add(new PartieDeChasse(id: id, chasseurs: new List<Chasseur>
                     {
                         new(nom: "Dédé", ballesRestantes: 20, nbGalinettes: 3),
                         new(nom: "Bernard", ballesRestantes: 8, nbGalinettes: 3),
                         new(nom: "Robert", ballesRestantes: 12, nbGalinettes: 3)
-                    },
-                    Terrain = new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3),
-                    Status = PartieStatus.Apéro,
-                    Events = new List<Event>()
-                });
+                    }, terrain: new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3), status: PartieStatus.Apéro,
+                    events: new List<Event>()));
 
                 var service = new PartieDeChasseService(repository, () => DateTime.Now);
                 var meilleurChasseur = service.TerminerLaPartie(id);
@@ -881,18 +749,12 @@ namespace Bouchonnois.Tests.Service
                 var id = Guid.NewGuid();
                 var repository = new PartieDeChasseRepositoryForTests();
 
-                repository.Add(new PartieDeChasse
+                repository.Add(new PartieDeChasse(id: id, chasseurs: new List<Chasseur>
                 {
-                    Id = id,
-                    Chasseurs = new List<Chasseur>
-                    {
-                        new(nom: "Dédé", ballesRestantes: 20),
-                        new(nom: "Bernard", ballesRestantes: 8),
-                        new(nom: "Robert", ballesRestantes: 12),
-                    },
-                    Terrain = new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3),
-                    Status = PartieStatus.Terminée
-                });
+                    new(nom: "Dédé", ballesRestantes: 20),
+                    new(nom: "Bernard", ballesRestantes: 8),
+                    new(nom: "Robert", ballesRestantes: 12),
+                }, terrain: new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3), status: PartieStatus.Terminée));
 
                 var service = new PartieDeChasseService(repository, () => DateTime.Now);
                 var prendreLapéroQuandTerminée = () => service.TerminerLaPartie(id);
@@ -913,23 +775,17 @@ namespace Bouchonnois.Tests.Service
                 var repository = new PartieDeChasseRepositoryForTests();
                 var service = new PartieDeChasseService(repository, () => DateTime.Now);
 
-                repository.Add(new PartieDeChasse
-                {
-                    Id = id,
-                    Chasseurs = new List<Chasseur>
+                repository.Add(new PartieDeChasse(id: id, chasseurs: new List<Chasseur>
                     {
                         new(nom: "Dédé", ballesRestantes: 20),
                         new(nom: "Bernard", ballesRestantes: 8),
                         new(nom: "Robert", ballesRestantes: 12, nbGalinettes: 2),
-                    },
-                    Terrain = new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3),
-                    Status = PartieStatus.EnCours,
-                    Events = new List<Event>
+                    }, terrain: new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3), status: PartieStatus.EnCours,
+                    events: new List<Event>
                     {
                         new(new DateTime(2024, 4, 25, 9, 0, 12),
                             "La partie de chasse commence à Pitibon sur Sauldre avec Dédé (20 balles), Bernard (8 balles), Robert (12 balles)")
-                    }
-                });
+                    }));
 
                 var status = service.ConsulterStatus(id);
 
@@ -946,18 +802,13 @@ namespace Bouchonnois.Tests.Service
                 var repository = new PartieDeChasseRepositoryForTests();
                 var service = new PartieDeChasseService(repository, () => DateTime.Now);
 
-                repository.Add(new PartieDeChasse
-                {
-                    Id = id,
-                    Chasseurs = new List<Chasseur>
+                repository.Add(new PartieDeChasse(id: id, chasseurs: new List<Chasseur>
                     {
                         new(nom: "Dédé", ballesRestantes: 20),
                         new(nom: "Bernard", ballesRestantes: 8),
                         new(nom: "Robert", ballesRestantes: 12, nbGalinettes: 2),
-                    },
-                    Terrain = new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3),
-                    Status = PartieStatus.EnCours,
-                    Events = new List<Event>
+                    }, terrain: new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3), status: PartieStatus.EnCours,
+                    events: new List<Event>
                     {
                         new(new DateTime(2024, 4, 25, 9, 0, 12),
                             "La partie de chasse commence à Pitibon sur Sauldre avec Dédé (20 balles), Bernard (8 balles), Robert (12 balles)"),
@@ -983,8 +834,7 @@ namespace Bouchonnois.Tests.Service
                         new(new DateTime(2024, 4, 25, 15, 0, 0), "Robert tire sur une galinette"),
                         new(new DateTime(2024, 4, 25, 15, 30, 0),
                             "La partie de chasse est terminée, vainqueur :  Robert - 3 galinettes"),
-                    }
-                });
+                    }));
 
                 var status = service.ConsulterStatus(id);
 
