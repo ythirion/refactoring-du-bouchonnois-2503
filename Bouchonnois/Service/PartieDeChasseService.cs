@@ -73,10 +73,9 @@ namespace Bouchonnois.Service
                 {
                     if (partieDeChasse.Status != PartieStatus.Terminée)
                     {
-                        if (partieDeChasse.Chasseurs.Exists(c => c.Nom == chasseur))
+                        var chasseurQuiTire = partieDeChasse.Chasseurs.FirstOrDefault(c => c.Nom == chasseur);
+                        if (chasseurQuiTire is not null)
                         {
-                            var chasseurQuiTire = partieDeChasse.Chasseurs.First(c => c.Nom == chasseur);
-
                             if (chasseurQuiTire.BallesRestantes == 0)
                             {
                                 partieDeChasse.Events.Add(new Event(_timeProvider(),
