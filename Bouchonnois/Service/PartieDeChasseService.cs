@@ -29,11 +29,7 @@ namespace Bouchonnois.Service
                 Id = Guid.NewGuid(),
                 Status = PartieStatus.EnCours,
                 Chasseurs = new List<Chasseur>(),
-                Terrain = new Terrain
-                {
-                    Nom = terrainDeChasse.nom,
-                    NbGalinettes = terrainDeChasse.nbGalinettes
-                },
+                Terrain = new Terrain(nom: terrainDeChasse.nom, terrainDeChasse.nbGalinettes),
                 Events = new List<Event>()
             };
 
@@ -44,11 +40,7 @@ namespace Bouchonnois.Service
                     throw new ImpossibleDeDémarrerUnePartieAvecUnChasseurSansBalle();
                 }
 
-                partieDeChasse.Chasseurs.Add(new Chasseur
-                {
-                    Nom = chasseur.nom,
-                    BallesRestantes = chasseur.nbBalles
-                });
+                partieDeChasse.Chasseurs.Add(new Chasseur(nom: chasseur.nom, ballesRestantes: chasseur.nbBalles));
             }
 
             if (partieDeChasse.Chasseurs.Count == 0)

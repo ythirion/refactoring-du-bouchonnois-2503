@@ -105,15 +105,11 @@ namespace Bouchonnois.Tests.Service
                     Id = id,
                     Chasseurs = new List<Chasseur>
                     {
-                        new() {Nom = "Dédé", BallesRestantes = 20},
-                        new() {Nom = "Bernard", BallesRestantes = 8},
-                        new() {Nom = "Robert", BallesRestantes = 12},
+                        new(nom: "Dédé", ballesRestantes: 20),
+                        new(nom: "Bernard", ballesRestantes: 8),
+                        new(nom: "Robert", ballesRestantes: 12),
                     },
-                    Terrain = new Terrain
-                    {
-                        Nom = "Pitibon sur Sauldre",
-                        NbGalinettes = 3
-                    },
+                    Terrain = new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3),
                     Status = PartieStatus.EnCours,
                     Events = new List<Event>()
                 });
@@ -163,15 +159,11 @@ namespace Bouchonnois.Tests.Service
                     Id = id,
                     Chasseurs = new List<Chasseur>
                     {
-                        new() {Nom = "Dédé", BallesRestantes = 20},
-                        new() {Nom = "Bernard", BallesRestantes = 0},
-                        new() {Nom = "Robert", BallesRestantes = 12},
+                        new(nom: "Dédé", ballesRestantes: 20),
+                        new(nom: "Bernard", ballesRestantes: 0),
+                        new(nom: "Robert", ballesRestantes: 12),
                     },
-                    Terrain = new Terrain
-                    {
-                        Nom = "Pitibon sur Sauldre",
-                        NbGalinettes = 3
-                    },
+                    Terrain = new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3),
                     Status = PartieStatus.EnCours,
                     Events = new List<Event>()
                 });
@@ -194,15 +186,11 @@ namespace Bouchonnois.Tests.Service
                     Id = id,
                     Chasseurs = new List<Chasseur>
                     {
-                        new() {Nom = "Dédé", BallesRestantes = 20},
-                        new() {Nom = "Bernard", BallesRestantes = 8},
-                        new() {Nom = "Robert", BallesRestantes = 12},
+                        new(nom: "Dédé", ballesRestantes: 20),
+                        new(nom: "Bernard", ballesRestantes: 8),
+                        new(nom: "Robert", ballesRestantes: 12),
                     },
-                    Terrain = new Terrain
-                    {
-                        Nom = "Pitibon sur Sauldre",
-                        NbGalinettes = 0
-                    },
+                    Terrain = new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 0),
                     Status = PartieStatus.EnCours
                 });
 
@@ -225,15 +213,11 @@ namespace Bouchonnois.Tests.Service
                     Id = id,
                     Chasseurs = new List<Chasseur>
                     {
-                        new() {Nom = "Dédé", BallesRestantes = 20},
-                        new() {Nom = "Bernard", BallesRestantes = 8},
-                        new() {Nom = "Robert", BallesRestantes = 12},
+                        new(nom: "Dédé", ballesRestantes: 20),
+                        new(nom: "Bernard", ballesRestantes: 8),
+                        new(nom: "Robert", ballesRestantes: 12),
                     },
-                    Terrain = new Terrain
-                    {
-                        Nom = "Pitibon sur Sauldre",
-                        NbGalinettes = 3
-                    },
+                    Terrain = new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3),
                     Status = PartieStatus.EnCours
                 });
 
@@ -256,15 +240,11 @@ namespace Bouchonnois.Tests.Service
                     Id = id,
                     Chasseurs = new List<Chasseur>
                     {
-                        new() {Nom = "Dédé", BallesRestantes = 20},
-                        new() {Nom = "Bernard", BallesRestantes = 8},
-                        new() {Nom = "Robert", BallesRestantes = 12},
+                        new(nom: "Dédé", ballesRestantes: 20),
+                        new(nom: "Bernard", ballesRestantes: 8),
+                        new(nom: "Robert", ballesRestantes: 12),
                     },
-                    Terrain = new Terrain
-                    {
-                        Nom = "Pitibon sur Sauldre",
-                        NbGalinettes = 3
-                    },
+                    Terrain = new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3),
                     Status = PartieStatus.Apéro,
                     Events = new List<Event>()
                 });
@@ -287,15 +267,11 @@ namespace Bouchonnois.Tests.Service
                     Id = id,
                     Chasseurs = new List<Chasseur>
                     {
-                        new() {Nom = "Dédé", BallesRestantes = 20},
-                        new() {Nom = "Bernard", BallesRestantes = 8},
-                        new() {Nom = "Robert", BallesRestantes = 12},
+                        new(nom: "Dédé", ballesRestantes: 20),
+                        new(nom: "Bernard", ballesRestantes: 8),
+                        new(nom: "Robert", ballesRestantes: 12),
                     },
-                    Terrain = new Terrain
-                    {
-                        Nom = "Pitibon sur Sauldre",
-                        NbGalinettes = 3
-                    },
+                    Terrain = new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3),
                     Status = PartieStatus.Terminée,
                     Events = new List<Event>()
                 });
@@ -321,15 +297,11 @@ namespace Bouchonnois.Tests.Service
                     Id = id,
                     Chasseurs = new List<Chasseur>
                     {
-                        new() {Nom = "Dédé", BallesRestantes = 20},
-                        new() {Nom = "Bernard", BallesRestantes = 8},
-                        new() {Nom = "Robert", BallesRestantes = 12},
+                        new(nom: "Dédé", ballesRestantes: 20),
+                        new(nom: "Bernard", ballesRestantes: 8),
+                        new(nom: "Robert", ballesRestantes: 12),
                     },
-                    Terrain = new Terrain
-                    {
-                        Nom = "Pitibon sur Sauldre",
-                        NbGalinettes = 3
-                    },
+                    Terrain = new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3),
                     Status = PartieStatus.EnCours,
                     Events = new List<Event>()
                 });
@@ -379,15 +351,11 @@ namespace Bouchonnois.Tests.Service
                     Id = id,
                     Chasseurs = new List<Chasseur>
                     {
-                        new() {Nom = "Dédé", BallesRestantes = 20},
-                        new() {Nom = "Bernard", BallesRestantes = 0},
-                        new() {Nom = "Robert", BallesRestantes = 12},
+                        new(nom: "Dédé", ballesRestantes: 20),
+                        new(nom: "Bernard", ballesRestantes: 0),
+                        new(nom: "Robert", ballesRestantes: 12),
                     },
-                    Terrain = new Terrain
-                    {
-                        Nom = "Pitibon sur Sauldre",
-                        NbGalinettes = 3
-                    },
+                    Terrain = new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3),
                     Status = PartieStatus.EnCours,
                     Events = new List<Event>()
                 });
@@ -410,15 +378,11 @@ namespace Bouchonnois.Tests.Service
                     Id = id,
                     Chasseurs = new List<Chasseur>
                     {
-                        new() {Nom = "Dédé", BallesRestantes = 20},
-                        new() {Nom = "Bernard", BallesRestantes = 8},
-                        new() {Nom = "Robert", BallesRestantes = 12},
+                        new(nom: "Dédé", ballesRestantes: 20),
+                        new(nom: "Bernard", ballesRestantes: 8),
+                        new(nom: "Robert", ballesRestantes: 12),
                     },
-                    Terrain = new Terrain
-                    {
-                        Nom = "Pitibon sur Sauldre",
-                        NbGalinettes = 3
-                    },
+                    Terrain = new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3),
                     Status = PartieStatus.EnCours
                 });
 
@@ -441,15 +405,11 @@ namespace Bouchonnois.Tests.Service
                     Id = id,
                     Chasseurs = new List<Chasseur>
                     {
-                        new() {Nom = "Dédé", BallesRestantes = 20},
-                        new() {Nom = "Bernard", BallesRestantes = 8},
-                        new() {Nom = "Robert", BallesRestantes = 12},
+                        new(nom: "Dédé", ballesRestantes: 20),
+                        new(nom: "Bernard", ballesRestantes: 8),
+                        new(nom: "Robert", ballesRestantes: 12),
                     },
-                    Terrain = new Terrain
-                    {
-                        Nom = "Pitibon sur Sauldre",
-                        NbGalinettes = 3
-                    },
+                    Terrain = new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3),
                     Status = PartieStatus.Apéro,
                     Events = new List<Event>()
                 });
@@ -472,15 +432,11 @@ namespace Bouchonnois.Tests.Service
                     Id = id,
                     Chasseurs = new List<Chasseur>
                     {
-                        new() {Nom = "Dédé", BallesRestantes = 20},
-                        new() {Nom = "Bernard", BallesRestantes = 8},
-                        new() {Nom = "Robert", BallesRestantes = 12},
+                        new(nom: "Dédé", ballesRestantes: 20),
+                        new(nom: "Bernard", ballesRestantes: 8),
+                        new(nom: "Robert", ballesRestantes: 12),
                     },
-                    Terrain = new Terrain
-                    {
-                        Nom = "Pitibon sur Sauldre",
-                        NbGalinettes = 3
-                    },
+                    Terrain = new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3),
                     Status = PartieStatus.Terminée,
                     Events = new List<Event>()
                 });
@@ -506,15 +462,11 @@ namespace Bouchonnois.Tests.Service
                     Id = id,
                     Chasseurs = new List<Chasseur>
                     {
-                        new() {Nom = "Dédé", BallesRestantes = 20},
-                        new() {Nom = "Bernard", BallesRestantes = 8},
-                        new() {Nom = "Robert", BallesRestantes = 12},
+                        new(nom: "Dédé", ballesRestantes: 20),
+                        new(nom: "Bernard", ballesRestantes: 8),
+                        new(nom: "Robert", ballesRestantes: 12),
                     },
-                    Terrain = new Terrain
-                    {
-                        Nom = "Pitibon sur Sauldre",
-                        NbGalinettes = 3
-                    },
+                    Terrain = new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3),
                     Status = PartieStatus.EnCours,
                     Events = new List<Event>()
                 });
@@ -563,15 +515,11 @@ namespace Bouchonnois.Tests.Service
                     Id = id,
                     Chasseurs = new List<Chasseur>
                     {
-                        new() {Nom = "Dédé", BallesRestantes = 20},
-                        new() {Nom = "Bernard", BallesRestantes = 8},
-                        new() {Nom = "Robert", BallesRestantes = 12},
+                        new(nom: "Dédé", ballesRestantes: 20),
+                        new(nom: "Bernard", ballesRestantes: 8),
+                        new(nom: "Robert", ballesRestantes: 12),
                     },
-                    Terrain = new Terrain
-                    {
-                        Nom = "Pitibon sur Sauldre",
-                        NbGalinettes = 3
-                    },
+                    Terrain = new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3),
                     Status = PartieStatus.Apéro
                 });
 
@@ -594,15 +542,11 @@ namespace Bouchonnois.Tests.Service
                     Id = id,
                     Chasseurs = new List<Chasseur>
                     {
-                        new() {Nom = "Dédé", BallesRestantes = 20},
-                        new() {Nom = "Bernard", BallesRestantes = 8},
-                        new() {Nom = "Robert", BallesRestantes = 12},
+                        new(nom: "Dédé", ballesRestantes: 20),
+                        new(nom: "Bernard", ballesRestantes: 8),
+                        new(nom: "Robert", ballesRestantes: 12),
                     },
-                    Terrain = new Terrain
-                    {
-                        Nom = "Pitibon sur Sauldre",
-                        NbGalinettes = 3
-                    },
+                    Terrain = new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3),
                     Status = PartieStatus.Terminée
                 });
 
@@ -628,15 +572,11 @@ namespace Bouchonnois.Tests.Service
                     Id = id,
                     Chasseurs = new List<Chasseur>
                     {
-                        new() {Nom = "Dédé", BallesRestantes = 20},
-                        new() {Nom = "Bernard", BallesRestantes = 8},
-                        new() {Nom = "Robert", BallesRestantes = 12},
+                        new(nom: "Dédé", ballesRestantes: 20),
+                        new(nom: "Bernard", ballesRestantes: 8),
+                        new(nom: "Robert", ballesRestantes: 12),
                     },
-                    Terrain = new Terrain
-                    {
-                        Nom = "Pitibon sur Sauldre",
-                        NbGalinettes = 3
-                    },
+                    Terrain = new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3),
                     Status = PartieStatus.Apéro,
                     Events = new List<Event>()
                 });
@@ -685,15 +625,11 @@ namespace Bouchonnois.Tests.Service
                     Id = id,
                     Chasseurs = new List<Chasseur>
                     {
-                        new() {Nom = "Dédé", BallesRestantes = 20},
-                        new() {Nom = "Bernard", BallesRestantes = 8},
-                        new() {Nom = "Robert", BallesRestantes = 12},
+                        new(nom: "Dédé", ballesRestantes: 20),
+                        new(nom: "Bernard", ballesRestantes: 8),
+                        new(nom: "Robert", ballesRestantes: 12),
                     },
-                    Terrain = new Terrain
-                    {
-                        Nom = "Pitibon sur Sauldre",
-                        NbGalinettes = 3
-                    },
+                    Terrain = new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3),
                     Status = PartieStatus.EnCours
                 });
 
@@ -717,15 +653,11 @@ namespace Bouchonnois.Tests.Service
                     Id = id,
                     Chasseurs = new List<Chasseur>
                     {
-                        new() {Nom = "Dédé", BallesRestantes = 20},
-                        new() {Nom = "Bernard", BallesRestantes = 8},
-                        new() {Nom = "Robert", BallesRestantes = 12},
+                        new(nom: "Dédé", ballesRestantes: 20),
+                        new(nom: "Bernard", ballesRestantes: 8),
+                        new(nom: "Robert", ballesRestantes: 12),
                     },
-                    Terrain = new Terrain
-                    {
-                        Nom = "Pitibon sur Sauldre",
-                        NbGalinettes = 3
-                    },
+                    Terrain = new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3),
                     Status = PartieStatus.Terminée
                 });
 
@@ -752,15 +684,11 @@ namespace Bouchonnois.Tests.Service
                     Id = id,
                     Chasseurs = new List<Chasseur>
                     {
-                        new() {Nom = "Dédé", BallesRestantes = 20},
-                        new() {Nom = "Bernard", BallesRestantes = 8},
-                        new() {Nom = "Robert", BallesRestantes = 12, NbGalinettes = 2},
+                        new(nom: "Dédé", ballesRestantes: 20),
+                        new(nom: "Bernard", ballesRestantes: 8),
+                        new(nom: "Robert", ballesRestantes: 12, nbGalinettes: 2),
                     },
-                    Terrain = new Terrain
-                    {
-                        Nom = "Pitibon sur Sauldre",
-                        NbGalinettes = 3
-                    },
+                    Terrain = new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3),
                     Status = PartieStatus.EnCours,
                     Events = new List<Event>()
                 });
@@ -798,13 +726,9 @@ namespace Bouchonnois.Tests.Service
                     Id = id,
                     Chasseurs = new List<Chasseur>
                     {
-                        new() {Nom = "Robert", BallesRestantes = 12, NbGalinettes = 2}
+                        new(nom: "Robert", ballesRestantes: 12, nbGalinettes: 2)
                     },
-                    Terrain = new Terrain
-                    {
-                        Nom = "Pitibon sur Sauldre",
-                        NbGalinettes = 3
-                    },
+                    Terrain = new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3),
                     Status = PartieStatus.EnCours,
                     Events = new List<Event>()
                 });
@@ -836,15 +760,11 @@ namespace Bouchonnois.Tests.Service
                     Id = id,
                     Chasseurs = new List<Chasseur>
                     {
-                        new() {Nom = "Dédé", BallesRestantes = 20, NbGalinettes = 2},
-                        new() {Nom = "Bernard", BallesRestantes = 8, NbGalinettes = 2},
-                        new() {Nom = "Robert", BallesRestantes = 12},
+                        new(nom: "Dédé", ballesRestantes: 20, nbGalinettes: 2),
+                        new(nom: "Bernard", ballesRestantes: 8, nbGalinettes: 2),
+                        new(nom: "Robert", ballesRestantes: 12),
                     },
-                    Terrain = new Terrain
-                    {
-                        Nom = "Pitibon sur Sauldre",
-                        NbGalinettes = 3
-                    },
+                    Terrain = new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3),
                     Status = PartieStatus.EnCours,
                     Events = new List<Event>()
                 });
@@ -882,15 +802,11 @@ namespace Bouchonnois.Tests.Service
                     Id = id,
                     Chasseurs = new List<Chasseur>
                     {
-                        new() {Nom = "Dédé", BallesRestantes = 20},
-                        new() {Nom = "Bernard", BallesRestantes = 8},
-                        new() {Nom = "Robert", BallesRestantes = 12},
+                        new(nom: "Dédé", ballesRestantes: 20),
+                        new(nom: "Bernard", ballesRestantes: 8),
+                        new(nom: "Robert", ballesRestantes: 12),
                     },
-                    Terrain = new Terrain
-                    {
-                        Nom = "Pitibon sur Sauldre",
-                        NbGalinettes = 3
-                    },
+                    Terrain = new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3),
                     Status = PartieStatus.EnCours,
                     Events = new List<Event>()
                 });
@@ -928,15 +844,11 @@ namespace Bouchonnois.Tests.Service
                     Id = id,
                     Chasseurs = new List<Chasseur>
                     {
-                        new() {Nom = "Dédé", BallesRestantes = 20, NbGalinettes = 3},
-                        new() {Nom = "Bernard", BallesRestantes = 8, NbGalinettes = 3},
-                        new() {Nom = "Robert", BallesRestantes = 12, NbGalinettes = 3}
+                        new(nom: "Dédé", ballesRestantes: 20, nbGalinettes: 3),
+                        new(nom: "Bernard", ballesRestantes: 8, nbGalinettes: 3),
+                        new(nom: "Robert", ballesRestantes: 12, nbGalinettes: 3)
                     },
-                    Terrain = new Terrain
-                    {
-                        Nom = "Pitibon sur Sauldre",
-                        NbGalinettes = 3
-                    },
+                    Terrain = new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3),
                     Status = PartieStatus.Apéro,
                     Events = new List<Event>()
                 });
@@ -974,15 +886,11 @@ namespace Bouchonnois.Tests.Service
                     Id = id,
                     Chasseurs = new List<Chasseur>
                     {
-                        new() {Nom = "Dédé", BallesRestantes = 20},
-                        new() {Nom = "Bernard", BallesRestantes = 8},
-                        new() {Nom = "Robert", BallesRestantes = 12},
+                        new(nom: "Dédé", ballesRestantes: 20),
+                        new(nom: "Bernard", ballesRestantes: 8),
+                        new(nom: "Robert", ballesRestantes: 12),
                     },
-                    Terrain = new Terrain
-                    {
-                        Nom = "Pitibon sur Sauldre",
-                        NbGalinettes = 3
-                    },
+                    Terrain = new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3),
                     Status = PartieStatus.Terminée
                 });
 
@@ -1010,15 +918,11 @@ namespace Bouchonnois.Tests.Service
                     Id = id,
                     Chasseurs = new List<Chasseur>
                     {
-                        new() {Nom = "Dédé", BallesRestantes = 20},
-                        new() {Nom = "Bernard", BallesRestantes = 8},
-                        new() {Nom = "Robert", BallesRestantes = 12, NbGalinettes = 2},
+                        new(nom: "Dédé", ballesRestantes: 20),
+                        new(nom: "Bernard", ballesRestantes: 8),
+                        new(nom: "Robert", ballesRestantes: 12, nbGalinettes: 2),
                     },
-                    Terrain = new Terrain
-                    {
-                        Nom = "Pitibon sur Sauldre",
-                        NbGalinettes = 3
-                    },
+                    Terrain = new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3),
                     Status = PartieStatus.EnCours,
                     Events = new List<Event>
                     {
@@ -1047,15 +951,11 @@ namespace Bouchonnois.Tests.Service
                     Id = id,
                     Chasseurs = new List<Chasseur>
                     {
-                        new() {Nom = "Dédé", BallesRestantes = 20},
-                        new() {Nom = "Bernard", BallesRestantes = 8},
-                        new() {Nom = "Robert", BallesRestantes = 12, NbGalinettes = 2},
+                        new(nom: "Dédé", ballesRestantes: 20),
+                        new(nom: "Bernard", ballesRestantes: 8),
+                        new(nom: "Robert", ballesRestantes: 12, nbGalinettes: 2),
                     },
-                    Terrain = new Terrain
-                    {
-                        Nom = "Pitibon sur Sauldre",
-                        NbGalinettes = 3
-                    },
+                    Terrain = new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3),
                     Status = PartieStatus.EnCours,
                     Events = new List<Event>
                     {
