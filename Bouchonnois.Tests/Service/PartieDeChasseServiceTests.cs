@@ -148,19 +148,23 @@ namespace Bouchonnois.Tests.Service
                 var id = Guid.NewGuid();
                 var repository = new PartieDeChasseRepositoryForTests();
 
-                repository.Add(new PartieDeChasse(id: id, chasseurs: new List<Chasseur>
+                PartieDeChasse partieDeChasse = new PartieDeChasse(id: id, chasseurs: new List<Chasseur>
                     {
                         new(nom: "Dédé", ballesRestantes: 20),
                         new(nom: "Bernard", ballesRestantes: 0),
                         new(nom: "Robert", ballesRestantes: 12),
                     }, terrain: new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3), status: PartieStatus.EnCours,
-                    events: new List<Event>()));
+                    events: new List<Event>());
+                
+                repository.Add(partieDeChasse);
 
                 var service = new PartieDeChasseService(repository, () => DateTime.Now);
                 var tirerSansBalle = () => service.TirerSurUneGalinette(id, "Bernard");
 
                 tirerSansBalle.Should()
                     .Throw<TasPlusDeBallesMonVieuxChasseALaMain>();
+                partieDeChasse.Events.Should().HaveCount(1);
+                partieDeChasse.Events[0].Message.Should().Be("Bernard veut tirer sur une galinette -> T'as plus de balles mon vieux, chasse à la main");
             }
 
             [Fact]
