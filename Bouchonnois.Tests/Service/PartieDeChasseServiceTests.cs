@@ -145,6 +145,8 @@ namespace Bouchonnois.Tests.Service
             [Fact]
             public void EchoueAvecUnChasseurNayantPlusDeBalles()
             {
+                var now = DateTime.Now;
+                
                 var id = Guid.NewGuid();
                 var repository = new PartieDeChasseRepositoryForTests();
 
@@ -158,13 +160,17 @@ namespace Bouchonnois.Tests.Service
                 
                 repository.Add(partieDeChasse);
 
-                var service = new PartieDeChasseService(repository, () => DateTime.Now);
+                var service = new PartieDeChasseService(repository, () => now);
                 var tirerSansBalle = () => service.TirerSurUneGalinette(id, "Bernard");
 
                 tirerSansBalle.Should()
                     .Throw<TasPlusDeBallesMonVieuxChasseALaMain>();
-                partieDeChasse.Events.Should().HaveCount(1);
-                partieDeChasse.Events[0].Message.Should().Be("Bernard veut tirer sur une galinette -> T'as plus de balles mon vieux, chasse à la main");
+                
+                repository
+                    .SavedPartieDeChasse()
+                    .Events
+                    .Should()
+                    .BeEquivalentTo([new Event(now,"Bernard veut tirer sur une galinette -> T'as plus de balles mon vieux, chasse à la main")]);
             }
 
             [Fact]
