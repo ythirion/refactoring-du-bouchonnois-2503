@@ -1,25 +1,15 @@
-using System.Diagnostics.CodeAnalysis;
-
 namespace Bouchonnois.Domain
 {
     public class Chasseur
     {
-        [SetsRequiredMembers]
-        public Chasseur(string nom, int ballesRestantes)
-        {
-            Nom = nom;
-            BallesRestantes = ballesRestantes;
-        }
-
-
-        public Chasseur(string nom, int ballesRestantes, int nbGalinettes)
+        public Chasseur(string nom, int ballesRestantes, int nbGalinettes = 0)
         {
             Nom = nom;
             BallesRestantes = ballesRestantes;
             NbGalinettes = nbGalinettes;
         }
 
-        public string Nom { get; set; }
+        public string Nom { get; }
         public int BallesRestantes { get; set; }
         public int NbGalinettes { get; set; }
     }
