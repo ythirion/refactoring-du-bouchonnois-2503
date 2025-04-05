@@ -240,7 +240,7 @@ namespace Bouchonnois.Service
 
             partieDeChasse.Status = PartieStatus.Terminée;
 
-            var result = "";
+            string result;
 
             if (classement.All(group => group.Key == 0))
             {

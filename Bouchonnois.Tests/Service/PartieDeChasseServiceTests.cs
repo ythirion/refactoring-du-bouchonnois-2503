@@ -240,7 +240,7 @@ namespace Bouchonnois.Tests.Service
                 partieDeChasse.Events.Should()
                     .ContainSingle().Which
                     .Message.Should()
-                    .Be($"Chasseur inconnu veut tirer -> On tire pas pendant l'apéro, c'est sacré !!!");
+                    .Be("Chasseur inconnu veut tirer -> On tire pas pendant l'apéro, c'est sacré !!!");
                 
                 repository.SaveCalledCounter.Should().Be(1);
             }
@@ -393,7 +393,7 @@ namespace Bouchonnois.Tests.Service
                 partieDeChasse.Events.Should()
                     .ContainSingle().Which
                     .Message.Should()
-                    .Be($"Chasseur inconnu veut tirer -> On tire pas pendant l'apéro, c'est sacré !!!");
+                    .Be("Chasseur inconnu veut tirer -> On tire pas pendant l'apéro, c'est sacré !!!");
                 repository.SaveCalledCounter.Should().Be(1);
             }
 
@@ -421,7 +421,7 @@ namespace Bouchonnois.Tests.Service
                 partieDeChasse.Events.Should()
                     .ContainSingle().Which
                     .Message.Should()
-                    .Be($"Chasseur inconnu veut tirer -> On tire pas quand la partie est terminée");
+                    .Be("Chasseur inconnu veut tirer -> On tire pas quand la partie est terminée");
                 repository.SaveCalledCounter.Should().Be(1);
             }
         }
@@ -686,13 +686,14 @@ namespace Bouchonnois.Tests.Service
                 var id = Guid.NewGuid();
                 var repository = new PartieDeChasseRepositoryForTests();
 
-                repository.Add(new PartieDeChasse(id: id, chasseurs: new List<Chasseur>
+                var partieDeChasse = new PartieDeChasse(id: id, chasseurs: new List<Chasseur>
                     {
                         new(nom: "Dédé", ballesRestantes: 20, nbGalinettes: 2),
                         new(nom: "Bernard", ballesRestantes: 8, nbGalinettes: 2),
                         new(nom: "Robert", ballesRestantes: 12),
                     }, terrain: new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3), status: PartieStatus.EnCours,
-                    events: new List<Event>()));
+                    events: new List<Event>());
+                repository.Add(partieDeChasse);
 
                 var service = new PartieDeChasseService(repository, () => DateTime.Now);
                 var meilleurChasseur = service.TerminerLaPartie(id);
@@ -714,6 +715,11 @@ namespace Bouchonnois.Tests.Service
                 savedPartieDeChasse.Chasseurs[2].NbGalinettes.Should().Be(0);
 
                 meilleurChasseur.Should().Be("Dédé, Bernard");
+                
+                partieDeChasse.Events.Should()
+                    .ContainSingle().Which
+                    .Message.Should()
+                    .Be(  "La partie de chasse est terminée, vainqueur : Dédé - 2 galinettes, Bernard - 2 galinettes");
             }
 
             [Fact]
