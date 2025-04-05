@@ -396,6 +396,8 @@ namespace Bouchonnois.Tests.Service
             [Fact]
             public void EchoueSiLaPartieDeChasseEstTerminée()
             {
+                var now = DateTime.Now;
+                
                 var id = Guid.NewGuid();
                 var repository = new PartieDeChasseRepositoryForTests();
 
@@ -407,11 +409,17 @@ namespace Bouchonnois.Tests.Service
                     }, terrain: new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3), status: PartieStatus.Terminée,
                     events: new List<Event>()));
 
-                var service = new PartieDeChasseService(repository, () => DateTime.Now);
+                var service = new PartieDeChasseService(repository, () => now);
                 var tirerQuandTerminée = () => service.Tirer(id, "Chasseur inconnu");
 
                 tirerQuandTerminée.Should()
                     .Throw<OnTirePasQuandLaPartieEstTerminée>();
+                
+                repository
+                    .SavedPartieDeChasse()
+                    .Events
+                    .Should()
+                    .BeEquivalentTo([new Event(now,"Chasseur inconnu veut tirer -> On tire pas quand la partie est terminée")]);
             }
         }
 
