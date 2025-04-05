@@ -375,6 +375,8 @@ namespace Bouchonnois.Tests.Service
             [Fact]
             public void EchoueSiLesChasseursSontEnApero()
             {
+                var now = DateTime.Now;
+                
                 var id = Guid.NewGuid();
                 var repository = new PartieDeChasseRepositoryForTests();
 
@@ -386,11 +388,17 @@ namespace Bouchonnois.Tests.Service
                     }, terrain: new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3), status: PartieStatus.Apéro,
                     events: new List<Event>()));
 
-                var service = new PartieDeChasseService(repository, () => DateTime.Now);
+                var service = new PartieDeChasseService(repository, () => now);
                 var tirerEnPleinApéro = () => service.Tirer(id, "Chasseur inconnu");
 
                 tirerEnPleinApéro.Should()
                     .Throw<OnTirePasPendantLapéroCestSacré>();
+                
+                repository
+                    .SavedPartieDeChasse()
+                    .Events
+                    .Should()
+                    .BeEquivalentTo([new Event(now,"Chasseur inconnu veut tirer -> On tire pas pendant l'apéro, c'est sacré !!!")]);
             }
 
             [Fact]
