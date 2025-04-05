@@ -221,19 +221,26 @@ namespace Bouchonnois.Tests.Service
                 var id = Guid.NewGuid();
                 var repository = new PartieDeChasseRepositoryForTests();
 
-                repository.Add(new PartieDeChasse(id: id, chasseurs: new List<Chasseur>
+                var partieDeChasse = new PartieDeChasse(id: id, chasseurs: new List<Chasseur>
                     {
                         new(nom: "Dédé", ballesRestantes: 20),
                         new(nom: "Bernard", ballesRestantes: 8),
                         new(nom: "Robert", ballesRestantes: 12),
                     }, terrain: new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3), status: PartieStatus.Apéro,
-                    events: new List<Event>()));
+                    events: new List<Event>());
+                
+                repository.Add(partieDeChasse);
 
                 var service = new PartieDeChasseService(repository, () => DateTime.Now);
                 var tirerEnPleinApéro = () => service.TirerSurUneGalinette(id, "Chasseur inconnu");
 
                 tirerEnPleinApéro.Should()
                     .Throw<OnTirePasPendantLapéroCestSacré>();
+                
+                partieDeChasse.Events.Should()
+                    .ContainSingle().Which
+                    .Message.Should()
+                    .Be($"Chasseur inconnu veut tirer -> On tire pas pendant l'apéro, c'est sacré !!!");
             }
 
             [Fact]
@@ -242,19 +249,25 @@ namespace Bouchonnois.Tests.Service
                 var id = Guid.NewGuid();
                 var repository = new PartieDeChasseRepositoryForTests();
 
-                repository.Add(new PartieDeChasse(id: id, chasseurs: new List<Chasseur>
+                var partieDeChasse = new PartieDeChasse(id: id, chasseurs: new List<Chasseur>
                     {
                         new(nom: "Dédé", ballesRestantes: 20),
                         new(nom: "Bernard", ballesRestantes: 8),
                         new(nom: "Robert", ballesRestantes: 12),
                     }, terrain: new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3), status: PartieStatus.Terminée,
-                    events: new List<Event>()));
+                    events: new List<Event>());
+                repository.Add(partieDeChasse);
 
                 var service = new PartieDeChasseService(repository, () => DateTime.Now);
                 var tirerQuandTerminée = () => service.TirerSurUneGalinette(id, "Chasseur inconnu");
 
                 tirerQuandTerminée.Should()
                     .Throw<OnTirePasQuandLaPartieEstTerminée>();
+                
+                partieDeChasse.Events.Should()
+                    .ContainSingle().Which
+                    .Message.Should()
+                    .Be("Chasseur inconnu veut tirer -> On tire pas quand la partie est terminée");
             }
         }
 
@@ -356,19 +369,25 @@ namespace Bouchonnois.Tests.Service
                 var id = Guid.NewGuid();
                 var repository = new PartieDeChasseRepositoryForTests();
 
-                repository.Add(new PartieDeChasse(id: id, chasseurs: new List<Chasseur>
+                var partieDeChasse = new PartieDeChasse(id: id, chasseurs: new List<Chasseur>
                     {
                         new(nom: "Dédé", ballesRestantes: 20),
                         new(nom: "Bernard", ballesRestantes: 8),
                         new(nom: "Robert", ballesRestantes: 12),
                     }, terrain: new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3), status: PartieStatus.Apéro,
-                    events: new List<Event>()));
+                    events: new List<Event>());
+                repository.Add(partieDeChasse);
 
                 var service = new PartieDeChasseService(repository, () => DateTime.Now);
                 var tirerEnPleinApéro = () => service.Tirer(id, "Chasseur inconnu");
 
                 tirerEnPleinApéro.Should()
                     .Throw<OnTirePasPendantLapéroCestSacré>();
+                
+                partieDeChasse.Events.Should()
+                    .ContainSingle().Which
+                    .Message.Should()
+                    .Be($"Chasseur inconnu veut tirer -> On tire pas pendant l'apéro, c'est sacré !!!");
             }
 
             [Fact]
@@ -377,19 +396,25 @@ namespace Bouchonnois.Tests.Service
                 var id = Guid.NewGuid();
                 var repository = new PartieDeChasseRepositoryForTests();
 
-                repository.Add(new PartieDeChasse(id: id, chasseurs: new List<Chasseur>
+                var partieDeChasse = new PartieDeChasse(id: id, chasseurs: new List<Chasseur>
                     {
                         new(nom: "Dédé", ballesRestantes: 20),
                         new(nom: "Bernard", ballesRestantes: 8),
                         new(nom: "Robert", ballesRestantes: 12),
                     }, terrain: new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3), status: PartieStatus.Terminée,
-                    events: new List<Event>()));
+                    events: new List<Event>());
+                repository.Add(partieDeChasse);
 
                 var service = new PartieDeChasseService(repository, () => DateTime.Now);
                 var tirerQuandTerminée = () => service.Tirer(id, "Chasseur inconnu");
 
                 tirerQuandTerminée.Should()
                     .Throw<OnTirePasQuandLaPartieEstTerminée>();
+                
+                partieDeChasse.Events.Should()
+                    .ContainSingle().Which
+                    .Message.Should()
+                    .Be($"Chasseur inconnu veut tirer -> On tire pas quand la partie est terminée");
             }
         }
 
@@ -469,12 +494,14 @@ namespace Bouchonnois.Tests.Service
                 var id = Guid.NewGuid();
                 var repository = new PartieDeChasseRepositoryForTests();
 
-                repository.Add(new PartieDeChasse(id: id, chasseurs: new List<Chasseur>
+                var partieDeChasse = new PartieDeChasse(id: id, chasseurs: new List<Chasseur>
                 {
                     new(nom: "Dédé", ballesRestantes: 20),
                     new(nom: "Bernard", ballesRestantes: 8),
                     new(nom: "Robert", ballesRestantes: 12),
-                }, terrain: new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3), status: PartieStatus.Terminée));
+                }, terrain: new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3), status: PartieStatus.Terminée);   
+                
+                repository.Add(partieDeChasse);
 
                 var service = new PartieDeChasseService(repository, () => DateTime.Now);
                 var prendreLapéroQuandTerminée = () => service.PrendreLapéro(id);
@@ -687,13 +714,15 @@ namespace Bouchonnois.Tests.Service
                 var id = Guid.NewGuid();
                 var repository = new PartieDeChasseRepositoryForTests();
 
-                repository.Add(new PartieDeChasse(id: id, chasseurs: new List<Chasseur>
+                var partieDeChasse = new PartieDeChasse(id: id, chasseurs: new List<Chasseur>
                     {
                         new(nom: "Dédé", ballesRestantes: 20),
                         new(nom: "Bernard", ballesRestantes: 8),
                         new(nom: "Robert", ballesRestantes: 12),
                     }, terrain: new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3), status: PartieStatus.EnCours,
-                    events: new List<Event>()));
+                    events: new List<Event>());
+                
+                repository.Add(partieDeChasse);
 
                 var service = new PartieDeChasseService(repository, () => DateTime.Now);
                 var meilleurChasseur = service.TerminerLaPartie(id);
@@ -715,6 +744,11 @@ namespace Bouchonnois.Tests.Service
                 savedPartieDeChasse.Chasseurs[2].NbGalinettes.Should().Be(0);
 
                 meilleurChasseur.Should().Be("Brocouille");
+                
+                partieDeChasse.Events.Should()
+                    .ContainSingle().Which
+                    .Message.Should()
+                    .Be("La partie de chasse est terminée, vainqueur : Brocouille");
             }
 
             [Fact]
