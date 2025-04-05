@@ -230,7 +230,8 @@ namespace Bouchonnois.Service
             var classement = partieDeChasse
                 .Chasseurs
                 .GroupBy(c => c.NbGalinettes)
-                .OrderByDescending(g => g.Key);
+                .OrderByDescending(g => g.Key)
+                .ToList();
 
             if (partieDeChasse.Status == PartieStatus.Terminée)
             {
@@ -239,7 +240,7 @@ namespace Bouchonnois.Service
 
             partieDeChasse.Status = PartieStatus.Terminée;
 
-            var result = "";
+            string result;
 
             if (classement.All(group => group.Key == 0))
             {
@@ -250,10 +251,11 @@ namespace Bouchonnois.Service
             }
             else
             {
-                result = string.Join(", ", classement.First().Select(c => c.Nom));
+                var vainqueurs = classement[0];
+                result = string.Join(", ", vainqueurs.Select(c => c.Nom));
                 partieDeChasse.Events.Add(
                     new Event(_timeProvider(),
-                        $"La partie de chasse est terminée, vainqueur : {string.Join(", ", classement.First().Select(c => $"{c.Nom} - {c.NbGalinettes} galinettes"))}"
+                        $"La partie de chasse est terminée, vainqueur : {string.Join(", ", vainqueurs.Select(c => $"{c.Nom} - {c.NbGalinettes} galinettes"))}"
                     )
                 );
             }
