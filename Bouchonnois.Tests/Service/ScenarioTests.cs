@@ -112,6 +112,7 @@ public class ScenarioTests
 09:10 - Dédé tire
 09:00 - La partie de chasse commence à Pitibon sur Sauldre avec Dédé (20 balles), Bernard (8 balles), Robert (12 balles)"
             );
+        
         // TODO est ce vraiment pertinent ?
         repository.SaveCalledCounter.Should().Be(20);
     }

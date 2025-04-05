@@ -2,6 +2,7 @@ using Bouchonnois.Domain;
 using Bouchonnois.Service;
 using Bouchonnois.Service.Exceptions;
 using Bouchonnois.Tests.Doubles;
+using Bouchonnois.Tests.Extensions;
 
 namespace Bouchonnois.Tests.Service
 {
@@ -168,9 +169,7 @@ namespace Bouchonnois.Tests.Service
                 
                 repository
                     .SavedPartieDeChasse()
-                    .Events
-                    .Should()
-                    .BeEquivalentTo([new Event(now,"Bernard veut tirer sur une galinette -> T'as plus de balles mon vieux, chasse à la main")]);
+                    .AssertEventsAreEquivalentTo([new Event(now,"Bernard veut tirer sur une galinette -> T'as plus de balles mon vieux, chasse à la main")]);
             }
 
             [Fact]
@@ -237,10 +236,7 @@ namespace Bouchonnois.Tests.Service
                 tirerEnPleinApéro.Should()
                     .Throw<OnTirePasPendantLapéroCestSacré>();
                 
-                partieDeChasse.Events.Should()
-                    .ContainSingle().Which
-                    .Message.Should()
-                    .Be("Chasseur inconnu veut tirer -> On tire pas pendant l'apéro, c'est sacré !!!");
+                partieDeChasse.AssertEventOccuredWithMessage("Chasseur inconnu veut tirer -> On tire pas pendant l'apéro, c'est sacré !!!");
                 
                 repository.SaveCalledCounter.Should().Be(1);
             }
@@ -266,10 +262,7 @@ namespace Bouchonnois.Tests.Service
                 tirerQuandTerminée.Should()
                     .Throw<OnTirePasQuandLaPartieEstTerminée>();
                 
-                partieDeChasse.Events.Should()
-                    .ContainSingle().Which
-                    .Message.Should()
-                    .Be("Chasseur inconnu veut tirer -> On tire pas quand la partie est terminée");
+                partieDeChasse.AssertEventOccuredWithMessage("Chasseur inconnu veut tirer -> On tire pas quand la partie est terminée");
                 
                 repository.SaveCalledCounter.Should().Be(1);
             }
@@ -354,19 +347,22 @@ namespace Bouchonnois.Tests.Service
                 var id = Guid.NewGuid();
                 var repository = new PartieDeChasseRepositoryForTests();
 
-                repository.Add(new PartieDeChasse(id: id, chasseurs: new List<Chasseur>
+                var partieDeChasse = new PartieDeChasse(id: id, chasseurs: new List<Chasseur>
                 {
                     new(nom: "Dédé", ballesRestantes: 20),
                     new(nom: "Bernard", ballesRestantes: 8),
                     new(nom: "Robert", ballesRestantes: 12),
-                }, terrain: new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3), status: PartieStatus.EnCours));
+                }, terrain: new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3), status: PartieStatus.EnCours);
+                repository.Add(partieDeChasse);
 
                 var service = new PartieDeChasseService(repository, () => DateTime.Now);
                 var chasseurInconnuVeutTirer = () => service.Tirer(id, "Chasseur inconnu");
 
                 chasseurInconnuVeutTirer.Should()
-                    .Throw<ChasseurInconnu>();
+                    .Throw<ChasseurInconnu>()
+                    .WithMessage("Chasseur inconnu Chasseur inconnu");
                 repository.SavedPartieDeChasse().Should().BeNull();
+                partieDeChasse.AssertNoEventOccured();
             }
 
             [Fact]
@@ -390,12 +386,11 @@ namespace Bouchonnois.Tests.Service
                 tirerEnPleinApéro.Should()
                     .Throw<OnTirePasPendantLapéroCestSacré>();
                 
-                partieDeChasse.Events.Should()
-                    .ContainSingle().Which
-                    .Message.Should()
-                    .Be("Chasseur inconnu veut tirer -> On tire pas pendant l'apéro, c'est sacré !!!");
+                partieDeChasse.AssertEventOccuredWithMessage("Chasseur inconnu veut tirer -> On tire pas pendant l'apéro, c'est sacré !!!");
+                
                 repository.SaveCalledCounter.Should().Be(1);
             }
+            
 
             [Fact]
             public void EchoueSiLaPartieDeChasseEstTerminée()
@@ -418,10 +413,7 @@ namespace Bouchonnois.Tests.Service
                 tirerQuandTerminée.Should()
                     .Throw<OnTirePasQuandLaPartieEstTerminée>();
                 
-                partieDeChasse.Events.Should()
-                    .ContainSingle().Which
-                    .Message.Should()
-                    .Be("Chasseur inconnu veut tirer -> On tire pas quand la partie est terminée");
+                partieDeChasse.AssertEventOccuredWithMessage("Chasseur inconnu veut tirer -> On tire pas quand la partie est terminée");
                 repository.SaveCalledCounter.Should().Be(1);
             }
         }
@@ -716,10 +708,7 @@ namespace Bouchonnois.Tests.Service
 
                 meilleurChasseur.Should().Be("Dédé, Bernard");
                 
-                partieDeChasse.Events.Should()
-                    .ContainSingle().Which
-                    .Message.Should()
-                    .Be(  "La partie de chasse est terminée, vainqueur : Dédé - 2 galinettes, Bernard - 2 galinettes");
+                partieDeChasse.AssertEventOccuredWithMessage(  "La partie de chasse est terminée, vainqueur : Dédé - 2 galinettes, Bernard - 2 galinettes");
             }
 
             [Fact]
@@ -759,10 +748,7 @@ namespace Bouchonnois.Tests.Service
 
                 meilleurChasseur.Should().Be("Brocouille");
                 
-                partieDeChasse.Events.Should()
-                    .ContainSingle().Which
-                    .Message.Should()
-                    .Be("La partie de chasse est terminée, vainqueur : Brocouille");
+                partieDeChasse.AssertEventOccuredWithMessage("La partie de chasse est terminée, vainqueur : Brocouille");
             }
 
             [Fact]
