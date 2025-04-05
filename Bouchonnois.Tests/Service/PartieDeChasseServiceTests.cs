@@ -241,6 +241,8 @@ namespace Bouchonnois.Tests.Service
                     .ContainSingle().Which
                     .Message.Should()
                     .Be($"Chasseur inconnu veut tirer -> On tire pas pendant l'apéro, c'est sacré !!!");
+                
+                repository.SaveCalledCounter.Should().Be(1);
             }
 
             [Fact]
@@ -268,6 +270,8 @@ namespace Bouchonnois.Tests.Service
                     .ContainSingle().Which
                     .Message.Should()
                     .Be("Chasseur inconnu veut tirer -> On tire pas quand la partie est terminée");
+                
+                repository.SaveCalledCounter.Should().Be(1);
             }
         }
 
@@ -340,6 +344,8 @@ namespace Bouchonnois.Tests.Service
 
                 tirerSansBalle.Should()
                     .Throw<TasPlusDeBallesMonVieuxChasseALaMain>();
+                
+                repository.SaveCalledCounter.Should().Be(1);
             }
 
             [Fact]
@@ -388,6 +394,7 @@ namespace Bouchonnois.Tests.Service
                     .ContainSingle().Which
                     .Message.Should()
                     .Be($"Chasseur inconnu veut tirer -> On tire pas pendant l'apéro, c'est sacré !!!");
+                repository.SaveCalledCounter.Should().Be(1);
             }
 
             [Fact]
@@ -415,6 +422,7 @@ namespace Bouchonnois.Tests.Service
                     .ContainSingle().Which
                     .Message.Should()
                     .Be($"Chasseur inconnu veut tirer -> On tire pas quand la partie est terminée");
+                repository.SaveCalledCounter.Should().Be(1);
             }
         }
 

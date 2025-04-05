@@ -7,11 +7,14 @@ namespace Bouchonnois.Tests.Doubles
     {
         private readonly IDictionary<Guid, PartieDeChasse> _partiesDeChasse = new Dictionary<Guid, PartieDeChasse>();
         private PartieDeChasse? _savedPartieDeChasse;
-
+        public int SaveCalledCounter { get; private set; } = 0;
+        
         public void Save(PartieDeChasse partieDeChasse)
         {
             _savedPartieDeChasse = partieDeChasse;
             _partiesDeChasse[partieDeChasse.Id] = partieDeChasse;
+
+            SaveCalledCounter++;
         }
 
         public PartieDeChasse GetById(Guid partieDeChasseId)
