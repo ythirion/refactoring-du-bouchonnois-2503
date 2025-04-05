@@ -317,6 +317,8 @@ namespace Bouchonnois.Tests.Service
             [Fact]
             public void EchoueAvecUnChasseurNayantPlusDeBalles()
             {
+                var now = DateTime.Now;
+                
                 var id = Guid.NewGuid();
                 var repository = new PartieDeChasseRepositoryForTests();
 
@@ -328,11 +330,17 @@ namespace Bouchonnois.Tests.Service
                     }, terrain: new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3), status: PartieStatus.EnCours,
                     events: new List<Event>()));
 
-                var service = new PartieDeChasseService(repository, () => DateTime.Now);
+                var service = new PartieDeChasseService(repository, () => now);
                 var tirerSansBalle = () => service.Tirer(id, "Bernard");
 
                 tirerSansBalle.Should()
                     .Throw<TasPlusDeBallesMonVieuxChasseALaMain>();
+                
+                repository
+                    .SavedPartieDeChasse()
+                    .Events
+                    .Should()
+                    .BeEquivalentTo([new Event(now,"Bernard tire -> T'as plus de balles mon vieux, chasse à la main")]);
             }
 
             [Fact]
