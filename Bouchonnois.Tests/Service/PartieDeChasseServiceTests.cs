@@ -722,6 +722,8 @@ namespace Bouchonnois.Tests.Service
             [Fact]
             public void QuandLaPartieEstEnCoursEtToutLeMondeBrocouille()
             {
+                var now = DateTime.Now;
+                
                 var id = Guid.NewGuid();
                 var repository = new PartieDeChasseRepositoryForTests();
 
@@ -733,7 +735,7 @@ namespace Bouchonnois.Tests.Service
                     }, terrain: new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3), status: PartieStatus.EnCours,
                     events: new List<Event>()));
 
-                var service = new PartieDeChasseService(repository, () => DateTime.Now);
+                var service = new PartieDeChasseService(repository, () => now);
                 var meilleurChasseur = service.TerminerLaPartie(id);
 
                 var savedPartieDeChasse = repository.SavedPartieDeChasse();
@@ -753,6 +755,11 @@ namespace Bouchonnois.Tests.Service
                 savedPartieDeChasse.Chasseurs[2].NbGalinettes.Should().Be(0);
 
                 meilleurChasseur.Should().Be("Brocouille");
+                
+                savedPartieDeChasse
+                    .Events
+                    .Should()
+                    .BeEquivalentTo([new Event(now,"La partie de chasse est terminée, vainqueur : Brocouille")]);
             }
 
             [Fact]
