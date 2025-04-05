@@ -211,7 +211,9 @@ namespace Bouchonnois.Tests.Service
                 var chasseurInconnuVeutTirer = () => service.TirerSurUneGalinette(id, "Chasseur inconnu");
 
                 chasseurInconnuVeutTirer.Should()
-                    .Throw<ChasseurInconnu>();
+                    .Throw<ChasseurInconnu>()
+                    .WithMessage("Chasseur inconnu Chasseur inconnu");
+                
                 repository.SavedPartieDeChasse().Should().BeNull();
             }
 
@@ -368,7 +370,9 @@ namespace Bouchonnois.Tests.Service
                 var chasseurInconnuVeutTirer = () => service.Tirer(id, "Chasseur inconnu");
 
                 chasseurInconnuVeutTirer.Should()
-                    .Throw<ChasseurInconnu>();
+                    .Throw<ChasseurInconnu>()
+                    .WithMessage("Chasseur inconnu Chasseur inconnu");
+                
                 repository.SavedPartieDeChasse().Should().BeNull();
             }
 
