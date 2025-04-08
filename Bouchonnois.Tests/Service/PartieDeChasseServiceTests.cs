@@ -237,7 +237,7 @@ namespace Bouchonnois.Tests.Service
                 tirerEnPleinApéro.Should()
                     .Throw<OnTirePasPendantLapéroCestSacré>();
                 partieDeChasse.Events.FirstOrDefault().Should().Be(new Event(timeProvider, "Chasseur inconnu veut tirer -> On tire pas pendant l'apéro, c'est sacré !!!"));
-
+                repository.SavedPartieDeChasse().Should().Be(partieDeChasse);
             }
 
             [Fact]
