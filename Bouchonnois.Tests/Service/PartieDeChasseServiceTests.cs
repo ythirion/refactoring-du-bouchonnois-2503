@@ -221,19 +221,23 @@ namespace Bouchonnois.Tests.Service
                 var id = Guid.NewGuid();
                 var repository = new PartieDeChasseRepositoryForTests();
 
-                repository.Add(new PartieDeChasse(id: id, chasseurs: new List<Chasseur>
+                var partieDeChasse = new PartieDeChasse(id: id, chasseurs: new List<Chasseur>
                     {
                         new(nom: "Dédé", ballesRestantes: 20),
                         new(nom: "Bernard", ballesRestantes: 8),
                         new(nom: "Robert", ballesRestantes: 12),
                     }, terrain: new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3), status: PartieStatus.Apéro,
-                    events: new List<Event>()));
+                    events: new List<Event>());
+                repository.Add(partieDeChasse);
 
-                var service = new PartieDeChasseService(repository, () => DateTime.Now);
+                var timeProvider = DateTime.Now;
+                var service = new PartieDeChasseService(repository, () => timeProvider);
                 var tirerEnPleinApéro = () => service.TirerSurUneGalinette(id, "Chasseur inconnu");
 
                 tirerEnPleinApéro.Should()
                     .Throw<OnTirePasPendantLapéroCestSacré>();
+                partieDeChasse.Events.FirstOrDefault().Should().Be(new Event(timeProvider, "Chasseur inconnu veut tirer -> On tire pas pendant l'apéro, c'est sacré !!!"));
+
             }
 
             [Fact]
