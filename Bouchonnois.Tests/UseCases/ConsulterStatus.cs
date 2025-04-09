@@ -130,18 +130,25 @@ public class ConsulterStatus
 
 public class PartieDeChasseBuilder
 {
+    private PartieStatus _status = PartieStatus.EnCours;
+    private List<Chasseur> _chasseurs = new();
+    private List<Event> _events = new();
+
     public PartieDeChasseBuilder QuiEstEnCours()
     {
+        _status = PartieStatus.EnCours;
         return this;
     }
 
     public PartieDeChasseBuilder AvecDesChasseurs(List<Chasseur> chasseurs)
     {
+        _chasseurs = chasseurs;
         return this;
     }
 
     public PartieDeChasseBuilder AvecSesEvenements(List<Event> events)
     {
+        _events = events;
         return this;
     }
 
@@ -150,19 +157,9 @@ public class PartieDeChasseBuilder
         var id = Guid.NewGuid();
         return new PartieDeChasse(
             id: id,
-            chasseurs: new List<Chasseur>
-            {
-                new(nom: "Dédé", ballesRestantes: 20),
-                new(nom: "Bernard", ballesRestantes: 8),
-                new(nom: "Robert", ballesRestantes: 12, nbGalinettes: 2),
-            },
+            chasseurs: _chasseurs,
             terrain: new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3),
-            status: PartieStatus.EnCours,
-            events: new List<Event>
-            {
-                new(
-                    new DateTime(2024, 4, 25, 9, 0, 12),
-                    "La partie de chasse commence à Pitibon sur Sauldre avec Dédé (20 balles), Bernard (8 balles), Robert (12 balles)")
-            });
+            status: _status,
+            events: _events);
     }
 }
