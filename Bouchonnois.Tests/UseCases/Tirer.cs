@@ -86,7 +86,7 @@ public class Tirer
         repository.Add(partieDeChasse);
 
         var service = new PartieDeChasseService(repository, () => DateTime.Now);
-        
+
         var chasseurInconnuVeutTirer = () => service.Tirer(partieDeChasse.Id, ChasseurInconnu);
 
         chasseurInconnuVeutTirer.Should()
@@ -101,24 +101,17 @@ public class Tirer
     {
         var now = DateTime.Now;
 
-        var id = Guid.NewGuid();
         var repository = new PartieDeChasseRepositoryForTests();
 
-        repository.Add(
-            new PartieDeChasse(
-                id,
-                chasseurs: new List<Chasseur>
-                {
-                    new("Dédé", 20),
-                    new("Bernard", 8),
-                    new("Robert", 12)
-                },
-                terrain: new Terrain("Pitibon sur Sauldre", 3),
-                status: PartieStatus.Apéro,
-                events: new List<Event>()));
+        var partieDeChasse = UnePartieDeChasse()
+            .EnApéro()
+            .Build();
+        
+        repository.Add(partieDeChasse);
 
         var service = new PartieDeChasseService(repository, () => now);
-        var tirerEnPleinApéro = () => service.Tirer(id, ChasseurInconnu);
+        
+        var tirerEnPleinApéro = () => service.Tirer(partieDeChasse.Id, ChasseurInconnu);
 
         tirerEnPleinApéro.Should()
             .Throw<OnTirePasPendantLapéroCestSacré>();

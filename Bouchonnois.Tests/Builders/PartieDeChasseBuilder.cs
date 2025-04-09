@@ -26,6 +26,12 @@ public class PartieDeChasseBuilder
         return this;
     }
 
+    public PartieDeChasseBuilder EnApéro()
+    {
+        _status = PartieStatus.Apéro;
+        return this;
+    }
+
     public PartieDeChasseBuilder Avec(params List<Chasseur> chasseurs)
     {
         _chasseurs = chasseurs;
@@ -46,4 +52,3 @@ public class PartieDeChasseBuilder
             status: _status,
             events: _events);
 }
-
