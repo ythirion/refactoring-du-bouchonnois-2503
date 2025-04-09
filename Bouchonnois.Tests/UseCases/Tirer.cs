@@ -28,8 +28,7 @@ public class Tirer
 
         service.Tirer(partieDeChasse.Id, Bernard);
 
-        var savedPartieDeChasse = repository.SavedPartieDeChasse();
-        VerifierChasseurATiré(savedPartieDeChasse, Bernard, 7);
+        VerifierChasseurATiré(repository.SavedPartieDeChasse(), Bernard, 7);
     }
 
     [Fact]
@@ -65,12 +64,11 @@ public class Tirer
 
         tirerSansBalle.Should()
             .Throw<TasPlusDeBallesMonVieuxChasseALaMain>();
-
-        repository
-            .SavedPartieDeChasse()
-            .Events
-            .Should()
-            .BeEquivalentTo([new Event(now, "Bernard tire -> T'as plus de balles mon vieux, chasse à la main")]);
+        
+        VerifierEvenementEmis(
+            repository.SavedPartieDeChasse(),
+            now,
+            "Bernard tire -> T'as plus de balles mon vieux, chasse à la main");
     }
 
     [Fact]
@@ -116,12 +114,10 @@ public class Tirer
         tirerEnPleinApéro.Should()
             .Throw<OnTirePasPendantLapéroCestSacré>();
 
-        repository
-            .SavedPartieDeChasse()
-            .Events
-            .Should()
-            .BeEquivalentTo(
-                [new Event(now, "Chasseur inconnu veut tirer -> On tire pas pendant l'apéro, c'est sacré !!!")]);
+        VerifierEvenementEmis(
+            repository.SavedPartieDeChasse(),
+            now,
+            "Chasseur inconnu veut tirer -> On tire pas pendant l'apéro, c'est sacré !!!");
     }
 
     [Fact]
@@ -145,8 +141,7 @@ public class Tirer
             .Throw<OnTirePasQuandLaPartieEstTerminée>();
 
         VerifierEvenementEmis(
-            repository
-                .SavedPartieDeChasse(),
+            repository.SavedPartieDeChasse(),
             now,
             "Chasseur inconnu veut tirer -> On tire pas quand la partie est terminée");
     }
