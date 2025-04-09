@@ -9,6 +9,7 @@ namespace Bouchonnois.Tests.UseCases;
 
 public class Tirer
 {
+    private readonly DateTime _now = DateTime.Now;
     private const string Bernard = "Bernard";
     private const string ChasseurInconnu = "Chasseur inconnu";
 
@@ -24,7 +25,7 @@ public class Tirer
 
         repository.Add(partieDeChasse);
 
-        var service = new PartieDeChasseService(repository, () => DateTime.Now);
+        var service = new PartieDeChasseService(repository, () => _now);
 
         service.Tirer(partieDeChasse.Id, Bernard);
 
@@ -36,7 +37,7 @@ public class Tirer
     {
         var id = Guid.NewGuid();
         var repository = new PartieDeChasseRepositoryForTests();
-        var service = new PartieDeChasseService(repository, () => DateTime.Now);
+        var service = new PartieDeChasseService(repository, () => _now);
         var tirerQuandPartieExistePas = () => service.Tirer(id, "Bernard");
 
         tirerQuandPartieExistePas.Should()
@@ -47,8 +48,6 @@ public class Tirer
     [Fact]
     public void EchoueAvecUnChasseurNayantPlusDeBalles()
     {
-        var now = DateTime.Now;
-
         var repository = new PartieDeChasseRepositoryForTests();
 
         var partieDeChasse = UnePartieDeChasse()
@@ -58,7 +57,7 @@ public class Tirer
 
         repository.Add(partieDeChasse);
 
-        var service = new PartieDeChasseService(repository, () => now);
+        var service = new PartieDeChasseService(repository, () => _now);
 
         var tirerSansBalle = () => service.Tirer(partieDeChasse.Id, Bernard);
 
@@ -67,7 +66,7 @@ public class Tirer
 
         repository.SavedPartieDeChasse()
             .VerifierEvenementEmis(
-                now,
+                _now,
                 "Bernard tire -> T'as plus de balles mon vieux, chasse à la main");
     }
 
@@ -83,7 +82,7 @@ public class Tirer
 
         repository.Add(partieDeChasse);
 
-        var service = new PartieDeChasseService(repository, () => DateTime.Now);
+        var service = new PartieDeChasseService(repository, () => _now);
 
         var chasseurInconnuVeutTirer = () => service.Tirer(partieDeChasse.Id, ChasseurInconnu);
 
@@ -97,8 +96,6 @@ public class Tirer
     [Fact]
     public void EchoueSiLesChasseursSontEnApero()
     {
-        var now = DateTime.Now;
-
         var repository = new PartieDeChasseRepositoryForTests();
 
         var partieDeChasse = UnePartieDeChasse()
@@ -107,7 +104,7 @@ public class Tirer
 
         repository.Add(partieDeChasse);
 
-        var service = new PartieDeChasseService(repository, () => now);
+        var service = new PartieDeChasseService(repository, () => _now);
 
         var tirerEnPleinApéro = () => service.Tirer(partieDeChasse.Id, ChasseurInconnu);
 
@@ -116,15 +113,13 @@ public class Tirer
 
         repository.SavedPartieDeChasse()
             .VerifierEvenementEmis(
-                now,
+                _now,
                 "Chasseur inconnu veut tirer -> On tire pas pendant l'apéro, c'est sacré !!!");
     }
 
     [Fact]
     public void EchoueSiLaPartieDeChasseEstTerminée()
     {
-        var now = DateTime.Now;
-
         var repository = new PartieDeChasseRepositoryForTests();
 
         var partieDeChasse = UnePartieDeChasse()
@@ -133,7 +128,7 @@ public class Tirer
 
         repository.Add(partieDeChasse);
 
-        var service = new PartieDeChasseService(repository, () => now);
+        var service = new PartieDeChasseService(repository, () => _now);
 
         var tirerQuandTerminée = () => service.Tirer(partieDeChasse.Id, ChasseurInconnu);
 
@@ -142,7 +137,7 @@ public class Tirer
 
         repository.SavedPartieDeChasse()
             .VerifierEvenementEmis(
-                now,
+                _now,
                 "Chasseur inconnu veut tirer -> On tire pas quand la partie est terminée");
     }
 }
