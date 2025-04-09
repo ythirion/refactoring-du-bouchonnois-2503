@@ -6,7 +6,14 @@ namespace Bouchonnois.Tests.UseCases;
 public class PartieDeChasseBuilder
 {
     private PartieStatus _status = PartieStatus.EnCours;
-    private List<Chasseur> _chasseurs = new();
+   
+    private List<Chasseur> _chasseurs =
+    [
+        new(nom: "Dédé", ballesRestantes: 20),
+        new(nom: "Bernard", ballesRestantes: 8),
+        new(nom: "Robert", ballesRestantes: 12)
+    ];
+    
     private List<Event> _events = new();
 
     public PartieDeChasseBuilder QuiEstEnCours()
