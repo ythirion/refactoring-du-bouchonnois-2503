@@ -3,7 +3,7 @@ using Bouchonnois.Service;
 using Bouchonnois.Service.Exceptions;
 using Bouchonnois.Tests.Doubles;
 using static Bouchonnois.Tests.Builders.PartieDeChasseBuilder;
-using static Bouchonnois.Tests.UseCases.ChasseurBuilder;
+using static Bouchonnois.Tests.Builders.ChasseurBuilder;
 
 namespace Bouchonnois.Tests.UseCases;
 
@@ -180,26 +180,4 @@ public class Tirer
             .BeEquivalentTo(
                 [new Event(now, "Chasseur inconnu veut tirer -> On tire pas quand la partie est terminée")]);
     }
-}
-
-public class ChasseurBuilder
-{
-    private string _nom = "Chasseur Inconnu";
-    private int _ballesRestantes = 0;
-    
-    public static ChasseurBuilder Bernard() => new ChasseurBuilder().Nommé("Bernard").AyantDesBalles(8);
-
-    public ChasseurBuilder Nommé(string nom)
-    {
-        _nom = nom;
-        return this;
-    }
-    
-    public ChasseurBuilder AyantDesBalles(int ballesRestantes)
-    {
-        _ballesRestantes = ballesRestantes;
-        return this;
-    }
-
-    public Chasseur Build() => new(_nom, _ballesRestantes);
 }
