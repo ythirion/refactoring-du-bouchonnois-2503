@@ -402,6 +402,7 @@ namespace Bouchonnois.Tests.Service
                     .Throw<OnTirePasQuandLaPartieEstTerminée>();
 
                 partieDeChasse.Events.FirstOrDefault().Should().Be(new Event(timeProvider, "Chasseur inconnu veut tirer -> On tire pas quand la partie est terminée"));
+                repository.SavedPartieDeChasse().Should().Be(partieDeChasse);
             }
         }
 
