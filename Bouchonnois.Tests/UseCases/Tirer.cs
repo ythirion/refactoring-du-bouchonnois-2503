@@ -17,7 +17,7 @@ public class Tirer : BaseTest
             {
                 Dédé,
                 Bernard,
-                new("Robert", 12)
+                Robert
             })
             .Build();
 
@@ -69,7 +69,7 @@ public class Tirer : BaseTest
                 {
                     Dédé,
                     new("Bernard", 0),
-                    new("Robert", 12)
+                    Robert
                 })
             .Build();
 
@@ -98,7 +98,7 @@ public class Tirer : BaseTest
             {
                 Dédé,
                 Bernard,
-                new("Robert", 12)
+                Robert
             })
             .Build();
 
@@ -126,7 +126,7 @@ public class Tirer : BaseTest
             {
                 Dédé,
                 Bernard,
-                new("Robert", 12)
+                Robert
             })
             .Build();
 
@@ -158,7 +158,7 @@ public class Tirer : BaseTest
             {
                 Dédé,
                 Bernard,
-                new("Robert", 12)
+                Robert
             })
             .Build();
 

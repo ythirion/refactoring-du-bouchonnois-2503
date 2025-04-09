@@ -18,7 +18,7 @@ public class TirerSurUneGalinette : BaseTest
             {
                 Dédé,
                 Bernard,
-                new("Robert", 12)
+                  Robert
             })
             .Build();
 
@@ -58,7 +58,7 @@ public class TirerSurUneGalinette : BaseTest
             {
                 Dédé,
                 new("Bernard", 0),
-                new("Robert", 12)
+                  Robert
             }).Build();
 
         Repository.Add(partieDeChasse);
@@ -92,7 +92,7 @@ public class TirerSurUneGalinette : BaseTest
                 {
                     Dédé,
                     Bernard,
-                    new("Robert", 12)
+                      Robert
                 })
             .Build();
 
@@ -115,7 +115,7 @@ public class TirerSurUneGalinette : BaseTest
             {
                 Dédé,
                 Bernard,
-                new("Robert", 12)
+                  Robert
             })
             .Build();
 
@@ -144,7 +144,7 @@ public class TirerSurUneGalinette : BaseTest
                 {
                     Dédé,
                     Bernard,
-                    new("Robert", 12)
+                      Robert
                 })
             .Build();
 
@@ -179,7 +179,7 @@ public class TirerSurUneGalinette : BaseTest
                 {
                     Dédé,
                     Bernard,
-                    new("Robert", 12)
+                      Robert
                 })
             .Build();
 

@@ -16,7 +16,7 @@ public class PrendreLApéro : BaseTest
             {
                 Dédé,
                 Bernard,
-                new("Robert", 12)
+                  Robert
             }).Build();
 
         Repository.Add(partieDeChasse);
@@ -63,7 +63,7 @@ public class PrendreLApéro : BaseTest
             {
                 Dédé,
                 Bernard,
-                new("Robert", 12)
+                  Robert
             })
             .Build();
 
@@ -86,7 +86,7 @@ public class PrendreLApéro : BaseTest
             {
                 Dédé,
                 Bernard,
-                new("Robert", 12)
+                  Robert
             })
             .Build();
 

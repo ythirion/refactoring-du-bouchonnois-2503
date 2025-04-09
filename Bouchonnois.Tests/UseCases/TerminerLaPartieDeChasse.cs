@@ -85,7 +85,7 @@ public class TerminerLaPartieDeChasse : BaseTest
             {
                 new("Dédé", 20, 2),
                 new("Bernard", 8, 2),
-                new("Robert", 12)
+                  Robert
             })
             .Build();
 
@@ -125,7 +125,7 @@ public class TerminerLaPartieDeChasse : BaseTest
             {
                 Dédé,
                 Bernard,
-                new("Robert", 12)
+                  Robert
             })
             .Build();
 
@@ -217,7 +217,7 @@ public class TerminerLaPartieDeChasse : BaseTest
             {
                 Dédé,
                 Bernard,
-                new("Robert", 12)
+                  Robert
             })
             .Build();
 

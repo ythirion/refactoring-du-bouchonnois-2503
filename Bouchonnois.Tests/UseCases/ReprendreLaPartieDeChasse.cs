@@ -17,7 +17,7 @@ public class ReprendreLaPartieDeChasse : BaseTest
             {
                 Dédé,
                 Bernard,
-                new("Robert", 12)
+                  Robert
             })
             .Build();
 
@@ -65,7 +65,7 @@ public class ReprendreLaPartieDeChasse : BaseTest
                 {
                     Dédé,
                     Bernard,
-                    new("Robert", 12)
+                      Robert
                 })
             .Build();
 
@@ -89,7 +89,7 @@ public class ReprendreLaPartieDeChasse : BaseTest
             {
                 Dédé,
                 Bernard,
-                new("Robert", 12)
+                  Robert
             }).Build();
 
         Repository.Add(partieDeChasse);
