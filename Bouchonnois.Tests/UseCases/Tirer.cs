@@ -1,7 +1,7 @@
-using Bouchonnois.Domain;
 using Bouchonnois.Service;
 using Bouchonnois.Service.Exceptions;
 using Bouchonnois.Tests.Doubles;
+using Bouchonnois.Tests.Verifications;
 using static Bouchonnois.Tests.Builders.PartieDeChasseBuilder;
 using static Bouchonnois.Tests.Builders.ChasseurBuilder;
 
@@ -28,7 +28,7 @@ public class Tirer
 
         service.Tirer(partieDeChasse.Id, Bernard);
 
-        VerifierChasseurATiré(repository.SavedPartieDeChasse(), Bernard, 7);
+        repository.SavedPartieDeChasse().VerifierChasseurATiré(Bernard, 7);
     }
 
     [Fact]
@@ -64,11 +64,11 @@ public class Tirer
 
         tirerSansBalle.Should()
             .Throw<TasPlusDeBallesMonVieuxChasseALaMain>();
-        
-        VerifierEvenementEmis(
-            repository.SavedPartieDeChasse(),
-            now,
-            "Bernard tire -> T'as plus de balles mon vieux, chasse à la main");
+
+        repository.SavedPartieDeChasse()
+            .VerifierEvenementEmis(
+                now,
+                "Bernard tire -> T'as plus de balles mon vieux, chasse à la main");
     }
 
     [Fact]
@@ -114,10 +114,10 @@ public class Tirer
         tirerEnPleinApéro.Should()
             .Throw<OnTirePasPendantLapéroCestSacré>();
 
-        VerifierEvenementEmis(
-            repository.SavedPartieDeChasse(),
-            now,
-            "Chasseur inconnu veut tirer -> On tire pas pendant l'apéro, c'est sacré !!!");
+        repository.SavedPartieDeChasse()
+            .VerifierEvenementEmis(
+                now,
+                "Chasseur inconnu veut tirer -> On tire pas pendant l'apéro, c'est sacré !!!");
     }
 
     [Fact]
@@ -140,18 +140,9 @@ public class Tirer
         tirerQuandTerminée.Should()
             .Throw<OnTirePasQuandLaPartieEstTerminée>();
 
-        VerifierEvenementEmis(
-            repository.SavedPartieDeChasse(),
-            now,
-            "Chasseur inconnu veut tirer -> On tire pas quand la partie est terminée");
+        repository.SavedPartieDeChasse()
+            .VerifierEvenementEmis(
+                now,
+                "Chasseur inconnu veut tirer -> On tire pas quand la partie est terminée");
     }
-
-    private static void VerifierEvenementEmis(PartieDeChasse partieDeChasse, DateTime now, string message)
-        => partieDeChasse
-            .Events
-            .Should()
-            .BeEquivalentTo([new Event(now, message)]);
-
-    private static void VerifierChasseurATiré(PartieDeChasse savedPartieDeChasse, string nom, int ballesRestantes)
-        => savedPartieDeChasse.Chasseurs.First(c => c.Nom == nom).BallesRestantes.Should().Be(ballesRestantes);
 }
