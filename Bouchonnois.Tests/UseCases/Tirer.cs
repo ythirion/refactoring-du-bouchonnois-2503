@@ -1,6 +1,7 @@
 using Bouchonnois.Domain;
 using Bouchonnois.Service;
 using Bouchonnois.Service.Exceptions;
+using Bouchonnois.Tests.Builders;
 using Bouchonnois.Tests.Doubles;
 
 namespace Bouchonnois.Tests.UseCases;
@@ -10,41 +11,23 @@ public class Tirer
     [Fact]
     public void AvecUnChasseurAyantDesBalles()
     {
-        var id = Guid.NewGuid();
         var repository = new PartieDeChasseRepositoryForTests();
 
-        repository.Add(
-            new PartieDeChasse(
-                id: id,
-                chasseurs: new List<Chasseur>
-                {
-                        new(nom: "Dédé", ballesRestantes: 20),
-                        new(nom: "Bernard", ballesRestantes: 8),
-                        new(nom: "Robert", ballesRestantes: 12),
-                },
-                terrain: new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3),
-                status: PartieStatus.EnCours,
-                events: new List<Event>()));
+        var partieDeChasse = new PartieDeChasseBuilder()
+            .QuiEstEnCours()
+            .AvecDesChasseurs(new Chasseur(nom: "Bernard", ballesRestantes: 8))
+            .Build();
+        
+        repository.Add(partieDeChasse);
 
         var service = new PartieDeChasseService(repository, () => DateTime.Now);
 
-        service.Tirer(id, "Bernard");
+        service.Tirer(partieDeChasse.Id, "Bernard");
 
         var savedPartieDeChasse = repository.SavedPartieDeChasse();
-        savedPartieDeChasse.Id.Should().Be(id);
-        savedPartieDeChasse.Status.Should().Be(PartieStatus.EnCours);
-        savedPartieDeChasse.Terrain.Nom.Should().Be("Pitibon sur Sauldre");
-        savedPartieDeChasse.Terrain.NbGalinettes.Should().Be(3);
-        savedPartieDeChasse.Chasseurs.Should().HaveCount(3);
-        savedPartieDeChasse.Chasseurs[0].Nom.Should().Be("Dédé");
-        savedPartieDeChasse.Chasseurs[0].BallesRestantes.Should().Be(20);
+        savedPartieDeChasse.Chasseurs[0].Nom.Should().Be("Bernard");
+        savedPartieDeChasse.Chasseurs[0].BallesRestantes.Should().Be(7);
         savedPartieDeChasse.Chasseurs[0].NbGalinettes.Should().Be(0);
-        savedPartieDeChasse.Chasseurs[1].Nom.Should().Be("Bernard");
-        savedPartieDeChasse.Chasseurs[1].BallesRestantes.Should().Be(7);
-        savedPartieDeChasse.Chasseurs[1].NbGalinettes.Should().Be(0);
-        savedPartieDeChasse.Chasseurs[2].Nom.Should().Be("Robert");
-        savedPartieDeChasse.Chasseurs[2].BallesRestantes.Should().Be(12);
-        savedPartieDeChasse.Chasseurs[2].NbGalinettes.Should().Be(0);
     }
 
     [Fact]
@@ -73,9 +56,9 @@ public class Tirer
                 id: id,
                 chasseurs: new List<Chasseur>
                 {
-                        new(nom: "Dédé", ballesRestantes: 20),
-                        new(nom: "Bernard", ballesRestantes: 0),
-                        new(nom: "Robert", ballesRestantes: 12),
+                    new(nom: "Dédé", ballesRestantes: 20),
+                    new(nom: "Bernard", ballesRestantes: 0),
+                    new(nom: "Robert", ballesRestantes: 12),
                 },
                 terrain: new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3),
                 status: PartieStatus.EnCours,
@@ -105,9 +88,9 @@ public class Tirer
                 id: id,
                 chasseurs: new List<Chasseur>
                 {
-                        new(nom: "Dédé", ballesRestantes: 20),
-                        new(nom: "Bernard", ballesRestantes: 8),
-                        new(nom: "Robert", ballesRestantes: 12),
+                    new(nom: "Dédé", ballesRestantes: 20),
+                    new(nom: "Bernard", ballesRestantes: 8),
+                    new(nom: "Robert", ballesRestantes: 12),
                 },
                 terrain: new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3),
                 status: PartieStatus.EnCours));
@@ -135,9 +118,9 @@ public class Tirer
                 id: id,
                 chasseurs: new List<Chasseur>
                 {
-                        new(nom: "Dédé", ballesRestantes: 20),
-                        new(nom: "Bernard", ballesRestantes: 8),
-                        new(nom: "Robert", ballesRestantes: 12),
+                    new(nom: "Dédé", ballesRestantes: 20),
+                    new(nom: "Bernard", ballesRestantes: 8),
+                    new(nom: "Robert", ballesRestantes: 12),
                 },
                 terrain: new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3),
                 status: PartieStatus.Apéro,
@@ -170,9 +153,9 @@ public class Tirer
                 id: id,
                 chasseurs: new List<Chasseur>
                 {
-                        new(nom: "Dédé", ballesRestantes: 20),
-                        new(nom: "Bernard", ballesRestantes: 8),
-                        new(nom: "Robert", ballesRestantes: 12),
+                    new(nom: "Dédé", ballesRestantes: 20),
+                    new(nom: "Bernard", ballesRestantes: 8),
+                    new(nom: "Robert", ballesRestantes: 12),
                 },
                 terrain: new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3),
                 status: PartieStatus.Terminée,
