@@ -26,7 +26,7 @@ public class PartieDeChasseBuilder
         return this;
     }
 
-    public PartieDeChasseBuilder AvecDesChasseurs(params List<Chasseur> chasseurs)
+    public PartieDeChasseBuilder Avec(params List<Chasseur> chasseurs)
     {
         _chasseurs = chasseurs;
         return this;

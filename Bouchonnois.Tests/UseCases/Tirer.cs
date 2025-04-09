@@ -8,6 +8,8 @@ namespace Bouchonnois.Tests.UseCases;
 
 public class Tirer
 {
+    private static readonly Chasseur Bernard = new(nom: "Bernard", ballesRestantes: 8);
+
     [Fact]
     public void AvecUnChasseurAyantDesBalles()
     {
@@ -15,7 +17,7 @@ public class Tirer
 
         var partieDeChasse = UnePartieDeChasse()
             .EnCours()
-            .AvecDesChasseurs(new Chasseur(nom: "Bernard", ballesRestantes: 8))
+            .Avec(Bernard)
             .Build();
 
         repository.Add(partieDeChasse);
