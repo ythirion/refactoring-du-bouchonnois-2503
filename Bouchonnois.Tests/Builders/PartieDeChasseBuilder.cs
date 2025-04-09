@@ -18,6 +18,8 @@ public class PartieDeChasseBuilder
     private List<Event> _events = [];
     private PartieStatus _status = PartieStatus.EnCours;
 
+    public static PartieDeChasseBuilder UnePartieDeChasse() => new();
+
     public PartieDeChasseBuilder QuiEstEnCours()
     {
         _status = PartieStatus.EnCours;

@@ -1,8 +1,8 @@
 using Bouchonnois.Domain;
 using Bouchonnois.Service;
 using Bouchonnois.Service.Exceptions;
-using Bouchonnois.Tests.Builders;
 using Bouchonnois.Tests.Doubles;
+using static Bouchonnois.Tests.Builders.PartieDeChasseBuilder;
 
 namespace Bouchonnois.Tests.UseCases;
 
@@ -13,7 +13,7 @@ public class Tirer
     {
         var repository = new PartieDeChasseRepositoryForTests();
 
-        var partieDeChasse = new PartieDeChasseBuilder()
+        var partieDeChasse = UnePartieDeChasse()
             .QuiEstEnCours()
             .AvecDesChasseurs(new Chasseur(nom: "Bernard", ballesRestantes: 8))
             .Build();
