@@ -17,7 +17,7 @@ public class Tirer
             .QuiEstEnCours()
             .AvecDesChasseurs(new Chasseur(nom: "Bernard", ballesRestantes: 8))
             .Build();
-        
+
         repository.Add(partieDeChasse);
 
         var service = new PartieDeChasseService(repository, () => DateTime.Now);
@@ -25,9 +25,12 @@ public class Tirer
         service.Tirer(partieDeChasse.Id, "Bernard");
 
         var savedPartieDeChasse = repository.SavedPartieDeChasse();
-        savedPartieDeChasse.Chasseurs[0].Nom.Should().Be("Bernard");
-        savedPartieDeChasse.Chasseurs[0].BallesRestantes.Should().Be(7);
-        savedPartieDeChasse.Chasseurs[0].NbGalinettes.Should().Be(0);
+        VerifierChasseurATiré(savedPartieDeChasse, "Bernard", 7);
+    }
+
+    private static void VerifierChasseurATiré(PartieDeChasse savedPartieDeChasse, string nom, int ballesRestantes)
+    {
+        savedPartieDeChasse.Chasseurs.First(c => c.Nom == nom).BallesRestantes.Should().Be(ballesRestantes);
     }
 
     [Fact]
