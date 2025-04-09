@@ -10,7 +10,6 @@ public class ConsulterStatus
     [Fact]
     public void QuandLaPartieVientDeDémarrer()
     {
-        var id = Guid.NewGuid();
         var repository = new PartieDeChasseRepositoryForTests();
         var service = new PartieDeChasseService(repository, () => DateTime.Now);
         var partieDeChasse = new PartieDeChasseBuilder()
@@ -30,25 +29,9 @@ public class ConsulterStatus
             })
             .Build();
 
-        repository.Add(
-            new PartieDeChasse(
-                id: id,
-                chasseurs: new List<Chasseur>
-                {
-                    new(nom: "Dédé", ballesRestantes: 20),
-                    new(nom: "Bernard", ballesRestantes: 8),
-                    new(nom: "Robert", ballesRestantes: 12, nbGalinettes: 2),
-                },
-                terrain: new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3),
-                status: PartieStatus.EnCours,
-                events: new List<Event>
-                {
-                    new(
-                        new DateTime(2024, 4, 25, 9, 0, 12),
-                        "La partie de chasse commence à Pitibon sur Sauldre avec Dédé (20 balles), Bernard (8 balles), Robert (12 balles)")
-                }));
+        repository.Add(partieDeChasse);
 
-        var status = service.ConsulterStatus(id);
+        var status = service.ConsulterStatus(partieDeChasse.Id);
 
         status.Should()
             .Be(
@@ -164,6 +147,22 @@ public class PartieDeChasseBuilder
 
     public PartieDeChasse Build()
     {
-        throw new NotImplementedException();
+        var id = Guid.NewGuid();
+        return new PartieDeChasse(
+            id: id,
+            chasseurs: new List<Chasseur>
+            {
+                new(nom: "Dédé", ballesRestantes: 20),
+                new(nom: "Bernard", ballesRestantes: 8),
+                new(nom: "Robert", ballesRestantes: 12, nbGalinettes: 2),
+            },
+            terrain: new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3),
+            status: PartieStatus.EnCours,
+            events: new List<Event>
+            {
+                new(
+                    new DateTime(2024, 4, 25, 9, 0, 12),
+                    "La partie de chasse commence à Pitibon sur Sauldre avec Dédé (20 balles), Bernard (8 balles), Robert (12 balles)")
+            });
     }
 }
