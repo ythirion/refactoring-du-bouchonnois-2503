@@ -13,23 +13,39 @@ public class ConsulterStatus
         var id = Guid.NewGuid();
         var repository = new PartieDeChasseRepositoryForTests();
         var service = new PartieDeChasseService(repository, () => DateTime.Now);
+        var partieDeChasse = new PartieDeChasseBuilder()
+            .QuiEstEnCours()
+            .AvecDesChasseurs(new List<Chasseur>
+                {
+                    new(nom: "Dédé", ballesRestantes: 20),
+                    new(nom: "Bernard", ballesRestantes: 8),
+                    new(nom: "Robert", ballesRestantes: 12, nbGalinettes: 2),
+                }
+            )
+            .AvecSesEvenements(new List<Event>
+            {
+                new(
+                    new DateTime(2024, 4, 25, 9, 0, 12),
+                    "La partie de chasse commence à Pitibon sur Sauldre avec Dédé (20 balles), Bernard (8 balles), Robert (12 balles)")
+            })
+            .Build();
 
         repository.Add(
             new PartieDeChasse(
                 id: id,
                 chasseurs: new List<Chasseur>
                 {
-                        new(nom: "Dédé", ballesRestantes: 20),
-                        new(nom: "Bernard", ballesRestantes: 8),
-                        new(nom: "Robert", ballesRestantes: 12, nbGalinettes: 2),
+                    new(nom: "Dédé", ballesRestantes: 20),
+                    new(nom: "Bernard", ballesRestantes: 8),
+                    new(nom: "Robert", ballesRestantes: 12, nbGalinettes: 2),
                 },
                 terrain: new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3),
                 status: PartieStatus.EnCours,
                 events: new List<Event>
                 {
-                        new(
-                            new DateTime(2024, 4, 25, 9, 0, 12),
-                            "La partie de chasse commence à Pitibon sur Sauldre avec Dédé (20 balles), Bernard (8 balles), Robert (12 balles)")
+                    new(
+                        new DateTime(2024, 4, 25, 9, 0, 12),
+                        "La partie de chasse commence à Pitibon sur Sauldre avec Dédé (20 balles), Bernard (8 balles), Robert (12 balles)")
                 }));
 
         var status = service.ConsulterStatus(id);
@@ -51,41 +67,41 @@ public class ConsulterStatus
                 id: id,
                 chasseurs: new List<Chasseur>
                 {
-                        new(nom: "Dédé", ballesRestantes: 20),
-                        new(nom: "Bernard", ballesRestantes: 8),
-                        new(nom: "Robert", ballesRestantes: 12, nbGalinettes: 2),
+                    new(nom: "Dédé", ballesRestantes: 20),
+                    new(nom: "Bernard", ballesRestantes: 8),
+                    new(nom: "Robert", ballesRestantes: 12, nbGalinettes: 2),
                 },
                 terrain: new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3),
                 status: PartieStatus.EnCours,
                 events: new List<Event>
                 {
-                        new(
-                            new DateTime(2024, 4, 25, 9, 0, 12),
-                            "La partie de chasse commence à Pitibon sur Sauldre avec Dédé (20 balles), Bernard (8 balles), Robert (12 balles)"),
-                        new(new DateTime(2024, 4, 25, 9, 10, 0), "Dédé tire"),
-                        new(new DateTime(2024, 4, 25, 9, 40, 0), "Robert tire sur une galinette"),
-                        new(new DateTime(2024, 4, 25, 10, 0, 0), "Petit apéro"),
-                        new(new DateTime(2024, 4, 25, 11, 0, 0), "Reprise de la chasse"),
-                        new(new DateTime(2024, 4, 25, 11, 2, 0), "Bernard tire"),
-                        new(new DateTime(2024, 4, 25, 11, 3, 0), "Bernard tire"),
-                        new(new DateTime(2024, 4, 25, 11, 4, 0), "Dédé tire sur une galinette"),
-                        new(new DateTime(2024, 4, 25, 11, 30, 0), "Robert tire sur une galinette"),
-                        new(new DateTime(2024, 4, 25, 11, 40, 0), "Petit apéro"),
-                        new(new DateTime(2024, 4, 25, 14, 30, 0), "Reprise de la chasse"),
-                        new(new DateTime(2024, 4, 25, 14, 41, 0), "Bernard tire"),
-                        new(new DateTime(2024, 4, 25, 14, 41, 1), "Bernard tire"),
-                        new(new DateTime(2024, 4, 25, 14, 41, 2), "Bernard tire"),
-                        new(new DateTime(2024, 4, 25, 14, 41, 3), "Bernard tire"),
-                        new(new DateTime(2024, 4, 25, 14, 41, 4), "Bernard tire"),
-                        new(new DateTime(2024, 4, 25, 14, 41, 5), "Bernard tire"),
-                        new(new DateTime(2024, 4, 25, 14, 41, 6), "Bernard tire"),
-                        new(
-                            new DateTime(2024, 4, 25, 14, 41, 7),
-                            "Bernard tire -> T'as plus de balles mon vieux, chasse à la main"),
-                        new(new DateTime(2024, 4, 25, 15, 0, 0), "Robert tire sur une galinette"),
-                        new(
-                            new DateTime(2024, 4, 25, 15, 30, 0),
-                            "La partie de chasse est terminée, vainqueur :  Robert - 3 galinettes"),
+                    new(
+                        new DateTime(2024, 4, 25, 9, 0, 12),
+                        "La partie de chasse commence à Pitibon sur Sauldre avec Dédé (20 balles), Bernard (8 balles), Robert (12 balles)"),
+                    new(new DateTime(2024, 4, 25, 9, 10, 0), "Dédé tire"),
+                    new(new DateTime(2024, 4, 25, 9, 40, 0), "Robert tire sur une galinette"),
+                    new(new DateTime(2024, 4, 25, 10, 0, 0), "Petit apéro"),
+                    new(new DateTime(2024, 4, 25, 11, 0, 0), "Reprise de la chasse"),
+                    new(new DateTime(2024, 4, 25, 11, 2, 0), "Bernard tire"),
+                    new(new DateTime(2024, 4, 25, 11, 3, 0), "Bernard tire"),
+                    new(new DateTime(2024, 4, 25, 11, 4, 0), "Dédé tire sur une galinette"),
+                    new(new DateTime(2024, 4, 25, 11, 30, 0), "Robert tire sur une galinette"),
+                    new(new DateTime(2024, 4, 25, 11, 40, 0), "Petit apéro"),
+                    new(new DateTime(2024, 4, 25, 14, 30, 0), "Reprise de la chasse"),
+                    new(new DateTime(2024, 4, 25, 14, 41, 0), "Bernard tire"),
+                    new(new DateTime(2024, 4, 25, 14, 41, 1), "Bernard tire"),
+                    new(new DateTime(2024, 4, 25, 14, 41, 2), "Bernard tire"),
+                    new(new DateTime(2024, 4, 25, 14, 41, 3), "Bernard tire"),
+                    new(new DateTime(2024, 4, 25, 14, 41, 4), "Bernard tire"),
+                    new(new DateTime(2024, 4, 25, 14, 41, 5), "Bernard tire"),
+                    new(new DateTime(2024, 4, 25, 14, 41, 6), "Bernard tire"),
+                    new(
+                        new DateTime(2024, 4, 25, 14, 41, 7),
+                        "Bernard tire -> T'as plus de balles mon vieux, chasse à la main"),
+                    new(new DateTime(2024, 4, 25, 15, 0, 0), "Robert tire sur une galinette"),
+                    new(
+                        new DateTime(2024, 4, 25, 15, 30, 0),
+                        "La partie de chasse est terminée, vainqueur :  Robert - 3 galinettes"),
                 }));
 
         var status = service.ConsulterStatus(id);
@@ -126,5 +142,28 @@ public class ConsulterStatus
         reprendrePartieQuandPartieExistePas.Should()
             .Throw<LaPartieDeChasseNexistePas>();
         repository.SavedPartieDeChasse().Should().BeNull();
+    }
+}
+
+public class PartieDeChasseBuilder
+{
+    public PartieDeChasseBuilder QuiEstEnCours()
+    {
+        return this;
+    }
+
+    public PartieDeChasseBuilder AvecDesChasseurs(List<Chasseur> chasseurs)
+    {
+        return this;
+    }
+
+    public PartieDeChasseBuilder AvecSesEvenements(List<Event> events)
+    {
+        return this;
+    }
+
+    public PartieDeChasse Build()
+    {
+        throw new NotImplementedException();
     }
 }
