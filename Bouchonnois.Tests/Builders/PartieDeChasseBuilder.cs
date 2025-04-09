@@ -5,10 +5,10 @@ namespace Bouchonnois.Tests.Builders;
 
 public class PartieDeChasseBuilder
 {
-    private PartieStatus _status = PartieStatus.EnCours;
     private List<Chasseur> _chasseurs = new();
     private List<Event> _events = new();
     private int _nbGalinettes = 3;
+    private PartieStatus _status = PartieStatus.EnCours;
 
     public PartieDeChasseBuilder QuiEstEnCours()
     {
@@ -49,11 +49,10 @@ public class PartieDeChasseBuilder
     {
         var id = Guid.NewGuid();
         return new PartieDeChasse(
-            id: id,
+            id,
             chasseurs: _chasseurs,
-            terrain: new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: _nbGalinettes),
+            terrain: new Terrain("Pitibon sur Sauldre", _nbGalinettes),
             status: _status,
             events: _events);
     }
-
 }

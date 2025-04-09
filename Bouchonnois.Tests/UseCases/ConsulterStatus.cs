@@ -1,25 +1,24 @@
 using Bouchonnois.Domain;
 using Bouchonnois.Service;
 using Bouchonnois.Service.Exceptions;
+using Bouchonnois.Tests.Abstractions;
 using Bouchonnois.Tests.Builders;
-using Bouchonnois.Tests.Doubles;
 
 namespace Bouchonnois.Tests.UseCases;
 
-public class ConsulterStatus
+public class ConsulterStatus : BaseTest
 {
     [Fact]
     public void QuandLaPartieVientDeDémarrer()
     {
-        var repository = new PartieDeChasseRepositoryForTests();
-        var service = new PartieDeChasseService(repository, () => DateTime.Now);
+        var service = new PartieDeChasseService(Repository, () => DateTime.Now);
         var partieDeChasse = new PartieDeChasseBuilder()
             .QuiEstEnCours()
             .AvecDesChasseurs(new List<Chasseur>
                 {
-                    new(nom: "Dédé", ballesRestantes: 20),
-                    new(nom: "Bernard", ballesRestantes: 8),
-                    new(nom: "Robert", ballesRestantes: 12, nbGalinettes: 2),
+                    Dédé,
+                    Bernard,
+                    new("Robert", 12, 2)
                 }
             )
             .AvecSesEvenements(new List<Event>
@@ -30,7 +29,7 @@ public class ConsulterStatus
             })
             .Build();
 
-        repository.Add(partieDeChasse);
+        Repository.Add(partieDeChasse);
 
         var status = service.ConsulterStatus(partieDeChasse.Id);
 
@@ -42,16 +41,15 @@ public class ConsulterStatus
     [Fact]
     public void QuandLaPartieEstTerminée()
     {
-        var repository = new PartieDeChasseRepositoryForTests();
-        var service = new PartieDeChasseService(repository, () => DateTime.Now);
+        var service = new PartieDeChasseService(Repository, () => DateTime.Now);
 
         var partieDeChasse = new PartieDeChasseBuilder()
             .QuiEstEnCours()
             .AvecDesChasseurs(new List<Chasseur>
             {
-                new(nom: "Dédé", ballesRestantes: 20),
-                new(nom: "Bernard", ballesRestantes: 8),
-                new(nom: "Robert", ballesRestantes: 12, nbGalinettes: 2),
+                Dédé,
+                Bernard,
+                new("Robert", 12, 2)
             })
             .AvecSesEvenements(
                 new List<Event>
@@ -82,10 +80,10 @@ public class ConsulterStatus
                     new(new DateTime(2024, 4, 25, 15, 0, 0), "Robert tire sur une galinette"),
                     new(
                         new DateTime(2024, 4, 25, 15, 30, 0),
-                        "La partie de chasse est terminée, vainqueur :  Robert - 3 galinettes"),
+                        "La partie de chasse est terminée, vainqueur :  Robert - 3 galinettes")
                 })
             .Build();
-        repository.Add(partieDeChasse);
+        Repository.Add(partieDeChasse);
 
         var status = service.ConsulterStatus(partieDeChasse.Id);
 
@@ -118,12 +116,12 @@ public class ConsulterStatus
     public void EchoueCarPartieNexistePas()
     {
         var id = Guid.NewGuid();
-        var repository = new PartieDeChasseRepositoryForTests();
-        var service = new PartieDeChasseService(repository, () => DateTime.Now);
+
+        var service = new PartieDeChasseService(Repository, () => DateTime.Now);
         var reprendrePartieQuandPartieExistePas = () => service.ConsulterStatus(id);
 
         reprendrePartieQuandPartieExistePas.Should()
             .Throw<LaPartieDeChasseNexistePas>();
-        repository.SavedPartieDeChasse().Should().BeNull();
+        Repository.SavedPartieDeChasse().Should().BeNull();
     }
 }

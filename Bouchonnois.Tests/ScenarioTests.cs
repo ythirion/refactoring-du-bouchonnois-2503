@@ -10,8 +10,8 @@ public class ScenarioTests
     public void DéroulerUnePartie()
     {
         var time = new DateTime(2024, 4, 25, 9, 0, 0);
-        var repository = new PartieDeChasseRepositoryForTests();
-        var service = new PartieDeChasseService(repository, () => time);
+
+        var service = new PartieDeChasseService(new PartieDeChasseRepositoryForTests(), () => time);
         var chasseurs = new List<(string, int)>
         {
             ("Dédé", 20),
