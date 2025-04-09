@@ -14,7 +14,7 @@ public class ConsulterStatus
         var repository = new PartieDeChasseRepositoryForTests();
         var service = new PartieDeChasseService(repository, () => DateTime.Now);
         var partieDeChasse = PartieDeChasseBuilder.UnePartieDeChasse()
-            .QuiEstEnCours()
+            .EnCours()
             .AvecSesEvenements(
                 new Event(
                     new DateTime(2024, 4, 25, 9, 0, 12),

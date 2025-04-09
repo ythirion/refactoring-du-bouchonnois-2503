@@ -14,7 +14,7 @@ public class Tirer
         var repository = new PartieDeChasseRepositoryForTests();
 
         var partieDeChasse = UnePartieDeChasse()
-            .QuiEstEnCours()
+            .EnCours()
             .AvecDesChasseurs(new Chasseur(nom: "Bernard", ballesRestantes: 8))
             .Build();
 

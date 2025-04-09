@@ -20,7 +20,7 @@ public class PartieDeChasseBuilder
 
     public static PartieDeChasseBuilder UnePartieDeChasse() => new();
 
-    public PartieDeChasseBuilder QuiEstEnCours()
+    public PartieDeChasseBuilder EnCours()
     {
         _status = PartieStatus.EnCours;
         return this;
