@@ -106,11 +106,11 @@ public class Tirer
         var partieDeChasse = UnePartieDeChasse()
             .EnApéro()
             .Build();
-        
+
         repository.Add(partieDeChasse);
 
         var service = new PartieDeChasseService(repository, () => now);
-        
+
         var tirerEnPleinApéro = () => service.Tirer(partieDeChasse.Id, ChasseurInconnu);
 
         tirerEnPleinApéro.Should()
@@ -134,23 +134,28 @@ public class Tirer
         var partieDeChasse = UnePartieDeChasse()
             .Terminée()
             .Build();
-        
+
         repository.Add(partieDeChasse);
 
         var service = new PartieDeChasseService(repository, () => now);
-        
+
         var tirerQuandTerminée = () => service.Tirer(partieDeChasse.Id, ChasseurInconnu);
 
         tirerQuandTerminée.Should()
             .Throw<OnTirePasQuandLaPartieEstTerminée>();
 
-        repository
-            .SavedPartieDeChasse()
+        VerifierEvenementEmis(
+            repository
+                .SavedPartieDeChasse(),
+            now,
+            "Chasseur inconnu veut tirer -> On tire pas quand la partie est terminée");
+    }
+
+    private static void VerifierEvenementEmis(PartieDeChasse partieDeChasse, DateTime now, string message)
+        => partieDeChasse
             .Events
             .Should()
-            .BeEquivalentTo(
-                [new Event(now, "Chasseur inconnu veut tirer -> On tire pas quand la partie est terminée")]);
-    }
+            .BeEquivalentTo([new Event(now, message)]);
 
     private static void VerifierChasseurATiré(PartieDeChasse savedPartieDeChasse, string nom, int ballesRestantes)
         => savedPartieDeChasse.Chasseurs.First(c => c.Nom == nom).BallesRestantes.Should().Be(ballesRestantes);
