@@ -5,16 +5,18 @@ namespace Bouchonnois.Tests.UseCases;
 
 public class PartieDeChasseBuilder
 {
-    private PartieStatus _status = PartieStatus.EnCours;
+    private readonly Guid _id = Guid.NewGuid();
+    private readonly Terrain _terrain = new("Pitibon sur Sauldre", 3);
 
     private List<Chasseur> _chasseurs =
     [
-        new(nom: "Dédé", ballesRestantes: 20),
-        new(nom: "Bernard", ballesRestantes: 8),
-        new(nom: "Robert", ballesRestantes: 12)
+        new("Dédé", 20),
+        new("Bernard", 8),
+        new("Robert", 12)
     ];
 
-    private List<Event> _events = new();
+    private List<Event> _events = [];
+    private PartieStatus _status = PartieStatus.EnCours;
 
     public PartieDeChasseBuilder QuiEstEnCours()
     {
@@ -35,13 +37,10 @@ public class PartieDeChasseBuilder
     }
 
     public PartieDeChasse Build()
-    {
-        var id = Guid.NewGuid();
-        return new PartieDeChasse(
-            id: id,
+        => new(
+            _id,
             chasseurs: _chasseurs,
-            terrain: new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3),
+            terrain: _terrain,
             status: _status,
             events: _events);
-    }
 }
