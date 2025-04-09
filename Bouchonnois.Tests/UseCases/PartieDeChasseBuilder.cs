@@ -6,14 +6,14 @@ namespace Bouchonnois.Tests.UseCases;
 public class PartieDeChasseBuilder
 {
     private PartieStatus _status = PartieStatus.EnCours;
-   
+
     private List<Chasseur> _chasseurs =
     [
         new(nom: "Dédé", ballesRestantes: 20),
         new(nom: "Bernard", ballesRestantes: 8),
         new(nom: "Robert", ballesRestantes: 12)
     ];
-    
+
     private List<Event> _events = new();
 
     public PartieDeChasseBuilder QuiEstEnCours()
@@ -28,7 +28,7 @@ public class PartieDeChasseBuilder
         return this;
     }
 
-    public PartieDeChasseBuilder AvecSesEvenements(List<Event> events)
+    public PartieDeChasseBuilder AvecSesEvenements(params List<Event> events)
     {
         _events = events;
         return this;
