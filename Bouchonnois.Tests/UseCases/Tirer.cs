@@ -31,11 +31,6 @@ public class Tirer
         VerifierChasseurATiré(savedPartieDeChasse, Bernard, 7);
     }
 
-    private static void VerifierChasseurATiré(PartieDeChasse savedPartieDeChasse, string nom, int ballesRestantes)
-    {
-        savedPartieDeChasse.Chasseurs.First(c => c.Nom == nom).BallesRestantes.Should().Be(ballesRestantes);
-    }
-
     [Fact]
     public void EchoueCarPartieNexistePas()
     {
@@ -54,24 +49,17 @@ public class Tirer
     {
         var now = DateTime.Now;
 
-        var id = Guid.NewGuid();
         var repository = new PartieDeChasseRepositoryForTests();
 
-        repository.Add(
-            new PartieDeChasse(
-                id: id,
-                chasseurs: new List<Chasseur>
-                {
-                    new(nom: "Dédé", ballesRestantes: 20),
-                    new(nom: "Bernard", ballesRestantes: 0),
-                    new(nom: "Robert", ballesRestantes: 12),
-                },
-                terrain: new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3),
-                status: PartieStatus.EnCours,
-                events: new List<Event>()));
+        var partieDeChasse = UnePartieDeChasse()
+            .EnCours()
+            .Avec(Bernard().AyantDesBalles(0))
+            .Build();
+        
+        repository.Add(partieDeChasse);
 
         var service = new PartieDeChasseService(repository, () => now);
-        var tirerSansBalle = () => service.Tirer(id, "Bernard");
+        var tirerSansBalle = () => service.Tirer(partieDeChasse.Id, Bernard);
 
         tirerSansBalle.Should()
             .Throw<TasPlusDeBallesMonVieuxChasseALaMain>();
@@ -179,5 +167,10 @@ public class Tirer
             .Should()
             .BeEquivalentTo(
                 [new Event(now, "Chasseur inconnu veut tirer -> On tire pas quand la partie est terminée")]);
+    }
+    
+    private static void VerifierChasseurATiré(PartieDeChasse savedPartieDeChasse, string nom, int ballesRestantes)
+    {
+        savedPartieDeChasse.Chasseurs.First(c => c.Nom == nom).BallesRestantes.Should().Be(ballesRestantes);
     }
 }
