@@ -23,7 +23,7 @@ public class Tirer
     [Fact]
     public void AvecUnChasseurAyantDesBalles()
     {
-        var partieDeChasse = PartieDeChasseExistante(
+        var partieDeChasse = UnePartieDeChasseExistante(
             _ =>
                 _.EnCours()
                     .Avec(Bernard().AyantDesBalles(8)));
@@ -31,6 +31,7 @@ public class Tirer
         _service.Tirer(partieDeChasse.Id, Bernard);
 
         _repository.SavedPartieDeChasse().VerifierChasseurATiré(Bernard, 7);
+        _repository.SavedPartieDeChasse().VerifierEvenementEmis(_now, "Bernard tire");
     }
     
     [Fact]
@@ -47,7 +48,7 @@ public class Tirer
     [Fact]
     public void EchoueAvecUnChasseurNayantPlusDeBalles()
     {
-        var partieDeChasse = PartieDeChasseExistante(
+        var partieDeChasse = UnePartieDeChasseExistante(
             _ =>
                 _.EnCours()
                     .Avec(Bernard().AyantDesBalles(0)));
@@ -66,7 +67,7 @@ public class Tirer
     [Fact]
     public void EchoueCarLeChasseurNestPasDansLaPartie()
     {
-        var partieDeChasse = PartieDeChasseExistante(_ => _.EnCours().Avec(Bernard()));
+        var partieDeChasse = UnePartieDeChasseExistante(_ => _.EnCours().Avec(Bernard()));
 
         var chasseurInconnuVeutTirer = () => _service.Tirer(partieDeChasse.Id, ChasseurInconnu);
 
@@ -80,7 +81,7 @@ public class Tirer
     [Fact]
     public void EchoueSiLesChasseursSontEnApero()
     {
-        var partieDeChasse = PartieDeChasseExistante(_ => _.EnApéro());
+        var partieDeChasse = UnePartieDeChasseExistante(_ => _.EnApéro());
 
         var tirerEnPleinApéro = () => _service.Tirer(partieDeChasse.Id, ChasseurInconnu);
 
@@ -96,7 +97,7 @@ public class Tirer
     [Fact]
     public void EchoueSiLaPartieDeChasseEstTerminée()
     {
-        var partieDeChasse = PartieDeChasseExistante(_ => _.Terminée());
+        var partieDeChasse = UnePartieDeChasseExistante(_ => _.Terminée());
 
         var tirerQuandTerminée = () => _service.Tirer(partieDeChasse.Id, ChasseurInconnu);
 
@@ -109,7 +110,7 @@ public class Tirer
                 "Chasseur inconnu veut tirer -> On tire pas quand la partie est terminée");
     }
 
-    private PartieDeChasse PartieDeChasseExistante(Func<PartieDeChasseBuilder, PartieDeChasseBuilder> setup)
+    private PartieDeChasse UnePartieDeChasseExistante(Func<PartieDeChasseBuilder, PartieDeChasseBuilder> setup)
     {
         var partieDeChasse = setup(UnePartieDeChasse()).Build();
 
