@@ -67,7 +67,7 @@ public class Tirer
     [Fact]
     public void EchoueCarLeChasseurNestPasDansLaPartie()
     {
-        var partieDeChasse = UnePartieDeChasseExistante(_ => _.EnCours().Avec(Bernard()));
+        var partieDeChasse = UnePartieDeChasseExistante(_ => _.EnCours());
 
         var chasseurInconnuVeutTirer = () => _service.Tirer(partieDeChasse.Id, ChasseurInconnu);
 
@@ -81,7 +81,7 @@ public class Tirer
     [Fact]
     public void EchoueSiLesChasseursSontEnApero()
     {
-        var partieDeChasse = UnePartieDeChasseExistante(_ => _.EnApéro());
+        var partieDeChasse = UnePartieDeChasseExistante(_ => _.ALApéro());
 
         var tirerEnPleinApéro = () => _service.Tirer(partieDeChasse.Id, ChasseurInconnu);
 

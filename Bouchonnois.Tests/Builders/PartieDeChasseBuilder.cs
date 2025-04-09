@@ -26,7 +26,7 @@ public class PartieDeChasseBuilder
         return this;
     }
 
-    public PartieDeChasseBuilder EnApéro()
+    public PartieDeChasseBuilder ALApéro()
     {
         _status = PartieStatus.Apéro;
         return this;
