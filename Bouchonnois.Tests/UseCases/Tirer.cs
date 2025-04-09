@@ -129,24 +129,17 @@ public class Tirer
     {
         var now = DateTime.Now;
 
-        var id = Guid.NewGuid();
         var repository = new PartieDeChasseRepositoryForTests();
 
-        repository.Add(
-            new PartieDeChasse(
-                id,
-                chasseurs: new List<Chasseur>
-                {
-                    new("Dédé", 20),
-                    new("Bernard", 8),
-                    new("Robert", 12)
-                },
-                terrain: new Terrain("Pitibon sur Sauldre", 3),
-                status: PartieStatus.Terminée,
-                events: new List<Event>()));
+        var partieDeChasse = UnePartieDeChasse()
+            .Terminée()
+            .Build();
+        
+        repository.Add(partieDeChasse);
 
         var service = new PartieDeChasseService(repository, () => now);
-        var tirerQuandTerminée = () => service.Tirer(id, ChasseurInconnu);
+        
+        var tirerQuandTerminée = () => service.Tirer(partieDeChasse.Id, ChasseurInconnu);
 
         tirerQuandTerminée.Should()
             .Throw<OnTirePasQuandLaPartieEstTerminée>();

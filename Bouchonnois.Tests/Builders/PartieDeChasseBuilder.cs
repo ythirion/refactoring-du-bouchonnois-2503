@@ -31,6 +31,12 @@ public class PartieDeChasseBuilder
         _status = PartieStatus.Apéro;
         return this;
     }
+    
+    public PartieDeChasseBuilder Terminée()
+    { 
+        _status = PartieStatus.Terminée;
+        return this;
+    }
 
     public PartieDeChasseBuilder Avec(params List<Chasseur> chasseurs)
     {
