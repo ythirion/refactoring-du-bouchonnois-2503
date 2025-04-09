@@ -18,7 +18,7 @@ public class Tirer
 
         var partieDeChasse = UnePartieDeChasse()
             .EnCours()
-            .Avec(Bernard().AyantDesBalles(8).Build())
+            .Avec(Bernard().AyantDesBalles(8))
             .Build();
 
         repository.Add(partieDeChasse);

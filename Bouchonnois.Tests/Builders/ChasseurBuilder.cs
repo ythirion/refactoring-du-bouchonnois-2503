@@ -24,4 +24,6 @@ public class ChasseurBuilder
     }
 
     public Chasseur Build() => new(_nom, _ballesRestantes);
+    
+    public static implicit operator Chasseur(ChasseurBuilder builder) => builder.Build();
 }
