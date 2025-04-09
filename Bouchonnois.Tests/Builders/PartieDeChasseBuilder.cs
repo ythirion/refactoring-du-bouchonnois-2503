@@ -46,3 +46,4 @@ public class PartieDeChasseBuilder
             status: _status,
             events: _events);
 }
+

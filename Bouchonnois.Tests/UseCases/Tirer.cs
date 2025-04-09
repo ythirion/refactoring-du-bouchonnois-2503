@@ -3,12 +3,13 @@ using Bouchonnois.Service;
 using Bouchonnois.Service.Exceptions;
 using Bouchonnois.Tests.Doubles;
 using static Bouchonnois.Tests.Builders.PartieDeChasseBuilder;
+using static Bouchonnois.Tests.UseCases.ChasseurBuilder;
 
 namespace Bouchonnois.Tests.UseCases;
 
 public class Tirer
 {
-    private static readonly Chasseur Bernard = new(nom: "Bernard", ballesRestantes: 8);
+    private const string Bernard = "Bernard";
 
     [Fact]
     public void AvecUnChasseurAyantDesBalles()
@@ -17,17 +18,17 @@ public class Tirer
 
         var partieDeChasse = UnePartieDeChasse()
             .EnCours()
-            .Avec(Bernard)
+            .Avec(Bernard().AyantDesBalles(8).Build())
             .Build();
 
         repository.Add(partieDeChasse);
 
         var service = new PartieDeChasseService(repository, () => DateTime.Now);
 
-        service.Tirer(partieDeChasse.Id, "Bernard");
+        service.Tirer(partieDeChasse.Id, Bernard);
 
         var savedPartieDeChasse = repository.SavedPartieDeChasse();
-        VerifierChasseurATiré(savedPartieDeChasse, "Bernard", 7);
+        VerifierChasseurATiré(savedPartieDeChasse, Bernard, 7);
     }
 
     private static void VerifierChasseurATiré(PartieDeChasse savedPartieDeChasse, string nom, int ballesRestantes)
@@ -179,4 +180,26 @@ public class Tirer
             .BeEquivalentTo(
                 [new Event(now, "Chasseur inconnu veut tirer -> On tire pas quand la partie est terminée")]);
     }
+}
+
+public class ChasseurBuilder
+{
+    private string _nom = "Chasseur Inconnu";
+    private int _ballesRestantes = 0;
+    
+    public static ChasseurBuilder Bernard() => new ChasseurBuilder().Nommé("Bernard").AyantDesBalles(8);
+
+    public ChasseurBuilder Nommé(string nom)
+    {
+        _nom = nom;
+        return this;
+    }
+    
+    public ChasseurBuilder AyantDesBalles(int ballesRestantes)
+    {
+        _ballesRestantes = ballesRestantes;
+        return this;
+    }
+
+    public Chasseur Build() => new(_nom, _ballesRestantes);
 }
