@@ -1,6 +1,7 @@
 using Bouchonnois.Domain;
 using Bouchonnois.Service;
 using Bouchonnois.Service.Exceptions;
+using Bouchonnois.Tests.Assertions;
 using Bouchonnois.Tests.Doubles;
 
 namespace Bouchonnois.Tests.UseCases;
@@ -13,11 +14,11 @@ public class DemarrerUnePartieDeChasse
         var repository = new PartieDeChasseRepositoryForTests();
         var service = new PartieDeChasseService(repository, () => DateTime.Now);
         var chasseurs = new List<(string, int)>
-            {
-                ("Dédé", 20),
-                ("Bernard", 8),
-                ("Robert", 12)
-            };
+        {
+            ("Dédé", 20),
+            ("Bernard", 8),
+            ("Robert", 12)
+        };
         var terrainDeChasse = ("Pitibon sur Sauldre", 3);
         var id = service.Demarrer(
             terrainDeChasse,
@@ -76,10 +77,10 @@ public class DemarrerUnePartieDeChasse
         var repository = new PartieDeChasseRepositoryForTests();
         var service = new PartieDeChasseService(repository, () => DateTime.Now);
         var chasseurs = new List<(string, int)>
-            {
-                ("Dédé", 20),
-                ("Bernard", 0),
-            };
+        {
+            ("Dédé", 20),
+            ("Bernard", 0),
+        };
         var terrainDeChasse = ("Pitibon sur Sauldre", 3);
 
         Action demarrerPartieAvecChasseurSansBalle = () => service.Demarrer(terrainDeChasse, chasseurs);

@@ -1,6 +1,7 @@
 using Bouchonnois.Domain;
 using Bouchonnois.Service;
 using Bouchonnois.Service.Exceptions;
+using Bouchonnois.Tests.Assertions;
 using Bouchonnois.Tests.Doubles;
 
 namespace Bouchonnois.Tests.UseCases;
@@ -18,33 +19,21 @@ public class TirerSurUneGalinette
                 id: id,
                 chasseurs: new List<Chasseur>
                 {
-                        new(nom: "Dédé", ballesRestantes: 20),
-                        new(nom: "Bernard", ballesRestantes: 8),
-                        new(nom: "Robert", ballesRestantes: 12),
+                    new(nom: "Dédé", ballesRestantes: 20),
+                    new(nom: "Bernard", ballesRestantes: 8),
+                    new(nom: "Robert", ballesRestantes: 12),
                 },
                 terrain: new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3),
                 status: PartieStatus.EnCours,
                 events: new List<Event>()));
 
         var service = new PartieDeChasseService(repository, () => DateTime.Now);
-
         service.TirerSurUneGalinette(id, "Bernard");
 
-        var savedPartieDeChasse = repository.SavedPartieDeChasse();
-        savedPartieDeChasse.Id.Should().Be(id);
-        savedPartieDeChasse.Status.Should().Be(PartieStatus.EnCours);
-        savedPartieDeChasse.Terrain.Nom.Should().Be("Pitibon sur Sauldre");
-        savedPartieDeChasse.Terrain.NbGalinettes.Should().Be(2);
-        savedPartieDeChasse.Chasseurs.Should().HaveCount(3);
-        savedPartieDeChasse.Chasseurs[0].Nom.Should().Be("Dédé");
-        savedPartieDeChasse.Chasseurs[0].BallesRestantes.Should().Be(20);
-        savedPartieDeChasse.Chasseurs[0].NbGalinettes.Should().Be(0);
-        savedPartieDeChasse.Chasseurs[1].Nom.Should().Be("Bernard");
-        savedPartieDeChasse.Chasseurs[1].BallesRestantes.Should().Be(7);
-        savedPartieDeChasse.Chasseurs[1].NbGalinettes.Should().Be(1);
-        savedPartieDeChasse.Chasseurs[2].Nom.Should().Be("Robert");
-        savedPartieDeChasse.Chasseurs[2].BallesRestantes.Should().Be(12);
-        savedPartieDeChasse.Chasseurs[2].NbGalinettes.Should().Be(0);
+        repository.SavedPartieDeChasse()
+            .HaveEmitted("Bernard tire sur une galinette")
+            .ChasseurATiréSurUneGalinette(Data.Bernard, ballesRestantes: 7, galinettes: 1)
+            .GalinettesRestantesSurLeTerrain(2);
     }
 
     [Fact]
@@ -72,9 +61,9 @@ public class TirerSurUneGalinette
             id: id,
             chasseurs: new List<Chasseur>
             {
-                    new(nom: "Dédé", ballesRestantes: 20),
-                    new(nom: "Bernard", ballesRestantes: 0),
-                    new(nom: "Robert", ballesRestantes: 12),
+                new(nom: "Dédé", ballesRestantes: 20),
+                new(nom: "Bernard", ballesRestantes: 0),
+                new(nom: "Robert", ballesRestantes: 12),
             },
             terrain: new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3),
             status: PartieStatus.EnCours,
@@ -95,8 +84,8 @@ public class TirerSurUneGalinette
             .BeEquivalentTo(
             [
                 new Event(
-                        now,
-                        "Bernard veut tirer sur une galinette -> T'as plus de balles mon vieux, chasse à la main")
+                    now,
+                    "Bernard veut tirer sur une galinette -> T'as plus de balles mon vieux, chasse à la main")
             ]);
     }
 
@@ -111,9 +100,9 @@ public class TirerSurUneGalinette
                 id: id,
                 chasseurs: new List<Chasseur>
                 {
-                        new(nom: "Dédé", ballesRestantes: 20),
-                        new(nom: "Bernard", ballesRestantes: 8),
-                        new(nom: "Robert", ballesRestantes: 12),
+                    new(nom: "Dédé", ballesRestantes: 20),
+                    new(nom: "Bernard", ballesRestantes: 8),
+                    new(nom: "Robert", ballesRestantes: 12),
                 },
                 terrain: new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 0),
                 status: PartieStatus.EnCours));
@@ -137,9 +126,9 @@ public class TirerSurUneGalinette
                 id: id,
                 chasseurs: new List<Chasseur>
                 {
-                        new(nom: "Dédé", ballesRestantes: 20),
-                        new(nom: "Bernard", ballesRestantes: 8),
-                        new(nom: "Robert", ballesRestantes: 12),
+                    new(nom: "Dédé", ballesRestantes: 20),
+                    new(nom: "Bernard", ballesRestantes: 8),
+                    new(nom: "Robert", ballesRestantes: 12),
                 },
                 terrain: new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3),
                 status: PartieStatus.EnCours));
@@ -167,9 +156,9 @@ public class TirerSurUneGalinette
                 id: id,
                 chasseurs: new List<Chasseur>
                 {
-                        new(nom: "Dédé", ballesRestantes: 20),
-                        new(nom: "Bernard", ballesRestantes: 8),
-                        new(nom: "Robert", ballesRestantes: 12),
+                    new(nom: "Dédé", ballesRestantes: 20),
+                    new(nom: "Bernard", ballesRestantes: 8),
+                    new(nom: "Robert", ballesRestantes: 12),
                 },
                 terrain: new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3),
                 status: PartieStatus.Apéro,
@@ -204,9 +193,9 @@ public class TirerSurUneGalinette
                 id: id,
                 chasseurs: new List<Chasseur>
                 {
-                        new(nom: "Dédé", ballesRestantes: 20),
-                        new(nom: "Bernard", ballesRestantes: 8),
-                        new(nom: "Robert", ballesRestantes: 12),
+                    new(nom: "Dédé", ballesRestantes: 20),
+                    new(nom: "Bernard", ballesRestantes: 8),
+                    new(nom: "Robert", ballesRestantes: 12),
                 },
                 terrain: new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3),
                 status: PartieStatus.Terminée,
