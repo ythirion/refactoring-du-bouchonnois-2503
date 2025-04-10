@@ -1,7 +1,6 @@
 using Bouchonnois.Domain;
 using Bouchonnois.Service;
 using Bouchonnois.Service.Exceptions;
-using Bouchonnois.Tests.Assertions;
 using Bouchonnois.Tests.Doubles;
 
 namespace Bouchonnois.Tests.UseCases;
