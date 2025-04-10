@@ -8,6 +8,7 @@ public class PartieDeChasseBuilder
     private List<Chasseur> _chasseurs = new();
     private List<Event> _events = new();
     private PartieStatus _status = PartieStatus.EnCours;
+    private int _nbGalinettes = Data.GalinettesSurUnTerrainRiche;
 
     private PartieDeChasseBuilder()
     {
@@ -18,13 +19,6 @@ public class PartieDeChasseBuilder
     public static PartieDeChasseBuilder UnePartieDeChasseALapero => new() { _status = PartieStatus.Apéro };
 
     public static PartieDeChasseBuilder UnePartieDeChasseTerminée => new() { _status = PartieStatus.Terminée };
-
-    [Obsolete("Use UnePartieDeChasseEnCours instead", true)]
-    public PartieDeChasseBuilder QuiEstEnCours()
-    {
-        _status = PartieStatus.EnCours;
-        return this;
-    }
 
     public PartieDeChasseBuilder AvecDesChasseurs(List<Chasseur> chasseurs)
     {
@@ -44,8 +38,13 @@ public class PartieDeChasseBuilder
         return new PartieDeChasse(
             id,
             chasseurs: _chasseurs,
-            terrain: new Terrain("Pitibon sur Sauldre", Data.GalinettesSurUnTerrainRiche),
+            terrain: new Terrain("Pitibon sur Sauldre", _nbGalinettes),
             status: _status,
             events: _events);
+    }
+    public PartieDeChasseBuilder AvecUnTerrainSansGalinette()
+    {
+        _nbGalinettes = 0;
+        return this;
     }
 }
