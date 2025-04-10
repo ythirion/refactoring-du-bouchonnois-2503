@@ -1,7 +1,6 @@
 using Bouchonnois.Domain;
 using Bouchonnois.Service;
 using Bouchonnois.Service.Exceptions;
-using Bouchonnois.Tests.Assertions;
 using Bouchonnois.Tests.Doubles;
 
 namespace Bouchonnois.Tests.UseCases;
@@ -13,13 +12,13 @@ public class ConsulterStatus
     {
         var repository = new PartieDeChasseRepositoryForTests();
         var service = new PartieDeChasseService(repository, () => DateTime.Now);
-        var partieDeChasse = new PartieDeChasseBuilder()
-            .QuiEstEnCours()
+        var partieDeChasse = PartieDeChasseBuilder
+            .UnePartieDeChasseEnCours
             .AvecDesChasseurs(new List<Chasseur>
                 {
-                    new(nom: "Dédé", ballesRestantes: 20),
-                    new(nom: "Bernard", ballesRestantes: 8),
-                    new(nom: "Robert", ballesRestantes: 12, nbGalinettes: 2),
+                    new("Dédé", 20),
+                    new("Bernard", 8),
+                    new("Robert", 12, 2)
                 }
             )
             .AvecSesEvenements(new List<Event>
@@ -48,14 +47,14 @@ public class ConsulterStatus
 
         repository.Add(
             new PartieDeChasse(
-                id: id,
+                id,
                 chasseurs: new List<Chasseur>
                 {
-                    new(nom: "Dédé", ballesRestantes: 20),
-                    new(nom: "Bernard", ballesRestantes: 8),
-                    new(nom: "Robert", ballesRestantes: 12, nbGalinettes: 2),
+                    new("Dédé", 20),
+                    new("Bernard", 8),
+                    new("Robert", 12, 2)
                 },
-                terrain: new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3),
+                terrain: new Terrain("Pitibon sur Sauldre", 3),
                 status: PartieStatus.EnCours,
                 events: new List<Event>
                 {
@@ -85,7 +84,7 @@ public class ConsulterStatus
                     new(new DateTime(2024, 4, 25, 15, 0, 0), "Robert tire sur une galinette"),
                     new(
                         new DateTime(2024, 4, 25, 15, 30, 0),
-                        "La partie de chasse est terminée, vainqueur :  Robert - 3 galinettes"),
+                        "La partie de chasse est terminée, vainqueur :  Robert - 3 galinettes")
                 }));
 
         var status = service.ConsulterStatus(id);
@@ -126,41 +125,5 @@ public class ConsulterStatus
         reprendrePartieQuandPartieExistePas.Should()
             .Throw<LaPartieDeChasseNexistePas>();
         repository.SavedPartieDeChasse().Should().BeNull();
-    }
-}
-
-public class PartieDeChasseBuilder
-{
-    private PartieStatus _status = PartieStatus.EnCours;
-    private List<Chasseur> _chasseurs = new();
-    private List<Event> _events = new();
-
-    public PartieDeChasseBuilder QuiEstEnCours()
-    {
-        _status = PartieStatus.EnCours;
-        return this;
-    }
-
-    public PartieDeChasseBuilder AvecDesChasseurs(List<Chasseur> chasseurs)
-    {
-        _chasseurs = chasseurs;
-        return this;
-    }
-
-    public PartieDeChasseBuilder AvecSesEvenements(List<Event> events)
-    {
-        _events = events;
-        return this;
-    }
-
-    public PartieDeChasse Build()
-    {
-        var id = Guid.NewGuid();
-        return new PartieDeChasse(
-            id: id,
-            chasseurs: _chasseurs,
-            terrain: new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3),
-            status: _status,
-            events: _events);
     }
 }
