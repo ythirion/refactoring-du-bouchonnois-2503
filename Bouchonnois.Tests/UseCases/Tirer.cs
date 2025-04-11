@@ -1,4 +1,3 @@
-using Bouchonnois.Domain;
 using Bouchonnois.Service;
 using Bouchonnois.Service.Exceptions;
 using Bouchonnois.Tests.Builders;
@@ -23,21 +22,21 @@ public class Tirer
     [Fact]
     public void AvecUnChasseurAyantDesBalles()
     {
-        var partieDeChasse = UnePartieDeChasseExistante(
-            _ =>
-                _.EnCours()
-                    .Avec(Bernard().AyantDesBalles(8)));
+        var id = UnePartieDeChasseExistante(
+            UnePartieDeChasse()
+                .EnCours()
+                .Avec(Bernard().AyantDesBalles(8)));
 
-        _service.Tirer(partieDeChasse.Id, Bernard);
+        _service.Tirer(id, Bernard);
 
         _repository.SavedPartieDeChasse().VerifierChasseurATiré(Bernard, 7);
         _repository.SavedPartieDeChasse().VerifierEvenementEmis(_now, "Bernard tire");
     }
-    
+
     [Fact]
     public void EchoueCarPartieNexistePas()
     {
-        var id = Guid.NewGuid();
+        var id = UnePartieDeChasseInexistante();
 
         var tirerQuandPartieExistePas = () => _service.Tirer(id, Bernard);
 
@@ -45,15 +44,16 @@ public class Tirer
         _repository.SavedPartieDeChasse().Should().BeNull();
     }
 
+
     [Fact]
     public void EchoueAvecUnChasseurNayantPlusDeBalles()
     {
-        var partieDeChasse = UnePartieDeChasseExistante(
-            _ =>
-                _.EnCours()
-                    .Avec(Bernard().AyantDesBalles(0)));
+        var id = UnePartieDeChasseExistante(
+            UnePartieDeChasse()
+                .EnCours()
+                .Avec(Bernard().AyantDesBalles(0)));
 
-        var tirerSansBalle = () => _service.Tirer(partieDeChasse.Id, Bernard);
+        var tirerSansBalle = () => _service.Tirer(id, Bernard);
 
         tirerSansBalle.Should()
             .Throw<TasPlusDeBallesMonVieuxChasseALaMain>();
@@ -67,9 +67,9 @@ public class Tirer
     [Fact]
     public void EchoueCarLeChasseurNestPasDansLaPartie()
     {
-        var partieDeChasse = UnePartieDeChasseExistante(_ => _.EnCours());
+        var id = UnePartieDeChasseExistante(UnePartieDeChasse().EnCours());
 
-        var chasseurInconnuVeutTirer = () => _service.Tirer(partieDeChasse.Id, ChasseurInconnu);
+        var chasseurInconnuVeutTirer = () => _service.Tirer(id, ChasseurInconnu);
 
         chasseurInconnuVeutTirer.Should()
             .Throw<ChasseurInconnu>()
@@ -81,9 +81,9 @@ public class Tirer
     [Fact]
     public void EchoueSiLesChasseursSontEnApero()
     {
-        var partieDeChasse = UnePartieDeChasseExistante(_ => _.ALApéro());
+        var id = UnePartieDeChasseExistante(UnePartieDeChasse().ALApéro());
 
-        var tirerEnPleinApéro = () => _service.Tirer(partieDeChasse.Id, ChasseurInconnu);
+        var tirerEnPleinApéro = () => _service.Tirer(id, ChasseurInconnu);
 
         tirerEnPleinApéro.Should()
             .Throw<OnTirePasPendantLapéroCestSacré>();
@@ -97,9 +97,9 @@ public class Tirer
     [Fact]
     public void EchoueSiLaPartieDeChasseEstTerminée()
     {
-        var partieDeChasse = UnePartieDeChasseExistante(_ => _.Terminée());
+        var id = UnePartieDeChasseExistante(UnePartieDeChasse().Terminée());
 
-        var tirerQuandTerminée = () => _service.Tirer(partieDeChasse.Id, ChasseurInconnu);
+        var tirerQuandTerminée = () => _service.Tirer(id, ChasseurInconnu);
 
         tirerQuandTerminée.Should()
             .Throw<OnTirePasQuandLaPartieEstTerminée>();
@@ -110,12 +110,14 @@ public class Tirer
                 "Chasseur inconnu veut tirer -> On tire pas quand la partie est terminée");
     }
 
-    private PartieDeChasse UnePartieDeChasseExistante(Func<PartieDeChasseBuilder, PartieDeChasseBuilder> setup)
+    private Guid UnePartieDeChasseInexistante() => Guid.NewGuid();
+
+    private Guid UnePartieDeChasseExistante(PartieDeChasseBuilder partieDeChasseBuilder)
     {
-        var partieDeChasse = setup(UnePartieDeChasse()).Build();
+        var partieDeChasse = partieDeChasseBuilder.Build();
 
         _repository.Add(partieDeChasse);
 
-        return partieDeChasse;
+        return partieDeChasse.Id;
     }
 }
