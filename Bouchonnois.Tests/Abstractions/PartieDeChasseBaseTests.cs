@@ -1,6 +1,4 @@
-﻿using Bouchonnois.Domain;
-using Bouchonnois.Tests.Doubles;
-using Bouchonnois.Tests.UseCases;
+﻿using Bouchonnois.Tests.Doubles;
 using Bouchonnois.Tests.UseCases.DataBuilders;
 
 namespace Bouchonnois.Tests.Abstractions;
