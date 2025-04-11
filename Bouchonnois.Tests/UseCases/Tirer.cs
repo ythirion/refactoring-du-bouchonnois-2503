@@ -1,24 +1,12 @@
-using Bouchonnois.Service;
 using Bouchonnois.Service.Exceptions;
-using Bouchonnois.Tests.Builders;
-using Bouchonnois.Tests.Doubles;
 using Bouchonnois.Tests.Verifications;
 using static Bouchonnois.Tests.Builders.PartieDeChasseBuilder;
 using static Bouchonnois.Tests.Builders.ChasseurBuilder;
 
 namespace Bouchonnois.Tests.UseCases;
 
-public class Tirer
+public class Tirer : UseCaseTest
 {
-    private const string Bernard = "Bernard";
-    private const string ChasseurInconnu = "Chasseur inconnu";
-
-    private readonly DateTime _now = DateTime.Now;
-    private readonly PartieDeChasseRepositoryForTests _repository = new();
-    private readonly PartieDeChasseService _service;
-
-    public Tirer() => _service = new PartieDeChasseService(_repository, () => _now);
-
     [Fact]
     public void AvecUnChasseurAyantDesBalles()
     {
@@ -27,10 +15,10 @@ public class Tirer
                 .EnCours()
                 .Avec(Bernard().AyantDesBalles(8)));
 
-        _service.Tirer(id, Bernard);
+        Service.Tirer(id, Bernard);
 
-        _repository.SavedPartieDeChasse().VerifierChasseurATiré(Bernard, 7);
-        _repository.SavedPartieDeChasse().VerifierEvenementEmis(_now, "Bernard tire");
+        Repository.SavedPartieDeChasse().VerifierChasseurATiré(Bernard, 7);
+        Repository.SavedPartieDeChasse().VerifierEvenementEmis(Now, "Bernard tire");
     }
 
     [Fact]
@@ -38,10 +26,10 @@ public class Tirer
     {
         var id = UnePartieDeChasseInexistante();
 
-        var tirerQuandPartieExistePas = () => _service.Tirer(id, Bernard);
+        var tirerQuandPartieExistePas = () => Service.Tirer(id, Bernard);
 
         tirerQuandPartieExistePas.Should().Throw<LaPartieDeChasseNexistePas>();
-        _repository.SavedPartieDeChasse().Should().BeNull();
+        Repository.SavedPartieDeChasse().Should().BeNull();
     }
 
 
@@ -53,14 +41,14 @@ public class Tirer
                 .EnCours()
                 .Avec(Bernard().AyantDesBalles(0)));
 
-        var tirerSansBalle = () => _service.Tirer(id, Bernard);
+        var tirerSansBalle = () => Service.Tirer(id, Bernard);
 
         tirerSansBalle.Should()
             .Throw<TasPlusDeBallesMonVieuxChasseALaMain>();
 
-        _repository.SavedPartieDeChasse()
+        Repository.SavedPartieDeChasse()
             .VerifierEvenementEmis(
-                _now,
+                Now,
                 "Bernard tire -> T'as plus de balles mon vieux, chasse à la main");
     }
 
@@ -69,13 +57,13 @@ public class Tirer
     {
         var id = UnePartieDeChasseExistante(UnePartieDeChasse().EnCours());
 
-        var chasseurInconnuVeutTirer = () => _service.Tirer(id, ChasseurInconnu);
+        var chasseurInconnuVeutTirer = () => Service.Tirer(id, ChasseurInconnu);
 
         chasseurInconnuVeutTirer.Should()
             .Throw<ChasseurInconnu>()
             .WithMessage("Chasseur inconnu Chasseur inconnu");
 
-        _repository.SavedPartieDeChasse().Should().BeNull();
+        Repository.SavedPartieDeChasse().Should().BeNull();
     }
 
     [Fact]
@@ -83,14 +71,14 @@ public class Tirer
     {
         var id = UnePartieDeChasseExistante(UnePartieDeChasse().ALApéro());
 
-        var tirerEnPleinApéro = () => _service.Tirer(id, ChasseurInconnu);
+        var tirerEnPleinApéro = () => Service.Tirer(id, ChasseurInconnu);
 
         tirerEnPleinApéro.Should()
             .Throw<OnTirePasPendantLapéroCestSacré>();
 
-        _repository.SavedPartieDeChasse()
+        Repository.SavedPartieDeChasse()
             .VerifierEvenementEmis(
-                _now,
+                Now,
                 "Chasseur inconnu veut tirer -> On tire pas pendant l'apéro, c'est sacré !!!");
     }
 
@@ -99,25 +87,14 @@ public class Tirer
     {
         var id = UnePartieDeChasseExistante(UnePartieDeChasse().Terminée());
 
-        var tirerQuandTerminée = () => _service.Tirer(id, ChasseurInconnu);
+        var tirerQuandTerminée = () => Service.Tirer(id, ChasseurInconnu);
 
         tirerQuandTerminée.Should()
             .Throw<OnTirePasQuandLaPartieEstTerminée>();
 
-        _repository.SavedPartieDeChasse()
+        Repository.SavedPartieDeChasse()
             .VerifierEvenementEmis(
-                _now,
+                Now,
                 "Chasseur inconnu veut tirer -> On tire pas quand la partie est terminée");
-    }
-
-    private Guid UnePartieDeChasseInexistante() => Guid.NewGuid();
-
-    private Guid UnePartieDeChasseExistante(PartieDeChasseBuilder partieDeChasseBuilder)
-    {
-        var partieDeChasse = partieDeChasseBuilder.Build();
-
-        _repository.Add(partieDeChasse);
-
-        return partieDeChasse.Id;
     }
 }
