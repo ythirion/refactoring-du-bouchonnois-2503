@@ -1,3 +1,4 @@
+using Bouchonnois.Domain;
 using Bouchonnois.Service;
 using Bouchonnois.Service.Exceptions;
 using Bouchonnois.Tests.Abstractions;
@@ -13,13 +14,15 @@ public class TirerSurUneGalinette : PartieDeChasseBaseTests
     [Fact]
     public void AvecUnChasseurAyantDesBallesEtAssezDeGalinettesSurLeTerrain()
     {
-        var partieDeChasse = UnePartieDeChasseEnCours
-            .AvecDesChasseurs([Dédé, Bernard, Robert])
-            .Build();
-        Repository.Add(partieDeChasse);
+        Repository.Add(
+            UnePartieDeChasseEnCours
+                .AvecDesChasseurs([Dédé, Bernard, Robert])
+                .Build());
 
         var service = new PartieDeChasseService(Repository, () => DateTime.Now);
-        service.TirerSurUneGalinette(partieDeChasse.Id, Data.Bernard);
+        service.TirerSurUneGalinette(UnePartieDeChasseEnCours
+            .AvecDesChasseurs([Dédé, Bernard, Robert])
+            .Build().Id, Data.Bernard);
 
         Repository.SavedPartieDeChasse()
             .HaveEmitted("Bernard tire sur une galinette")
@@ -44,18 +47,22 @@ public class TirerSurUneGalinette : PartieDeChasseBaseTests
     {
         var now = DateTime.Now;
 
-        var partieDeChasse = UnePartieDeChasseEnCours
+        Repository.Add(UnePartieDeChasseEnCours
             .AvecDesChasseurs([
                 Dédé,
                 Bernard.AvecDesBalles(0),
                 Robert
             ])
-            .Build();
-
-        Repository.Add(partieDeChasse);
+            .Build());
 
         var service = new PartieDeChasseService(Repository, () => now);
-        var tirerSansBalle = () => service.TirerSurUneGalinette(partieDeChasse.Id, Data.Bernard);
+        var tirerSansBalle = () => service.TirerSurUneGalinette(UnePartieDeChasseEnCours
+            .AvecDesChasseurs([
+                Dédé,
+                Bernard.AvecDesBalles(0),
+                Robert
+            ])
+            .Build().Id, Data.Bernard);
 
         tirerSansBalle.Should()
             .Throw<TasPlusDeBallesMonVieuxChasseALaMain>();
