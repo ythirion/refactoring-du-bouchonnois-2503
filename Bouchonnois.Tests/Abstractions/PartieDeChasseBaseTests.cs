@@ -1,6 +1,7 @@
 ﻿using Bouchonnois.Domain;
 using Bouchonnois.Tests.Doubles;
 using Bouchonnois.Tests.UseCases;
+using Bouchonnois.Tests.UseCases.DataBuilders;
 
 namespace Bouchonnois.Tests.Abstractions;
 
@@ -8,13 +9,18 @@ public abstract class PartieDeChasseBaseTests
 {
     protected PartieDeChasseRepositoryForTests Repository = new();
 
-    protected Chasseur Dédé = new(Data.Dédé, 20);
-    protected Chasseur Bernard = new(Data.Bernard, 8);
-    protected Chasseur Robert = new(Data.Robert, 12);
+    protected ChasseurBuilder Dédé = new ChasseurBuilder(Data.Dédé)
+        .AvecDesBalles(20);
+
+    protected ChasseurBuilder Bernard = new ChasseurBuilder(Data.Bernard)
+        .AvecDesBalles(8);
+
+    protected ChasseurBuilder Robert = new ChasseurBuilder(Data.Robert)
+        .AvecDesBalles(12);
 
     protected static PartieDeChasseBuilder UnePartieDeChasseEnCours => PartieDeChasseBuilder.UnePartieDeChasseEnCours;
 
-    protected static PartieDeChasseBuilder UnePartieDeChasseALApero => PartieDeChasseBuilder.UnePartieDeChasseALapero;
+    protected static PartieDeChasseBuilder UnePartieDeChasseAlApero => PartieDeChasseBuilder.UnePartieDeChasseALapero;
 
     protected static PartieDeChasseBuilder UnePartieDeChasseTerminée => PartieDeChasseBuilder.UnePartieDeChasseTerminée;
 }

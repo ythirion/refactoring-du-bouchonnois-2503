@@ -3,8 +3,9 @@ using Bouchonnois.Service;
 using Bouchonnois.Service.Exceptions;
 using Bouchonnois.Tests.Abstractions;
 using Bouchonnois.Tests.Assertions;
+using Bouchonnois.Tests.UseCases.DataBuilders;
 
-using static Bouchonnois.Tests.UseCases.Data;
+using static Bouchonnois.Tests.UseCases.DataBuilders.Data;
 
 namespace Bouchonnois.Tests.UseCases;
 
@@ -47,7 +48,7 @@ public class TirerSurUneGalinette : PartieDeChasseBaseTests
         var partieDeChasse = UnePartieDeChasseEnCours
             .AvecDesChasseurs([
                 Dédé,
-                new Chasseur(Data.Bernard, 0),
+                Bernard.AvecDesBalles(0),
                 Robert
             ])
             .Build();
@@ -106,7 +107,7 @@ public class TirerSurUneGalinette : PartieDeChasseBaseTests
     public void EchoueSiLesChasseursSontEnApero()
     {
         var now = DateTime.Now;
-        var partieDeChasse = UnePartieDeChasseALApero
+        var partieDeChasse = UnePartieDeChasseAlApero
             .AvecDesChasseurs([Dédé, Bernard, Robert])
             .Build();
         Repository.Add(partieDeChasse);

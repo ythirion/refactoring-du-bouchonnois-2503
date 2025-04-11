@@ -1,4 +1,4 @@
-namespace Bouchonnois.Tests.UseCases;
+namespace Bouchonnois.Tests.UseCases.DataBuilders;
 
 public class Data
 {

@@ -10,7 +10,7 @@ public class ReprendreLaPartieDeChasse : PartieDeChasseBaseTests
     [Fact]
     public void QuandLapéroEstEnCours()
     {
-        var partieDeChasse = UnePartieDeChasseALApero
+        var partieDeChasse = UnePartieDeChasseAlApero
             .AvecDesChasseurs([Dédé, Bernard, Robert])
             .Build();
         Repository.Add(partieDeChasse);

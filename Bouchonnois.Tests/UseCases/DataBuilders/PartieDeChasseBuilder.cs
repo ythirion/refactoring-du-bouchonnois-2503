@@ -1,11 +1,11 @@
 ﻿using Bouchonnois.Domain;
 using Bouchonnois.Service;
 
-namespace Bouchonnois.Tests.UseCases;
+namespace Bouchonnois.Tests.UseCases.DataBuilders;
 
 public class PartieDeChasseBuilder
 {
-    private List<Chasseur> _chasseurs = new();
+    private List<ChasseurBuilder> _chasseurs = new();
     private List<Event> _events = new();
     private PartieStatus _status = PartieStatus.EnCours;
     private int _nbGalinettes = Data.GalinettesSurUnTerrainRiche;
@@ -20,7 +20,7 @@ public class PartieDeChasseBuilder
 
     public static PartieDeChasseBuilder UnePartieDeChasseTerminée => new() { _status = PartieStatus.Terminée };
 
-    public PartieDeChasseBuilder AvecDesChasseurs(List<Chasseur> chasseurs)
+    public PartieDeChasseBuilder AvecDesChasseurs(List<ChasseurBuilder> chasseurs)
     {
         _chasseurs = chasseurs;
         return this;
@@ -37,7 +37,7 @@ public class PartieDeChasseBuilder
         var id = Guid.NewGuid();
         return new PartieDeChasse(
             id,
-            chasseurs: _chasseurs,
+            chasseurs: _chasseurs.Select(chasseur => chasseur.Build()).ToList(),
             terrain: new Terrain("Pitibon sur Sauldre", _nbGalinettes),
             status: _status,
             events: _events);

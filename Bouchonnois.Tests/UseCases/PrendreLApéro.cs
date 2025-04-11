@@ -40,7 +40,7 @@ public class PrendreLApéro : PartieDeChasseBaseTests
     [Fact]
     public void EchoueSiLesChasseursSontDéjaEnApero()
     {
-        var partieDeChasse = UnePartieDeChasseALApero
+        var partieDeChasse = UnePartieDeChasseAlApero
             .AvecDesChasseurs([Dédé, Bernard, Robert])
             .Build();
         Repository.Add(partieDeChasse);

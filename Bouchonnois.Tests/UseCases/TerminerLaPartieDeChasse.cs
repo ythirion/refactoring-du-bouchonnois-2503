@@ -3,6 +3,7 @@ using Bouchonnois.Service;
 using Bouchonnois.Service.Exceptions;
 using Bouchonnois.Tests.Abstractions;
 using Bouchonnois.Tests.Assertions;
+using Bouchonnois.Tests.UseCases.DataBuilders;
 
 namespace Bouchonnois.Tests.UseCases;
 
@@ -13,8 +14,9 @@ public class TerminerLaPartieDeChasse : PartieDeChasseBaseTests
     {
         var partieDeChasse = UnePartieDeChasseEnCours
             .AvecDesChasseurs([
-                Dédé, Bernard,
-                new Chasseur(Data.Robert, 12, 2)
+                Dédé,
+                Bernard,
+                Robert.AvecDesGalinettesDansSaBesace(2)
             ])
             .Build();
         Repository.Add(partieDeChasse);
@@ -34,7 +36,7 @@ public class TerminerLaPartieDeChasse : PartieDeChasseBaseTests
     public void QuandLaPartieEstEnCoursEt1SeulChasseurDansLaPartie()
     {
         var partieDeChasse = UnePartieDeChasseEnCours
-            .AvecDesChasseurs([new Chasseur(Data.Robert, 12, 2)])
+            .AvecDesChasseurs([Robert.AvecDesGalinettesDansSaBesace(2)])
             .Build();
         Repository.Add(partieDeChasse);
 
@@ -53,12 +55,11 @@ public class TerminerLaPartieDeChasse : PartieDeChasseBaseTests
     public void QuandLaPartieEstEnCoursEt2ChasseursExAequo()
     {
         var partieDeChasse = UnePartieDeChasseEnCours
-            .AvecDesChasseurs(new List<Chasseur>
-            {
-                new(Data.Dédé, 20, 2),
-                new(Data.Bernard, 8, 2),
+            .AvecDesChasseurs([
+                Dédé.AvecDesGalinettesDansSaBesace(2),
+                Bernard.AvecDesGalinettesDansSaBesace(2),
                 Robert
-            })
+            ])
             .Build();
         Repository.Add(partieDeChasse);
 
@@ -97,11 +98,11 @@ public class TerminerLaPartieDeChasse : PartieDeChasseBaseTests
     {
         var now = DateTime.Now;
 
-        var partieDeChasse = UnePartieDeChasseALApero
+        var partieDeChasse = UnePartieDeChasseAlApero
             .AvecDesChasseurs([
-                new Chasseur(Data.Dédé, 20, 3),
-                new Chasseur(Data.Bernard, 8, 3),
-                new Chasseur(Data.Robert, 12, 3)
+                Dédé.AvecDesGalinettesDansSaBesace(3),
+                Bernard.AvecDesGalinettesDansSaBesace(3),
+                Robert.AvecDesGalinettesDansSaBesace(3)
             ])
             .Build();
         Repository.Add(partieDeChasse);

@@ -12,7 +12,11 @@ public class ConsulterStatus : PartieDeChasseBaseTests
     {
         var service = new PartieDeChasseService(Repository, () => DateTime.Now);
         var partieDeChasse = UnePartieDeChasseEnCours
-            .AvecDesChasseurs([Dédé, Bernard, new Chasseur(Data.Robert, 12, 2)])
+            .AvecDesChasseurs([
+                Dédé,
+                Bernard,
+                Robert.AvecDesGalinettesDansSaBesace(2)
+            ])
             .AvecSesEvenements(new List<Event>
             {
                 new(
@@ -36,8 +40,9 @@ public class ConsulterStatus : PartieDeChasseBaseTests
 
         var partieDeChasse = UnePartieDeChasseEnCours
             .AvecDesChasseurs([
-                Dédé, Bernard,
-                new Chasseur(Data.Robert, 12, 2)
+                Dédé,
+                Bernard,
+                Robert.AvecDesGalinettesDansSaBesace(2)
             ])
             .AvecSesEvenements(new List<Event>
             {
