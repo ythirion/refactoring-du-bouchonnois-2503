@@ -23,7 +23,10 @@ public class ChasseurBuilder
         return this;
     }
 
+
+    public ChasseurBuilder SansBalles() => AyantDesBalles(0);
+
     public Chasseur Build() => new(_nom, _ballesRestantes);
-    
+
     public static implicit operator Chasseur(ChasseurBuilder builder) => builder.Build();
 }

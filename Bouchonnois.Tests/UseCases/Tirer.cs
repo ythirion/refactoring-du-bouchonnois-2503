@@ -40,7 +40,7 @@ public class Tirer : UseCaseTest
         var id = UnePartieDeChasseExistante(
             UnePartieDeChasse()
                 .EnCours()
-                .Avec(Bernard().AyantDesBalles(0)));
+                .Avec(Bernard().SansBalles()));
 
         var tirerSansBalle = () => Service.Tirer(id, Bernard);
 
