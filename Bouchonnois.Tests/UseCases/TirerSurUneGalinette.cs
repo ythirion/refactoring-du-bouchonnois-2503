@@ -4,6 +4,8 @@ using Bouchonnois.Service.Exceptions;
 using Bouchonnois.Tests.Abstractions;
 using Bouchonnois.Tests.Assertions;
 
+using static Bouchonnois.Tests.UseCases.Data;
+
 namespace Bouchonnois.Tests.UseCases;
 
 public class TirerSurUneGalinette : PartieDeChasseBaseTests
@@ -60,14 +62,8 @@ public class TirerSurUneGalinette : PartieDeChasseBaseTests
 
         Repository
             .SavedPartieDeChasse()
-            .Events
-            .Should()
-            .BeEquivalentTo(
-            [
-                new Event(
-                    now,
-                    "Bernard veut tirer sur une galinette -> T'as plus de balles mon vieux, chasse à la main")
-            ]);
+            .HaveEmitted("Bernard veut tirer sur une galinette -> T'as plus de balles mon vieux, chasse à la main")
+            .GalinettesRestantesSurLeTerrain(GalinettesSurUnTerrainRiche);
     }
 
     [Fact]
@@ -123,12 +119,8 @@ public class TirerSurUneGalinette : PartieDeChasseBaseTests
 
         Repository
             .SavedPartieDeChasse()
-            .Events
-            .Should()
-            .BeEquivalentTo(
-            [
-                new Event(now, "Chasseur inconnu veut tirer -> On tire pas pendant l'apéro, c'est sacré !!!")
-            ]);
+            .HaveEmitted("Chasseur inconnu veut tirer -> On tire pas pendant l'apéro, c'est sacré !!!")
+            .GalinettesRestantesSurLeTerrain(GalinettesSurUnTerrainRiche);
     }
 
     [Fact]
@@ -148,9 +140,7 @@ public class TirerSurUneGalinette : PartieDeChasseBaseTests
             .Throw<OnTirePasQuandLaPartieEstTerminée>();
 
         Repository.SavedPartieDeChasse()
-            .Events
-            .Should()
-            .BeEquivalentTo(
-                [new Event(now, "Chasseur inconnu veut tirer -> On tire pas quand la partie est terminée")]);
+            .HaveEmitted("Chasseur inconnu veut tirer -> On tire pas quand la partie est terminée")
+            .GalinettesRestantesSurLeTerrain(GalinettesSurUnTerrainRiche);
     }
 }

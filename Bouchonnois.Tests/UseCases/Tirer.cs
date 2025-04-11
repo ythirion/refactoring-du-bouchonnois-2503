@@ -60,9 +60,8 @@ public class Tirer : PartieDeChasseBaseTests
 
         Repository
             .SavedPartieDeChasse()
-            .Events
-            .Should()
-            .BeEquivalentTo([new Event(now, "Bernard tire -> T'as plus de balles mon vieux, chasse à la main")]);
+            .HaveEmitted("Bernard tire -> T'as plus de balles mon vieux, chasse à la main")
+            .GalinettesRestantesSurLeTerrain(GalinettesSurUnTerrainRiche);
     }
 
     [Fact]
@@ -103,10 +102,8 @@ public class Tirer : PartieDeChasseBaseTests
 
         Repository
             .SavedPartieDeChasse()
-            .Events
-            .Should()
-            .BeEquivalentTo(
-                [new Event(now, "Chasseur inconnu veut tirer -> On tire pas pendant l'apéro, c'est sacré !!!")]);
+            .HaveEmitted("Chasseur inconnu veut tirer -> On tire pas pendant l'apéro, c'est sacré !!!")
+            .GalinettesRestantesSurLeTerrain(3);
     }
 
     [Fact]
@@ -127,9 +124,7 @@ public class Tirer : PartieDeChasseBaseTests
 
         Repository
             .SavedPartieDeChasse()
-            .Events
-            .Should()
-            .BeEquivalentTo(
-                [new Event(now, "Chasseur inconnu veut tirer -> On tire pas quand la partie est terminée")]);
+            .HaveEmitted("Chasseur inconnu veut tirer -> On tire pas quand la partie est terminée")
+            .GalinettesRestantesSurLeTerrain(3);
     }
 }
