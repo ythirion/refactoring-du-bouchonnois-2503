@@ -11,9 +11,8 @@ public class ConsulterStatus : UseCaseTest
     [Fact]
     public void QuandLaPartieVientDeDémarrer()
     {
-      var id=  UnePartieDeChasseExistante(
+        var id = UnePartieDeChasseExistante(
             UnePartieDeChasse()
-                .EnCours()
                 .AvecEvenements(
                     new Event(
                         new DateTime(2024, 4, 25, 9, 0, 12),
