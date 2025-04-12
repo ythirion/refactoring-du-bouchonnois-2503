@@ -5,7 +5,7 @@ using Bouchonnois.Tests.Doubles;
 
 namespace Bouchonnois.Tests.UseCases;
 
-public class PrendreLApéro
+public class PrendreLApéro : UseCaseTest
 {
     [Fact]
     public void QuandLaPartieEstEnCours()
