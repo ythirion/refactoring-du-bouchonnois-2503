@@ -50,6 +50,8 @@ public class PartieDeChasseBuilder
         _nbGalinettes = nbGalinettes;
         return this;
     }
+    
+    public PartieDeChasseBuilder SurUnTerrainSansGalinettes() => SurUnTerrainAyantGalinettes(0);
 
     public PartieDeChasseBuilder AvecSesEvenements(params List<Event> events)
     {
