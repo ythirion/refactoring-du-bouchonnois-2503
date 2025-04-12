@@ -43,17 +43,9 @@ public class ScenarioTests
         Act(1.SecondsLater(), () => _service.Tirer(id, "Bernard"));
         Act(1.SecondsLater(), () => _service.Tirer(id, "Bernard"));
         Act(1.SecondsLater(), () => _service.Tirer(id, "Bernard"));
+        Act(1.SecondsLater(), () => _service.Tirer(id, "Bernard"));
 
-        _time = _time.Add(TimeSpan.FromSeconds(1));
-
-        try
-        {
-            _service.Tirer(id, "Bernard");
-        }
-        catch (TasPlusDeBallesMonVieuxChasseALaMain)
-        {
-        }
-
+        
         _time = _time.Add(TimeSpan.FromMinutes(19));
         _service.TirerSurUneGalinette(id, "Robert");
 
@@ -91,7 +83,14 @@ public class ScenarioTests
     private void Act(TimeSpan time, Action tirer)
     {
         _time = _time.Add(time);
-        tirer();
+        
+        try
+        {
+            tirer();
+        }
+        catch (TasPlusDeBallesMonVieuxChasseALaMain)
+        {
+        }
     }
 }
 
