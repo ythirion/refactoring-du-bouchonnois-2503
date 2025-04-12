@@ -30,14 +30,13 @@ public class TirerSurUneGalinette : UseCaseTest
     [Fact]
     public void EchoueCarPartieNexistePas()
     {
-        var id = Guid.NewGuid();
-        var repository = new PartieDeChasseRepositoryForTests();
-        var service = new PartieDeChasseService(repository, () => DateTime.Now);
-        var tirerQuandPartieExistePas = () => service.TirerSurUneGalinette(id, "Bernard");
+        var id = UnePartieDeChasseInexistante();
+        
+        var tirerQuandPartieExistePas = () => Service.TirerSurUneGalinette(id, "Bernard");
 
-        tirerQuandPartieExistePas.Should()
-            .Throw<LaPartieDeChasseNexistePas>();
-        repository.SavedPartieDeChasse().Should().BeNull();
+        tirerQuandPartieExistePas.Should().Throw<LaPartieDeChasseNexistePas>();
+      
+        Repository.SavedPartieDeChasse().Should().BeNull();
     }
 
     [Fact]
