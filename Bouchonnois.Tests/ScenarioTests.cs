@@ -27,25 +27,25 @@ public class ScenarioTests
             terrainDeChasse,
             chasseurs);
 
-        Act(10.MinutesLater(), () => _service.Tirer(id, "Dédé"));
-        Act(30.MinutesLater(), () => _service.TirerSurUneGalinette(id, "Robert"));
-        Act(20.MinutesLater(), () => _service.PrendreLapéro(id));
-        Act(60.MinutesLater(), () => _service.ReprendreLaPartie(id));
-        Act(2.MinutesLater(), () => _service.Tirer(id, "Bernard"));
-        Act(1.MinutesLater(), () => _service.Tirer(id, "Bernard"));
-        Act(1.MinutesLater(), () => _service.TirerSurUneGalinette(id, "Dédé"));
-        Act(26.MinutesLater(), () => _service.TirerSurUneGalinette(id, "Robert"));
-        Act(10.MinutesLater(), () => _service.PrendreLapéro(id));
+        Act(10.MinutesLater(),  () => _service.Tirer(id, "Dédé"));
+        Act(30.MinutesLater(),  () => _service.TirerSurUneGalinette(id, "Robert"));
+        Act(20.MinutesLater(),  () => _service.PrendreLapéro(id));
+        Act(60.MinutesLater(),  () => _service.ReprendreLaPartie(id));
+        Act(2.MinutesLater(),   () => _service.Tirer(id, "Bernard"));
+        Act(1.MinutesLater(),   () => _service.Tirer(id, "Bernard"));
+        Act(1.MinutesLater(),   () => _service.TirerSurUneGalinette(id, "Dédé"));
+        Act(26.MinutesLater(),  () => _service.TirerSurUneGalinette(id, "Robert"));
+        Act(10.MinutesLater(),  () => _service.PrendreLapéro(id));
         Act(170.MinutesLater(), () => _service.ReprendreLaPartie(id));
-        Act(11.MinutesLater(), () => _service.Tirer(id, "Bernard"));
-        Act(1.SecondsLater(), () => _service.Tirer(id, "Bernard"));
-        Act(1.SecondsLater(), () => _service.Tirer(id, "Bernard"));
-        Act(1.SecondsLater(), () => _service.Tirer(id, "Bernard"));
-        Act(1.SecondsLater(), () => _service.Tirer(id, "Bernard"));
-        Act(1.SecondsLater(), () => _service.Tirer(id, "Bernard"));
-        Act(1.SecondsLater(), () => _service.Tirer(id, "Bernard"));
-        Act(19.MinutesLater(), () => _service.TirerSurUneGalinette(id, "Robert"));
-        Act(30.MinutesLater(), () => _service.TerminerLaPartie(id));
+        Act(11.MinutesLater(),  () => _service.Tirer(id, "Bernard"));
+        Act(1.SecondsLater(),   () => _service.Tirer(id, "Bernard"));
+        Act(1.SecondsLater(),   () => _service.Tirer(id, "Bernard"));
+        Act(1.SecondsLater(),   () => _service.Tirer(id, "Bernard"));
+        Act(1.SecondsLater(),   () => _service.Tirer(id, "Bernard"));
+        Act(1.SecondsLater(),   () => _service.Tirer(id, "Bernard"));
+        Act(1.SecondsLater(),   () => _service.Tirer(id, "Bernard"));
+        Act(19.MinutesLater(),  () => _service.TirerSurUneGalinette(id, "Robert"));
+        Act(30.MinutesLater(),  () => _service.TerminerLaPartie(id));
         
 
         _service.ConsulterStatus(id)
