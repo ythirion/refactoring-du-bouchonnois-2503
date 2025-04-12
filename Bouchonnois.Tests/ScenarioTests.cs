@@ -34,9 +34,7 @@ public class ScenarioTests
         Act(2.MinutesLater(), () => _service.Tirer(id, "Bernard"));
         Act(1.MinutesLater(), () => _service.Tirer(id, "Bernard"));
         Act(1.MinutesLater(), () => _service.TirerSurUneGalinette(id, "Dédé"));
-
-        _time = _time.Add(TimeSpan.FromMinutes(26));
-        _service.TirerSurUneGalinette(id, "Robert");
+        Act(26.MinutesLater(), () => _service.TirerSurUneGalinette(id, "Robert"));
 
         _time = _time.Add(TimeSpan.FromMinutes(10));
         _service.PrendreLapéro(id);
