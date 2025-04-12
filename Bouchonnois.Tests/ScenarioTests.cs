@@ -22,9 +22,7 @@ public class ScenarioTests
         };
         var terrainDeChasse = ("Pitibon sur Sauldre", 4);
 
-        var id = _service.Demarrer(
-            terrainDeChasse,
-            chasseurs);
+        var id = _service.Demarrer(terrainDeChasse, chasseurs);
 
         // @formatter:off
         Act(10.MinutesLater(),  () => _service.Tirer(id, "Dédé"));
