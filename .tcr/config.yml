@@ -6,5 +6,5 @@ config:
     mob-timer:
         duration: 5m0s
     tcr:
-        language: ""
-        toolchain: ""
+        language: "csharp"
+        toolchain: "dotnet"
