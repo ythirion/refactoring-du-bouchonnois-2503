@@ -6,7 +6,7 @@ using Bouchonnois.Tests.Doubles;
 
 namespace Bouchonnois.Tests.UseCases;
 
-public class ConsulterStatus
+public class ConsulterStatus : UseCaseTest
 {
     [Fact]
     public void QuandLaPartieVientDeDémarrer()

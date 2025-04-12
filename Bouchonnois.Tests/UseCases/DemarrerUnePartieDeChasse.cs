@@ -19,9 +19,7 @@ public class DemarrerUnePartieDeChasse : UseCaseTest
         };
         var terrainDeChasse = ("Pitibon sur Sauldre", 3);
 
-        var id = Service.Demarrer(
-            terrainDeChasse,
-            chasseurs);
+        var id = Service.Demarrer(terrainDeChasse, chasseurs);
 
         Repository.SavedPartieDeChasse()
             .Should()
