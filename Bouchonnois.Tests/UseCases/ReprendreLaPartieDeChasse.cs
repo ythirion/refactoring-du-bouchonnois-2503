@@ -15,10 +15,12 @@ public class ReprendreLaPartieDeChasse : UseCaseTest
         var id = UnePartieDeChasseExistante(
             UnePartieDeChasse()
                 .ALApéro());
-        
+
         Service.ReprendreLaPartie(id);
 
-        Repository.SavedPartieDeChasse().EstEnCours().AEmisEvenement(Now,"Reprise de la chasse");
+        Repository.SavedPartieDeChasse()
+            .EstEnCours()
+            .AEmisEvenement(Now, "Reprise de la chasse");
     }
 
     [Fact]
