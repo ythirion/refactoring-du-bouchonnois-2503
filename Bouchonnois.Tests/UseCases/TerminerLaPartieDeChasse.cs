@@ -1,7 +1,4 @@
-using Bouchonnois.Domain;
-using Bouchonnois.Service;
 using Bouchonnois.Service.Exceptions;
-using Bouchonnois.Tests.Doubles;
 using Bouchonnois.Tests.Verifications;
 using static Bouchonnois.Tests.Builders.ChasseurBuilder;
 using static Bouchonnois.Tests.Builders.PartieDeChasseBuilder;
@@ -115,12 +112,10 @@ public class TerminerLaPartieDeChasse : UseCaseTest
         var id = UnePartieDeChasseExistante(
             UnePartieDeChasse()
                 .Terminée());
-      
-
+        
         var prendreLapéroQuandTerminée = () => Service.TerminerLaPartie(id);
 
-        prendreLapéroQuandTerminée.Should()
-            .Throw<QuandCestFiniCestFini>();
+        prendreLapéroQuandTerminée.Should().Throw<QuandCestFiniCestFini>();
 
         Repository.SavedPartieDeChasse().Should().BeNull();
     }
