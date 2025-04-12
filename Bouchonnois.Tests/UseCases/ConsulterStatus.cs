@@ -88,13 +88,12 @@ public class ConsulterStatus : UseCaseTest
     [Fact]
     public void EchoueCarPartieNexistePas()
     {
-        var id = Guid.NewGuid();
-        var repository = new PartieDeChasseRepositoryForTests();
-        var service = new PartieDeChasseService(repository, () => DateTime.Now);
-        var reprendrePartieQuandPartieExistePas = () => service.ConsulterStatus(id);
+        var id = UnePartieDeChasseInexistante();
+    
+        var reprendrePartieQuandPartieExistePas = () => Service.ConsulterStatus(id);
 
-        reprendrePartieQuandPartieExistePas.Should()
-            .Throw<LaPartieDeChasseNexistePas>();
-        repository.SavedPartieDeChasse().Should().BeNull();
+        reprendrePartieQuandPartieExistePas.Should().Throw<LaPartieDeChasseNexistePas>();
+        
+        Repository.SavedPartieDeChasse().Should().BeNull();
     }
 }
