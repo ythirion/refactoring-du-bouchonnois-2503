@@ -107,6 +107,7 @@ public class TerminerLaPartieDeChasse : UseCaseTest
         Repository.SavedPartieDeChasse()
             .AEmisEvenement(Now,
                 "La partie de chasse est terminée, vainqueur : Dédé - 3 galinettes, Bernard - 3 galinettes, Robert - 3 galinettes");
+        
     }
 
     [Fact]
