@@ -2,6 +2,7 @@ using Bouchonnois.Domain;
 using Bouchonnois.Service;
 using Bouchonnois.Service.Exceptions;
 using Bouchonnois.Tests.Assertions;
+using Bouchonnois.Tests.DataBuilders;
 using Bouchonnois.Tests.Doubles;
 
 using static Bouchonnois.Tests.UseCases.Data;
@@ -10,31 +11,31 @@ namespace Bouchonnois.Tests.UseCases;
 
 public class Tirer
 {
+    private readonly PartieDeChasseRepositoryForTests _repository;
+    private readonly PartieDeChasseService _service;
+
+    public Tirer()
+    {
+        _repository = new PartieDeChasseRepositoryForTests();
+        _service = new PartieDeChasseService(_repository, () => DateTime.Now);
+    }
+
     [Fact]
     public void AvecUnChasseurAyantDesBalles()
     {
-        var id = Guid.NewGuid();
-        var repository = new PartieDeChasseRepositoryForTests();
+        var partieDeChasse =
+            new PartieDeChasseBuilder()
+            .AjouterChasseur(new(Dede, 20))
+            .AjouterChasseur(new(Bernard, 8))
+            .AjouterChasseur(new(Robert, 12))
+            .Build();
+        _repository.Add(partieDeChasse);
 
-        repository.Add(
-            new PartieDeChasse(
-                id: id,
-                chasseurs: new List<Chasseur>
-                {
-                    new(nom: "Dédé", ballesRestantes: 20),
-                    new(nom: Bernard, ballesRestantes: 8),
-                    new(nom: "Robert", ballesRestantes: 12),
-                },
-                terrain: new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: GalinettesSurUnTerrainRiche),
-                status: PartieStatus.EnCours,
-                events: new List<Event>()));
+        _service.Tirer(partieDeChasse.Id, Bernard);
 
-        var service = new PartieDeChasseService(repository, () => DateTime.Now);
-        service.Tirer(id, Bernard);
-
-        repository
+        _repository
             .SavedPartieDeChasse()
-            .HaveEmitted("Bernard tire")
+            .HaveEmitted($"{Bernard} tire")
             .ChasseurATiré(Bernard, ballesRestantes: 7)
             .GalinettesRestantesSurLeTerrain(GalinettesSurUnTerrainRiche);
     }
@@ -42,76 +43,56 @@ public class Tirer
     [Fact]
     public void EchoueCarPartieNexistePas()
     {
-        var id = Guid.NewGuid();
-        var repository = new PartieDeChasseRepositoryForTests();
-        var service = new PartieDeChasseService(repository, () => DateTime.Now);
-        var tirerQuandPartieExistePas = () => service.Tirer(id, Bernard);
+        var tirerQuandPartieExistePas = () => _service.Tirer(Guid.Empty, Bernard);
 
         tirerQuandPartieExistePas.Should()
             .Throw<LaPartieDeChasseNexistePas>();
-        repository.SavedPartieDeChasse().Should().BeNull();
+        _repository.SavedPartieDeChasse().Should().BeNull();
     }
 
     [Fact]
     public void EchoueAvecUnChasseurNayantPlusDeBalles()
     {
+        var partieDeChasse =
+            new PartieDeChasseBuilder()
+                .AjouterChasseur(new(Dede, 20))
+                .AjouterChasseur(new(Bernard, 0))
+                .AjouterChasseur(new(Robert, 12))
+                .Build();
+        _repository.Add(partieDeChasse);
+
         var now = DateTime.Now;
-
-        var id = Guid.NewGuid();
-        var repository = new PartieDeChasseRepositoryForTests();
-
-        repository.Add(
-            new PartieDeChasse(
-                id: id,
-                chasseurs: new List<Chasseur>
-                {
-                    new(nom: "Dédé", ballesRestantes: 20),
-                    new(nom: Bernard, ballesRestantes: 0),
-                    new(nom: "Robert", ballesRestantes: 12),
-                },
-                terrain: new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3),
-                status: PartieStatus.EnCours,
-                events: new List<Event>()));
-
-        var service = new PartieDeChasseService(repository, () => now);
-        var tirerSansBalle = () => service.Tirer(id, Bernard);
+        var service = new PartieDeChasseService(_repository, () => now);
+        var tirerSansBalle = () => service.Tirer(partieDeChasse.Id, Bernard);
 
         tirerSansBalle.Should()
             .Throw<TasPlusDeBallesMonVieuxChasseALaMain>();
 
-        repository
+        _repository
             .SavedPartieDeChasse()
             .Events
             .Should()
-            .BeEquivalentTo([new Event(now, "Bernard tire -> T'as plus de balles mon vieux, chasse à la main")]);
+            .BeEquivalentTo([new Event(now, $"{Bernard} tire -> T'as plus de balles mon vieux, chasse à la main")]);
     }
 
     [Fact]
     public void EchoueCarLeChasseurNestPasDansLaPartie()
     {
-        var id = Guid.NewGuid();
-        var repository = new PartieDeChasseRepositoryForTests();
+        var partieDeChasse =
+            new PartieDeChasseBuilder()
+                .AjouterChasseur(new(Dede, 20))
+                .AjouterChasseur(new(Bernard, 0))
+                .AjouterChasseur(new(Robert, 12))
+                .Build();
+        _repository.Add(partieDeChasse);
 
-        repository.Add(
-            new PartieDeChasse(
-                id: id,
-                chasseurs: new List<Chasseur>
-                {
-                    new(nom: "Dédé", ballesRestantes: 20),
-                    new(nom: Bernard, ballesRestantes: 8),
-                    new(nom: "Robert", ballesRestantes: 12),
-                },
-                terrain: new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3),
-                status: PartieStatus.EnCours));
-
-        var service = new PartieDeChasseService(repository, () => DateTime.Now);
-        var chasseurInconnuVeutTirer = () => service.Tirer(id, "Chasseur inconnu");
+        var chasseurInconnuVeutTirer = () => _service.Tirer(partieDeChasse.Id, "Chasseur inconnu");
 
         chasseurInconnuVeutTirer.Should()
             .Throw<ChasseurInconnu>()
             .WithMessage("Chasseur inconnu Chasseur inconnu");
 
-        repository.SavedPartieDeChasse().Should().BeNull();
+        _repository.SavedPartieDeChasse().Should().BeNull();
     }
 
     [Fact]
@@ -119,29 +100,22 @@ public class Tirer
     {
         var now = DateTime.Now;
 
-        var id = Guid.NewGuid();
-        var repository = new PartieDeChasseRepositoryForTests();
+        var partieDeChasse =
+            new PartieDeChasseBuilder()
+                .QuandLesChasseursSontALapero()
+                .AjouterChasseur(new(Dede, 20))
+                .AjouterChasseur(new(Bernard, 8))
+                .AjouterChasseur(new(Robert, 12))
+                .Build();
+        _repository.Add(partieDeChasse);
 
-        repository.Add(
-            new PartieDeChasse(
-                id: id,
-                chasseurs: new List<Chasseur>
-                {
-                    new(nom: "Dédé", ballesRestantes: 20),
-                    new(nom: Bernard, ballesRestantes: 8),
-                    new(nom: "Robert", ballesRestantes: 12),
-                },
-                terrain: new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3),
-                status: PartieStatus.Apéro,
-                events: new List<Event>()));
-
-        var service = new PartieDeChasseService(repository, () => now);
-        var tirerEnPleinApéro = () => service.Tirer(id, "Chasseur inconnu");
+        var service = new PartieDeChasseService(_repository, () => now);
+        var tirerEnPleinApéro = () => service.Tirer(partieDeChasse.Id, "Chasseur inconnu");
 
         tirerEnPleinApéro.Should()
             .Throw<OnTirePasPendantLapéroCestSacré>();
 
-        repository
+        _repository
             .SavedPartieDeChasse()
             .Events
             .Should()
@@ -153,30 +127,22 @@ public class Tirer
     public void EchoueSiLaPartieDeChasseEstTerminée()
     {
         var now = DateTime.Now;
+        var partieDeChasse =
+            new PartieDeChasseBuilder()
+                .QuandLaPartieDeChasseEstTerminee()
+                .AjouterChasseur(new(Dede, 20))
+                .AjouterChasseur(new(Bernard, 8))
+                .AjouterChasseur(new(Robert, 12))
+                .Build();
+        _repository.Add(partieDeChasse);
 
-        var id = Guid.NewGuid();
-        var repository = new PartieDeChasseRepositoryForTests();
-
-        repository.Add(
-            new PartieDeChasse(
-                id: id,
-                chasseurs: new List<Chasseur>
-                {
-                    new(nom: "Dédé", ballesRestantes: 20),
-                    new(nom: Bernard, ballesRestantes: 8),
-                    new(nom: "Robert", ballesRestantes: 12),
-                },
-                terrain: new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3),
-                status: PartieStatus.Terminée,
-                events: new List<Event>()));
-
-        var service = new PartieDeChasseService(repository, () => now);
-        var tirerQuandTerminée = () => service.Tirer(id, "Chasseur inconnu");
+        var service = new PartieDeChasseService(_repository, () => now);
+        var tirerQuandTerminée = () => service.Tirer(partieDeChasse.Id, "Chasseur inconnu");
 
         tirerQuandTerminée.Should()
             .Throw<OnTirePasQuandLaPartieEstTerminée>();
 
-        repository
+        _repository
             .SavedPartieDeChasse()
             .Events
             .Should()

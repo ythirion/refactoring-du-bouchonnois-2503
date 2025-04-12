@@ -1,6 +1,7 @@
 using Bouchonnois.Service;
 using Bouchonnois.Service.Exceptions;
 using Bouchonnois.Tests.Doubles;
+using Bouchonnois.Tests.UseCases;
 
 namespace Bouchonnois.Tests;
 
@@ -14,21 +15,21 @@ public class ScenarioTests
         var service = new PartieDeChasseService(repository, () => time);
         var chasseurs = new List<(string, int)>
         {
-            ("Dédé", 20),
-            ("Bernard", 8),
-            ("Robert", 12)
+            (Data.Dede, 20),
+            (Data.Bernard, 8),
+            (Data.Robert, 12)
         };
-        var terrainDeChasse = ("Pitibon sur Sauldre", 4);
+        var terrainDeChasse = (Data.Terrain, 4);
         var id = service.Demarrer(
             terrainDeChasse,
             chasseurs
         );
 
         time = time.Add(TimeSpan.FromMinutes(10));
-        service.Tirer(id, "Dédé");
+        service.Tirer(id, Data.Dede);
 
         time = time.Add(TimeSpan.FromMinutes(30));
-        service.TirerSurUneGalinette(id, "Robert");
+        service.TirerSurUneGalinette(id, Data.Robert);
 
         time = time.Add(TimeSpan.FromMinutes(20));
         service.PrendreLapéro(id);
@@ -37,16 +38,16 @@ public class ScenarioTests
         service.ReprendreLaPartie(id);
 
         time = time.Add(TimeSpan.FromMinutes(2));
-        service.Tirer(id, "Bernard");
+        service.Tirer(id, Data.Bernard);
 
         time = time.Add(TimeSpan.FromMinutes(1));
-        service.Tirer(id, "Bernard");
+        service.Tirer(id, Data.Bernard);
 
         time = time.Add(TimeSpan.FromMinutes(1));
-        service.TirerSurUneGalinette(id, "Dédé");
+        service.TirerSurUneGalinette(id, Data.Dede);
 
         time = time.Add(TimeSpan.FromMinutes(26));
-        service.TirerSurUneGalinette(id, "Robert");
+        service.TirerSurUneGalinette(id, Data.Robert);
 
         time = time.Add(TimeSpan.FromMinutes(10));
         service.PrendreLapéro(id);
@@ -55,35 +56,35 @@ public class ScenarioTests
         service.ReprendreLaPartie(id);
 
         time = time.Add(TimeSpan.FromMinutes(11));
-        service.Tirer(id, "Bernard");
+        service.Tirer(id, Data.Bernard);
 
         time = time.Add(TimeSpan.FromSeconds(1));
-        service.Tirer(id, "Bernard");
+        service.Tirer(id, Data.Bernard);
 
         time = time.Add(TimeSpan.FromSeconds(1));
-        service.Tirer(id, "Bernard");
+        service.Tirer(id, Data.Bernard);
 
         time = time.Add(TimeSpan.FromSeconds(1));
-        service.Tirer(id, "Bernard");
+        service.Tirer(id, Data.Bernard);
 
         time = time.Add(TimeSpan.FromSeconds(1));
-        service.Tirer(id, "Bernard");
+        service.Tirer(id, Data.Bernard);
 
         time = time.Add(TimeSpan.FromSeconds(1));
-        service.Tirer(id, "Bernard");
+        service.Tirer(id, Data.Bernard);
 
         time = time.Add(TimeSpan.FromSeconds(1));
 
         try
         {
-            service.Tirer(id, "Bernard");
+            service.Tirer(id, Data.Bernard);
         }
         catch (TasPlusDeBallesMonVieuxChasseALaMain)
         {
         }
 
         time = time.Add(TimeSpan.FromMinutes(19));
-        service.TirerSurUneGalinette(id, "Robert");
+        service.TirerSurUneGalinette(id, Data.Robert);
 
         time = time.Add(TimeSpan.FromMinutes(30));
         service.TerminerLaPartie(id);

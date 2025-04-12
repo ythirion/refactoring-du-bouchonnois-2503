@@ -23,7 +23,7 @@ public class TirerSurUneGalinette
                     new(nom: "Bernard", ballesRestantes: 8),
                     new(nom: "Robert", ballesRestantes: 12),
                 },
-                terrain: new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3),
+                terrain: new Terrain(nom: Data.Terrain, nbGalinettes: 3),
                 status: PartieStatus.EnCours,
                 events: new List<Event>()));
 
@@ -65,7 +65,7 @@ public class TirerSurUneGalinette
                 new(nom: "Bernard", ballesRestantes: 0),
                 new(nom: "Robert", ballesRestantes: 12),
             },
-            terrain: new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3),
+            terrain: new Terrain(nom: Data.Terrain, nbGalinettes: 3),
             status: PartieStatus.EnCours,
             events: new List<Event>());
 
@@ -104,7 +104,7 @@ public class TirerSurUneGalinette
                     new(nom: "Bernard", ballesRestantes: 8),
                     new(nom: "Robert", ballesRestantes: 12),
                 },
-                terrain: new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 0),
+                terrain: new Terrain(nom: Data.Terrain, nbGalinettes: 0),
                 status: PartieStatus.EnCours));
 
         var service = new PartieDeChasseService(repository, () => DateTime.Now);
@@ -130,7 +130,7 @@ public class TirerSurUneGalinette
                     new(nom: "Bernard", ballesRestantes: 8),
                     new(nom: "Robert", ballesRestantes: 12),
                 },
-                terrain: new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3),
+                terrain: new Terrain(nom: Data.Terrain, nbGalinettes: 3),
                 status: PartieStatus.EnCours));
 
         var service = new PartieDeChasseService(repository, () => DateTime.Now);
@@ -160,7 +160,7 @@ public class TirerSurUneGalinette
                     new(nom: "Bernard", ballesRestantes: 8),
                     new(nom: "Robert", ballesRestantes: 12),
                 },
-                terrain: new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3),
+                terrain: new Terrain(nom: Data.Terrain, nbGalinettes: 3),
                 status: PartieStatus.Apéro,
                 events: new List<Event>()));
 
@@ -197,7 +197,7 @@ public class TirerSurUneGalinette
                     new(nom: "Bernard", ballesRestantes: 8),
                     new(nom: "Robert", ballesRestantes: 12),
                 },
-                terrain: new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3),
+                terrain: new Terrain(nom: Data.Terrain, nbGalinettes: 3),
                 status: PartieStatus.Terminée,
                 events: new List<Event>()));
 
