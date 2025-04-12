@@ -1,5 +1,6 @@
 using Bouchonnois.Domain;
 using Bouchonnois.Service.Exceptions;
+using Bouchonnois.Tests.UseCases.Common;
 using static Bouchonnois.Tests.Builders.ChasseurBuilder;
 using static Bouchonnois.Tests.Builders.PartieDeChasseBuilder;
 using static Bouchonnois.Tests.Builders.TerrainBuilder;

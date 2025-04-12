@@ -2,7 +2,7 @@ using Bouchonnois.Service;
 using Bouchonnois.Tests.Builders;
 using Bouchonnois.Tests.Doubles;
 
-namespace Bouchonnois.Tests.UseCases;
+namespace Bouchonnois.Tests.UseCases.Common;
 
 public class UseCaseTest
 {

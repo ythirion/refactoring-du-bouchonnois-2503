@@ -1,5 +1,6 @@
 using Bouchonnois.Domain;
 using Bouchonnois.Service.Exceptions;
+using Bouchonnois.Tests.UseCases.Common;
 using static Bouchonnois.Tests.Builders.PartieDeChasseBuilder;
 
 namespace Bouchonnois.Tests.UseCases;
