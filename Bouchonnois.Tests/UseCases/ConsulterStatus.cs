@@ -19,10 +19,10 @@ public class ConsulterStatus
             {
                 new(
                     new DateTime(2024, 4, 25, 9, 0, 12),
-                    "La partie de chasse commence à Pitibon sur Sauldre avec Dédé (20 balles), Bernard (8 balles), Robert (12 balles)")
+                    "La partie de chasse commence à Pitibon sur Sauldre avec Dédé (20 balles), Bernard (8 balles), Robert (12 balles)"
+                )
             })
             .Build();
-
         repository.Add(partieDeChasse);
 
         var status = service.ConsulterStatus(partieDeChasse.Id);
@@ -35,22 +35,12 @@ public class ConsulterStatus
     [Fact]
     public void QuandLaPartieEstTerminée()
     {
-        var id = Guid.NewGuid();
         var repository = new PartieDeChasseRepositoryForTests();
         var service = new PartieDeChasseService(repository, () => DateTime.Now);
-
-        repository.Add(
-            new PartieDeChasse(
-                id: id,
-                chasseurs: new List<Chasseur>
-                {
-                    new(nom: "Dédé", ballesRestantes: 20),
-                    new(nom: "Bernard", ballesRestantes: 8),
-                    new(nom: "Robert", ballesRestantes: 12, nbGalinettes: 2),
-                },
-                terrain: new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3),
-                status: PartieStatus.EnCours,
-                events: new List<Event>
+        var partieDeChasse = new PartieDeChasseBuilder()
+            .QuiEstEnCours()
+            .AvecSesEvenements(
+                new List<Event>
                 {
                     new(
                         new DateTime(2024, 4, 25, 9, 0, 12),
@@ -79,9 +69,12 @@ public class ConsulterStatus
                     new(
                         new DateTime(2024, 4, 25, 15, 30, 0),
                         "La partie de chasse est terminée, vainqueur :  Robert - 3 galinettes"),
-                }));
+                }
+            )
+            .Build();
+        repository.Add(partieDeChasse);
 
-        var status = service.ConsulterStatus(id);
+        var status = service.ConsulterStatus(partieDeChasse.Id);
 
         status.Should()
             .BeEquivalentTo(
