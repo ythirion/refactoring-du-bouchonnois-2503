@@ -38,9 +38,8 @@ public class ScenarioTests
         Act(10.MinutesLater(), () => _service.PrendreLapéro(id));
         Act(170.MinutesLater(), () => _service.ReprendreLaPartie(id));
         Act(11.MinutesLater(), () => _service.Tirer(id, "Bernard"));
+        Act(1.SecondsLater(), () => _service.Tirer(id, "Bernard"));
 
-        _time = _time.Add(TimeSpan.FromSeconds(1));
-        _service.Tirer(id, "Bernard");
 
         _time = _time.Add(TimeSpan.FromSeconds(1));
         _service.Tirer(id, "Bernard");
@@ -108,4 +107,5 @@ public class ScenarioTests
 public static class ScenarioTestsExtensions
 {
     public static TimeSpan MinutesLater(this int minutes) => TimeSpan.FromMinutes(minutes);
+    public static TimeSpan SecondsLater(this int seconds) => TimeSpan.FromSeconds(seconds);
 }
