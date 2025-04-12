@@ -45,7 +45,7 @@ public class DemarrerUnePartieDeChasse : UseCaseTest
         var chasseurs = new List<(string, int)>();
         var terrainDeChasse = ("Pitibon sur Sauldre", 3);
 
-        Action demarrerPartieSansChasseurs = () => Service.Demarrer(terrainDeChasse, chasseurs);
+        var demarrerPartieSansChasseurs = () => Service.Demarrer(terrainDeChasse, chasseurs);
 
         demarrerPartieSansChasseurs.Should().Throw<ImpossibleDeDémarrerUnePartieSansChasseur>();
 
@@ -58,7 +58,7 @@ public class DemarrerUnePartieDeChasse : UseCaseTest
         var chasseurs = new List<(string, int)>();
         var terrainDeChasse = ("Pitibon sur Sauldre", 0);
 
-        Action demarrerPartieSansChasseurs = () => Service.Demarrer(terrainDeChasse, chasseurs);
+        var demarrerPartieSansChasseurs = () => Service.Demarrer(terrainDeChasse, chasseurs);
 
         demarrerPartieSansChasseurs.Should().Throw<ImpossibleDeDémarrerUnePartieSansGalinettes>();
 
@@ -75,7 +75,7 @@ public class DemarrerUnePartieDeChasse : UseCaseTest
         };
         var terrainDeChasse = ("Pitibon sur Sauldre", 3);
 
-        Action demarrerPartieAvecChasseurSansBalle = () => Service.Demarrer(terrainDeChasse, chasseurs);
+        var demarrerPartieAvecChasseurSansBalle = () => Service.Demarrer(terrainDeChasse, chasseurs);
 
         demarrerPartieAvecChasseurSansBalle.Should().Throw<ImpossibleDeDémarrerUnePartieAvecUnChasseurSansBalle>();
 
