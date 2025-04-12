@@ -27,8 +27,7 @@ public class ScenarioTests
             terrainDeChasse,
             chasseurs);
 
-        _time = _time.Add(TimeSpan.FromMinutes(10));
-        _service.Tirer(id, "Dédé");
+        Act(id, TimeSpan.FromMinutes(10));
 
         _time = _time.Add(TimeSpan.FromMinutes(30));
         _service.TirerSurUneGalinette(id, "Robert");
@@ -116,5 +115,11 @@ public class ScenarioTests
                 09:10 - Dédé tire
                 09:00 - La partie de chasse commence à Pitibon sur Sauldre avec Dédé (20 balles), Bernard (8 balles), Robert (12 balles)
                 """);
+    }
+
+    private void Act(Guid id, TimeSpan time)
+    {
+        _time = _time.Add(time);
+        _service.Tirer(id, "Dédé");
     }
 }
