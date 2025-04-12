@@ -50,27 +50,12 @@ public class ReprendreLaPartieDeChasse : UseCaseTest
     [Fact]
     public void EchoueSiLaPartieDeChasseEstTerminée()
     {
-        var id = Guid.NewGuid();
-        var repository = new PartieDeChasseRepositoryForTests();
+        var id = UnePartieDeChasseExistante(UnePartieDeChasse().Terminée());
 
-        repository.Add(
-            new PartieDeChasse(
-                id: id,
-                chasseurs: new List<Chasseur>
-                {
-                    new(nom: "Dédé", ballesRestantes: 20),
-                    new(nom: "Bernard", ballesRestantes: 8),
-                    new(nom: "Robert", ballesRestantes: 12)
-                },
-                terrain: new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3),
-                status: PartieStatus.Terminée));
+        var prendreLapéroQuandTerminée = () => Service.ReprendreLaPartie(id);
 
-        var service = new PartieDeChasseService(repository, () => DateTime.Now);
-        var prendreLapéroQuandTerminée = () => service.ReprendreLaPartie(id);
+        prendreLapéroQuandTerminée.Should().Throw<QuandCestFiniCestFini>();
 
-        prendreLapéroQuandTerminée.Should()
-            .Throw<QuandCestFiniCestFini>();
-
-        repository.SavedPartieDeChasse().Should().BeNull();
+        Repository.SavedPartieDeChasse().Should().BeNull();
     }
 }
