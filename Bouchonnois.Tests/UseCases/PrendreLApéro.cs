@@ -18,7 +18,9 @@ public class PrendreLApéro : UseCaseTest
 
         Service.PrendreLapéro(id);
 
-        Repository.SavedPartieDeChasse().EstALApéro();
+        Repository.SavedPartieDeChasse()
+            .EstALApéro()
+            .AEmisEvenement(Now, "Petit apéro");
     }
 
     [Fact]
