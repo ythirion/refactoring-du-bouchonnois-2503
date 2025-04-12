@@ -14,7 +14,7 @@ public class DemarrerUnePartieDeChasse : UseCaseTest
         var service = new PartieDeChasseService(repository, () => DateTime.Now);
         var chasseurs = new List<(string, int)>
         {
-            ("Dédé", 20),
+            (Dédé, 20),
             ("Bernard", 8),
             ("Robert", 12)
         };
@@ -29,7 +29,7 @@ public class DemarrerUnePartieDeChasse : UseCaseTest
         savedPartieDeChasse.Terrain.Nom.Should().Be("Pitibon sur Sauldre");
         savedPartieDeChasse.Terrain.NbGalinettes.Should().Be(3);
         savedPartieDeChasse.Chasseurs.Should().HaveCount(3);
-        savedPartieDeChasse.Chasseurs[0].Nom.Should().Be("Dédé");
+        savedPartieDeChasse.Chasseurs[0].Nom.Should().Be(Dédé);
         savedPartieDeChasse.Chasseurs[0].BallesRestantes.Should().Be(20);
         savedPartieDeChasse.Chasseurs[0].NbGalinettes.Should().Be(0);
         savedPartieDeChasse.Chasseurs[1].Nom.Should().Be("Bernard");
@@ -76,7 +76,7 @@ public class DemarrerUnePartieDeChasse : UseCaseTest
         var service = new PartieDeChasseService(repository, () => DateTime.Now);
         var chasseurs = new List<(string, int)>
         {
-            ("Dédé", 20),
+            (Dédé, 20),
             ("Bernard", 0)
         };
         var terrainDeChasse = ("Pitibon sur Sauldre", 3);

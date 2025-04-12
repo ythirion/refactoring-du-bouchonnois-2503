@@ -6,6 +6,7 @@ namespace Bouchonnois.Tests.UseCases;
 
 public class UseCaseTest
 {
+    protected const string Dédé = "Dédé";
     protected const string Bernard = "Bernard";
     protected const string Robert = "Robert";
     protected const string ChasseurInconnu = "Chasseur inconnu";
