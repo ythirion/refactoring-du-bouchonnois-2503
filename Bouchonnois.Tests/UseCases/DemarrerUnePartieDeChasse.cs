@@ -1,7 +1,5 @@
 using Bouchonnois.Domain;
-using Bouchonnois.Service;
 using Bouchonnois.Service.Exceptions;
-using Bouchonnois.Tests.Doubles;
 using static Bouchonnois.Tests.Builders.ChasseurBuilder;
 using static Bouchonnois.Tests.Builders.PartieDeChasseBuilder;
 using static Bouchonnois.Tests.Builders.TerrainBuilder;
@@ -65,7 +63,7 @@ public class DemarrerUnePartieDeChasse : UseCaseTest
         Action demarrerPartieSansChasseurs = () => Service.Demarrer(terrainDeChasse, chasseurs);
 
         demarrerPartieSansChasseurs.Should().Throw<ImpossibleDeDémarrerUnePartieSansGalinettes>();
-        
+
         Repository.SavedPartieDeChasse().Should().BeNull();
     }
 
@@ -82,7 +80,7 @@ public class DemarrerUnePartieDeChasse : UseCaseTest
         Action demarrerPartieAvecChasseurSansBalle = () => Service.Demarrer(terrainDeChasse, chasseurs);
 
         demarrerPartieAvecChasseurSansBalle.Should().Throw<ImpossibleDeDémarrerUnePartieAvecUnChasseurSansBalle>();
-      
+
         Repository.SavedPartieDeChasse().Should().BeNull();
     }
 }
