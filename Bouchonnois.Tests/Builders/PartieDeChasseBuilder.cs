@@ -4,7 +4,7 @@ namespace Bouchonnois.Tests.Builders;
 
 public class PartieDeChasseBuilder
 {
-    private readonly Guid _id = Guid.NewGuid();
+    private Guid _id = Guid.NewGuid();
     private List<Chasseur> _chasseurs = [];
     private List<Event> _events = [];
     private PartieStatus _status = PartieStatus.EnCours;
@@ -35,6 +35,12 @@ public class PartieDeChasseBuilder
         _chasseurs = chasseurs;
         return this;
     }
+    
+    public PartieDeChasseBuilder Sur(TerrainBuilder terrainBuilder)
+    {
+        _terrainBuilder = terrainBuilder;
+        return this;
+    }
 
     public PartieDeChasseBuilder SurUnTerrainAyantGalinettes(int nbGalinettes)
     {
@@ -54,7 +60,7 @@ public class PartieDeChasseBuilder
         return this;
     }
 
-    public PartieDeChasseBuilder AvecSesEvenements(params List<Event> events)
+    public PartieDeChasseBuilder AvecEvenements(params List<Event> events)
     {
         _events = events;
         return this;
@@ -67,4 +73,10 @@ public class PartieDeChasseBuilder
             terrain: _terrainBuilder.Build(),
             status: _status,
             events: _events);
+
+    public PartieDeChasseBuilder IdentifiéePar(Guid id)
+    {
+        _id = id;
+        return this;
+    }
 }

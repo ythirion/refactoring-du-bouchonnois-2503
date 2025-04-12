@@ -4,9 +4,17 @@ namespace Bouchonnois.Tests.Builders;
 
 public class TerrainBuilder
 {
-    private const string PitibonSurSauldre = "Pitibon sur Sauldre";
     private int _nbGalinettes;
+    private string _nom = "Pitibon sur Sauldre";
 
+    public static TerrainBuilder UnTerrain() => new();
+    
+    public TerrainBuilder Nommé(string nom)
+    {
+        _nom = nom;
+        return this;
+    }
+    
     public TerrainBuilder AyantGalinettes(int nbGalinettes)
     {
         _nbGalinettes = nbGalinettes;
@@ -17,5 +25,5 @@ public class TerrainBuilder
 
     public TerrainBuilder SansGalinettes() => AyantGalinettes(0);
 
-    public Terrain Build() => new(PitibonSurSauldre, _nbGalinettes);
+    public Terrain Build() => new(_nom, _nbGalinettes);
 }

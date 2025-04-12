@@ -15,7 +15,7 @@ public class ConsulterStatus
         var service = new PartieDeChasseService(repository, () => DateTime.Now);
         var partieDeChasse = PartieDeChasseBuilder.UnePartieDeChasse()
             .EnCours()
-            .AvecSesEvenements(
+            .AvecEvenements(
                 new Event(
                     new DateTime(2024, 4, 25, 9, 0, 12),
                     "La partie de chasse commence à Pitibon sur Sauldre avec Dédé (20 balles), Bernard (8 balles), Robert (12 balles)"))
