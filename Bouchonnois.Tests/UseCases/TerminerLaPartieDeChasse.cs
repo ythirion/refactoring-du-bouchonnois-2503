@@ -23,7 +23,7 @@ public class TerminerLaPartieDeChasse : UseCaseTest
 
         var meilleurChasseur = Service.TerminerLaPartie(id);
 
-        meilleurChasseur.Should().Be("Robert");
+        meilleurChasseur.Should().Be(Robert);
 
         Repository.SavedPartieDeChasse()
             .AEmisEvenement(Now, "La partie de chasse est terminée, vainqueur : Robert - 2 galinettes");
@@ -40,7 +40,7 @@ public class TerminerLaPartieDeChasse : UseCaseTest
                 id: id,
                 chasseurs: new List<Chasseur>
                 {
-                    new(nom: "Robert", ballesRestantes: 12, nbGalinettes: 2)
+                    new(nom: Robert, ballesRestantes: 12, nbGalinettes: 2)
                 },
                 terrain: new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3),
                 status: PartieStatus.EnCours,
@@ -55,11 +55,11 @@ public class TerminerLaPartieDeChasse : UseCaseTest
         savedPartieDeChasse.Terrain.Nom.Should().Be("Pitibon sur Sauldre");
         savedPartieDeChasse.Terrain.NbGalinettes.Should().Be(3);
         savedPartieDeChasse.Chasseurs.Should().HaveCount(1);
-        savedPartieDeChasse.Chasseurs[0].Nom.Should().Be("Robert");
+        savedPartieDeChasse.Chasseurs[0].Nom.Should().Be(Robert);
         savedPartieDeChasse.Chasseurs[0].BallesRestantes.Should().Be(12);
         savedPartieDeChasse.Chasseurs[0].NbGalinettes.Should().Be(2);
 
-        meilleurChasseur.Should().Be("Robert");
+        meilleurChasseur.Should().Be(Robert);
     }
 
     [Fact]
@@ -75,7 +75,7 @@ public class TerminerLaPartieDeChasse : UseCaseTest
                 {
                     new(nom: "Dédé", ballesRestantes: 20, nbGalinettes: 2),
                     new(nom: "Bernard", ballesRestantes: 8, nbGalinettes: 2),
-                    new(nom: "Robert", ballesRestantes: 12)
+                    new(nom: Robert, ballesRestantes: 12)
                 },
                 terrain: new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3),
                 status: PartieStatus.EnCours,
@@ -96,7 +96,7 @@ public class TerminerLaPartieDeChasse : UseCaseTest
         savedPartieDeChasse.Chasseurs[1].Nom.Should().Be("Bernard");
         savedPartieDeChasse.Chasseurs[1].BallesRestantes.Should().Be(8);
         savedPartieDeChasse.Chasseurs[1].NbGalinettes.Should().Be(2);
-        savedPartieDeChasse.Chasseurs[2].Nom.Should().Be("Robert");
+        savedPartieDeChasse.Chasseurs[2].Nom.Should().Be(Robert);
         savedPartieDeChasse.Chasseurs[2].BallesRestantes.Should().Be(12);
         savedPartieDeChasse.Chasseurs[2].NbGalinettes.Should().Be(0);
 
@@ -118,7 +118,7 @@ public class TerminerLaPartieDeChasse : UseCaseTest
                 {
                     new(nom: "Dédé", ballesRestantes: 20),
                     new(nom: "Bernard", ballesRestantes: 8),
-                    new(nom: "Robert", ballesRestantes: 12)
+                    new(nom: Robert, ballesRestantes: 12)
                 },
                 terrain: new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3),
                 status: PartieStatus.EnCours,
@@ -139,7 +139,7 @@ public class TerminerLaPartieDeChasse : UseCaseTest
         savedPartieDeChasse.Chasseurs[1].Nom.Should().Be("Bernard");
         savedPartieDeChasse.Chasseurs[1].BallesRestantes.Should().Be(8);
         savedPartieDeChasse.Chasseurs[1].NbGalinettes.Should().Be(0);
-        savedPartieDeChasse.Chasseurs[2].Nom.Should().Be("Robert");
+        savedPartieDeChasse.Chasseurs[2].Nom.Should().Be(Robert);
         savedPartieDeChasse.Chasseurs[2].BallesRestantes.Should().Be(12);
         savedPartieDeChasse.Chasseurs[2].NbGalinettes.Should().Be(0);
 
@@ -166,7 +166,7 @@ public class TerminerLaPartieDeChasse : UseCaseTest
                 {
                     new(nom: "Dédé", ballesRestantes: 20, nbGalinettes: 3),
                     new(nom: "Bernard", ballesRestantes: 8, nbGalinettes: 3),
-                    new(nom: "Robert", ballesRestantes: 12, nbGalinettes: 3)
+                    new(nom: Robert, ballesRestantes: 12, nbGalinettes: 3)
                 },
                 terrain: new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3),
                 status: PartieStatus.Apéro,
@@ -187,7 +187,7 @@ public class TerminerLaPartieDeChasse : UseCaseTest
         savedPartieDeChasse.Chasseurs[1].Nom.Should().Be("Bernard");
         savedPartieDeChasse.Chasseurs[1].BallesRestantes.Should().Be(8);
         savedPartieDeChasse.Chasseurs[1].NbGalinettes.Should().Be(3);
-        savedPartieDeChasse.Chasseurs[2].Nom.Should().Be("Robert");
+        savedPartieDeChasse.Chasseurs[2].Nom.Should().Be(Robert);
         savedPartieDeChasse.Chasseurs[2].BallesRestantes.Should().Be(12);
         savedPartieDeChasse.Chasseurs[2].NbGalinettes.Should().Be(3);
 
@@ -217,7 +217,7 @@ public class TerminerLaPartieDeChasse : UseCaseTest
                 {
                     new(nom: "Dédé", ballesRestantes: 20),
                     new(nom: "Bernard", ballesRestantes: 8),
-                    new(nom: "Robert", ballesRestantes: 12)
+                    new(nom: Robert, ballesRestantes: 12)
                 },
                 terrain: new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3),
                 status: PartieStatus.Terminée));

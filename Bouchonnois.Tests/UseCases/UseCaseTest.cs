@@ -7,6 +7,7 @@ namespace Bouchonnois.Tests.UseCases;
 public class UseCaseTest
 {
     protected const string Bernard = "Bernard";
+    protected const string Robert = "Robert";
     protected const string ChasseurInconnu = "Chasseur inconnu";
 
     protected readonly DateTime Now = DateTime.Now;
