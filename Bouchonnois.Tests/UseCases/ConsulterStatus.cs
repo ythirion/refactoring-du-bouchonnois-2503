@@ -1,8 +1,8 @@
 using Bouchonnois.Domain;
 using Bouchonnois.Service;
 using Bouchonnois.Service.Exceptions;
-using Bouchonnois.Tests.Builders;
 using Bouchonnois.Tests.Doubles;
+using static Bouchonnois.Tests.Builders.PartieDeChasseBuilder;
 
 namespace Bouchonnois.Tests.UseCases;
 
@@ -11,9 +11,7 @@ public class ConsulterStatus : UseCaseTest
     [Fact]
     public void QuandLaPartieVientDeDémarrer()
     {
-        var repository = new PartieDeChasseRepositoryForTests();
-        var service = new PartieDeChasseService(repository, () => DateTime.Now);
-        var partieDeChasse = PartieDeChasseBuilder.UnePartieDeChasse()
+        var partieDeChasse = UnePartieDeChasse()
             .EnCours()
             .AvecEvenements(
                 new Event(
@@ -21,9 +19,9 @@ public class ConsulterStatus : UseCaseTest
                     "La partie de chasse commence à Pitibon sur Sauldre avec Dédé (20 balles), Bernard (8 balles), Robert (12 balles)"))
             .Build();
 
-        repository.Add(partieDeChasse);
+        Repository.Add(partieDeChasse);
 
-        var status = service.ConsulterStatus(partieDeChasse.Id);
+        var status = Service.ConsulterStatus(partieDeChasse.Id);
 
         status.Should()
             .Be(
