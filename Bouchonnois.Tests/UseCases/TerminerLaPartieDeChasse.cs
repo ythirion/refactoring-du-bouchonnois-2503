@@ -111,7 +111,7 @@ public class TerminerLaPartieDeChasse : UseCaseTest
         var id = UnePartieDeChasseExistante(
             UnePartieDeChasse()
                 .Terminée());
-        
+
         var prendreLapéroQuandTerminée = () => Service.TerminerLaPartie(id);
 
         prendreLapéroQuandTerminée.Should().Throw<QuandCestFiniCestFini>();
