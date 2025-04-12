@@ -31,7 +31,7 @@ public class ScenarioTests
         Act(10.MinutesLater(),  () => _service.Tirer(id, "Dédé"));
         Act(30.MinutesLater(),  () => _service.TirerSurUneGalinette(id, "Robert"));
         Act(20.MinutesLater(),  () => _service.PrendreLapéro(id));
-        Act(60.MinutesLater(),  () => _service.ReprendreLaPartie(id));
+        Act(1.HoursLater(),     () => _service.ReprendreLaPartie(id));
         Act(2.MinutesLater(),   () => _service.Tirer(id, "Bernard"));
         Act(1.MinutesLater(),   () => _service.Tirer(id, "Bernard"));
         Act(1.MinutesLater(),   () => _service.TirerSurUneGalinette(id, "Dédé"));
@@ -94,6 +94,7 @@ public class ScenarioTests
 
 public static class ScenarioTestsExtensions
 {
+    public static TimeSpan HoursLater(this int hours) => TimeSpan.FromHours(hours);
     public static TimeSpan MinutesLater(this int minutes) => TimeSpan.FromMinutes(minutes);
     public static TimeSpan SecondsLater(this int seconds) => TimeSpan.FromSeconds(seconds);
 }
