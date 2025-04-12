@@ -11,17 +11,16 @@ public class ConsulterStatus : UseCaseTest
     [Fact]
     public void QuandLaPartieVientDeDémarrer()
     {
-        var partieDeChasse = UnePartieDeChasse()
-            .EnCours()
-            .AvecEvenements(
-                new Event(
-                    new DateTime(2024, 4, 25, 9, 0, 12),
-                    "La partie de chasse commence à Pitibon sur Sauldre avec Dédé (20 balles), Bernard (8 balles), Robert (12 balles)"))
-            .Build();
+      var id=  UnePartieDeChasseExistante(
+            UnePartieDeChasse()
+                .EnCours()
+                .AvecEvenements(
+                    new Event(
+                        new DateTime(2024, 4, 25, 9, 0, 12),
+                        "La partie de chasse commence à Pitibon sur Sauldre avec Dédé (20 balles), Bernard (8 balles), Robert (12 balles)")));
 
-        Repository.Add(partieDeChasse);
 
-        var status = Service.ConsulterStatus(partieDeChasse.Id);
+        var status = Service.ConsulterStatus(id);
 
         status.Should()
             .Be(
