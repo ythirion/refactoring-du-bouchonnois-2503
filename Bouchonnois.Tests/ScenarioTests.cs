@@ -6,14 +6,11 @@ namespace Bouchonnois.Tests;
 
 public class ScenarioTests
 {
-    private readonly PartieDeChasseRepositoryForTests _repository = new PartieDeChasseRepositoryForTests();
-    private DateTime _time = new DateTime(2024, 4, 25, 9, 0, 0);
+    private readonly PartieDeChasseRepositoryForTests _repository = new();
     private readonly PartieDeChasseService _service;
+    private DateTime _time = new(2024, 4, 25, 9, 0, 0);
 
-    public ScenarioTests()
-    {
-        _service = new PartieDeChasseService(_repository, () => _time);
-    }
+    public ScenarioTests() => _service = new PartieDeChasseService(_repository, () => _time);
 
     [Fact]
     public void DéroulerUnePartie()
@@ -25,11 +22,10 @@ public class ScenarioTests
             ("Robert", 12)
         };
         var terrainDeChasse = ("Pitibon sur Sauldre", 4);
-        
+
         var id = _service.Demarrer(
             terrainDeChasse,
-            chasseurs
-        );
+            chasseurs);
 
         _time = _time.Add(TimeSpan.FromMinutes(10));
         _service.Tirer(id, "Dédé");
@@ -119,7 +115,6 @@ public class ScenarioTests
                 09:40 - Robert tire sur une galinette
                 09:10 - Dédé tire
                 09:00 - La partie de chasse commence à Pitibon sur Sauldre avec Dédé (20 balles), Bernard (8 balles), Robert (12 balles)
-                """
-            );
+                """);
     }
 }
