@@ -26,14 +26,13 @@ public class PrendreLApéro : UseCaseTest
     [Fact]
     public void EchoueCarPartieNexistePas()
     {
-        var id = Guid.NewGuid();
-        var repository = new PartieDeChasseRepositoryForTests();
-        var service = new PartieDeChasseService(repository, () => DateTime.Now);
-        var apéroQuandPartieExistePas = () => service.PrendreLapéro(id);
+        var id = UnePartieDeChasseInexistante();
+       
+        var apéroQuandPartieExistePas = () => Service.PrendreLapéro(id);
 
-        apéroQuandPartieExistePas.Should()
-            .Throw<LaPartieDeChasseNexistePas>();
-        repository.SavedPartieDeChasse().Should().BeNull();
+        apéroQuandPartieExistePas.Should().Throw<LaPartieDeChasseNexistePas>();
+       
+        Repository.SavedPartieDeChasse().Should().BeNull();
     }
 
     [Fact]
