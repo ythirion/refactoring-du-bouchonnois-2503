@@ -32,33 +32,27 @@ public class ConsulterStatus : UseCaseTest
         var id = UnePartieDeChasseExistante(
             UnePartieDeChasse()
                 .AvecEvenements(
-                    new Event(
-                        new DateTime(2024, 4, 25, 9, 0, 12),
-                        "La partie de chasse commence à Pitibon sur Sauldre avec Dédé (20 balles), Bernard (8 balles), Robert (12 balles)"),
-                    new Event(new DateTime(2024, 4, 25, 9, 10, 0), "Dédé tire"),
-                    new Event(new DateTime(2024, 4, 25, 9, 40, 0), "Robert tire sur une galinette"),
-                    new Event(new DateTime(2024, 4, 25, 10, 0, 0), "Petit apéro"),
-                    new Event(new DateTime(2024, 4, 25, 11, 0, 0), "Reprise de la chasse"),
-                    new Event(new DateTime(2024, 4, 25, 11, 2, 0), "Bernard tire"),
-                    new Event(new DateTime(2024, 4, 25, 11, 3, 0), "Bernard tire"),
-                    new Event(new DateTime(2024, 4, 25, 11, 4, 0), "Dédé tire sur une galinette"),
-                    new Event(new DateTime(2024, 4, 25, 11, 30, 0), "Robert tire sur une galinette"),
-                    new Event(new DateTime(2024, 4, 25, 11, 40, 0), "Petit apéro"),
-                    new Event(new DateTime(2024, 4, 25, 14, 30, 0), "Reprise de la chasse"),
-                    new Event(new DateTime(2024, 4, 25, 14, 41, 0), "Bernard tire"),
-                    new Event(new DateTime(2024, 4, 25, 14, 41, 1), "Bernard tire"),
-                    new Event(new DateTime(2024, 4, 25, 14, 41, 2), "Bernard tire"),
-                    new Event(new DateTime(2024, 4, 25, 14, 41, 3), "Bernard tire"),
-                    new Event(new DateTime(2024, 4, 25, 14, 41, 4), "Bernard tire"),
-                    new Event(new DateTime(2024, 4, 25, 14, 41, 5), "Bernard tire"),
-                    new Event(new DateTime(2024, 4, 25, 14, 41, 6), "Bernard tire"),
-                    new Event(
-                        new DateTime(2024, 4, 25, 14, 41, 7),
-                        "Bernard tire -> T'as plus de balles mon vieux, chasse à la main"),
-                    new Event(new DateTime(2024, 4, 25, 15, 0, 0), "Robert tire sur une galinette"),
-                    new Event(
-                        new DateTime(2024, 4, 25, 15, 30, 0),
-                        "La partie de chasse est terminée, vainqueur :  Robert - 3 galinettes")));
+                    new Event(new DateTime(2024, 04, 25, 09, 0, 12), "La partie de chasse commence à Pitibon sur Sauldre avec Dédé (20 balles), Bernard (8 balles), Robert (12 balles)"),
+                    new Event(new DateTime(2024, 04, 25, 09, 10, 00), "Dédé tire"),
+                    new Event(new DateTime(2024, 04, 25, 09, 40, 00), "Robert tire sur une galinette"),
+                    new Event(new DateTime(2024, 04, 25, 10, 00, 00), "Petit apéro"),
+                    new Event(new DateTime(2024, 04, 25, 11, 00, 00), "Reprise de la chasse"),
+                    new Event(new DateTime(2024, 04, 25, 11, 02, 00), "Bernard tire"),
+                    new Event(new DateTime(2024, 04, 25, 11, 03, 00), "Bernard tire"),
+                    new Event(new DateTime(2024, 04, 25, 11, 04, 00), "Dédé tire sur une galinette"),
+                    new Event(new DateTime(2024, 04, 25, 11, 30, 00), "Robert tire sur une galinette"),
+                    new Event(new DateTime(2024, 04, 25, 11, 40, 00), "Petit apéro"),
+                    new Event(new DateTime(2024, 04, 25, 14, 30, 00), "Reprise de la chasse"),
+                    new Event(new DateTime(2024, 04, 25, 14, 41, 00), "Bernard tire"),
+                    new Event(new DateTime(2024, 04, 25, 14, 41, 01), "Bernard tire"),
+                    new Event(new DateTime(2024, 04, 25, 14, 41, 02), "Bernard tire"),
+                    new Event(new DateTime(2024, 04, 25, 14, 41, 03), "Bernard tire"),
+                    new Event(new DateTime(2024, 04, 25, 14, 41, 04), "Bernard tire"),
+                    new Event(new DateTime(2024, 04, 25, 14, 41, 05), "Bernard tire"),
+                    new Event(new DateTime(2024, 04, 25, 14, 41, 06), "Bernard tire"),
+                    new Event(new DateTime(2024, 04, 25, 14, 41, 07), "Bernard tire -> T'as plus de balles mon vieux, chasse à la main"),
+                    new Event(new DateTime(2024, 04, 25, 15, 00, 00), "Robert tire sur une galinette"),
+                    new Event(new DateTime(2024, 04, 25, 15, 30, 00), "La partie de chasse est terminée, vainqueur :  Robert - 3 galinettes")));
 
 
         var status = Service.ConsulterStatus(id);
