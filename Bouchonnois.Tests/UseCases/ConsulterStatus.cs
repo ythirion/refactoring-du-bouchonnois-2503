@@ -15,13 +15,6 @@ public class ConsulterStatus
         var service = new PartieDeChasseService(repository, () => DateTime.Now);
         var partieDeChasse = new PartieDeChasseBuilder()
             .QuiEstEnCours()
-            .AvecDesChasseurs(new List<Chasseur>
-                {
-                    new(nom: "Dédé", ballesRestantes: 20),
-                    new(nom: "Bernard", ballesRestantes: 8),
-                    new(nom: "Robert", ballesRestantes: 12, nbGalinettes: 2),
-                }
-            )
             .AvecSesEvenements(new List<Event>
             {
                 new(
