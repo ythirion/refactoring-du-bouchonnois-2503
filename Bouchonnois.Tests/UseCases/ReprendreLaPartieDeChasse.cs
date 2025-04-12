@@ -5,7 +5,7 @@ using Bouchonnois.Tests.Doubles;
 
 namespace Bouchonnois.Tests.UseCases;
 
-public class ReprendreLaPartieDeChasse
+public class ReprendreLaPartieDeChasse : UseCaseTest
 {
     [Fact]
     public void QuandLapéroEstEnCours()
