@@ -5,6 +5,7 @@ namespace Bouchonnois.Tests.Builders;
 public class ChasseurBuilder
 {
     private int _ballesRestantes;
+    private int _nbGalinettes;
     private string _nom = "Chasseur Inconnu";
 
     public static ChasseurBuilder UnChasseur() => new();
@@ -23,10 +24,17 @@ public class ChasseurBuilder
         return this;
     }
 
-
     public ChasseurBuilder SansBalles() => AyantDesBalles(0);
 
-    public Chasseur Build() => new(_nom, _ballesRestantes);
+    public ChasseurBuilder AyantAttrapéGalinettes(int nbGalinettes)
+    {
+        _nbGalinettes = nbGalinettes;
+        return this;
+    }
+
+    public ChasseurBuilder SansGalinettes() => AyantAttrapéGalinettes(0);
+
+    public Chasseur Build() => new(_nom, _ballesRestantes, _nbGalinettes);
 
     public static implicit operator Chasseur(ChasseurBuilder builder) => builder.Build();
 }

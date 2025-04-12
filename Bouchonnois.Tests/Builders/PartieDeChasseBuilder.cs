@@ -5,8 +5,8 @@ namespace Bouchonnois.Tests.Builders;
 
 public class PartieDeChasseBuilder
 {
+    private const string PitibonSurSauldre = "Pitibon sur Sauldre";
     private readonly Guid _id = Guid.NewGuid();
-    private readonly Terrain _terrain = new("Pitibon sur Sauldre", 3);
 
     private List<Chasseur> _chasseurs =
     [
@@ -16,6 +16,7 @@ public class PartieDeChasseBuilder
     ];
 
     private List<Event> _events = [];
+    private int _nbGalinettes;
     private PartieStatus _status = PartieStatus.EnCours;
 
     public static PartieDeChasseBuilder UnePartieDeChasse() => new();
@@ -31,9 +32,9 @@ public class PartieDeChasseBuilder
         _status = PartieStatus.Apéro;
         return this;
     }
-    
+
     public PartieDeChasseBuilder Terminée()
-    { 
+    {
         _status = PartieStatus.Terminée;
         return this;
     }
@@ -41,6 +42,12 @@ public class PartieDeChasseBuilder
     public PartieDeChasseBuilder Avec(params List<Chasseur> chasseurs)
     {
         _chasseurs = chasseurs;
+        return this;
+    }
+
+    public PartieDeChasseBuilder SurUnTerrainAyantGalinettes(int nbGalinettes)
+    {
+        _nbGalinettes = nbGalinettes;
         return this;
     }
 
@@ -54,7 +61,7 @@ public class PartieDeChasseBuilder
         => new(
             _id,
             chasseurs: _chasseurs,
-            terrain: _terrain,
+            terrain: new Terrain(PitibonSurSauldre, _nbGalinettes),
             status: _status,
             events: _events);
 }
