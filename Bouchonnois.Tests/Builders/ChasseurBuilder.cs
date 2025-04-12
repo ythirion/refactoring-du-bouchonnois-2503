@@ -10,7 +10,9 @@ public class ChasseurBuilder
 
     public static ChasseurBuilder UnChasseur() => new();
 
+    public static ChasseurBuilder Dédé() => UnChasseur().Nommé("Dédé").AyantDesBalles(20);
     public static ChasseurBuilder Bernard() => UnChasseur().Nommé("Bernard").AyantDesBalles(8);
+    public static ChasseurBuilder Robert() => UnChasseur().Nommé("Robert").AyantDesBalles(12);
 
     public ChasseurBuilder Nommé(string nom)
     {
@@ -26,13 +28,13 @@ public class ChasseurBuilder
 
     public ChasseurBuilder SansBalles() => AyantDesBalles(0);
 
-    public ChasseurBuilder AyantAttrapéGalinettes(int nbGalinettes)
+    public ChasseurBuilder AyantCapturéGalinettes(int nbGalinettes)
     {
         _nbGalinettes = nbGalinettes;
         return this;
     }
 
-    public ChasseurBuilder SansGalinettes() => AyantAttrapéGalinettes(0);
+    public ChasseurBuilder Brocouille() => AyantCapturéGalinettes(0);
 
     public Chasseur Build() => new(_nom, _ballesRestantes, _nbGalinettes);
 

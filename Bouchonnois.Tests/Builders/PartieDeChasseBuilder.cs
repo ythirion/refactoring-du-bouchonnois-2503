@@ -7,14 +7,7 @@ public class PartieDeChasseBuilder
 {
     private const string PitibonSurSauldre = "Pitibon sur Sauldre";
     private readonly Guid _id = Guid.NewGuid();
-
-    private List<Chasseur> _chasseurs =
-    [
-        new("Dédé", 20),
-        new("Bernard", 8),
-        new("Robert", 12)
-    ];
-
+    private List<Chasseur> _chasseurs = [];
     private List<Event> _events = [];
     private int _nbGalinettes;
     private PartieStatus _status = PartieStatus.EnCours;
@@ -52,7 +45,7 @@ public class PartieDeChasseBuilder
     }
 
     public PartieDeChasseBuilder SurUnTerrainRicheEnGalinettes() => SurUnTerrainAyantGalinettes(3);
-    
+
     public PartieDeChasseBuilder SurUnTerrainSansGalinettes() => SurUnTerrainAyantGalinettes(0);
 
     public PartieDeChasseBuilder AvecSesEvenements(params List<Event> events)

@@ -13,7 +13,7 @@ public class TirerSurUneGalinette : UseCaseTest
         var id = UnePartieDeChasseExistante(
             UnePartieDeChasse()
                 .EnCours()
-                .Avec(Bernard().AyantDesBalles(8).SansGalinettes())
+                .Avec(Bernard().AyantDesBalles(8).Brocouille())
                 .SurUnTerrainAyantGalinettes(3));
 
         Service.TirerSurUneGalinette(id, Bernard);
