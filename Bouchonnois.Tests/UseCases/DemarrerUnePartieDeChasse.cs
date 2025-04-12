@@ -20,6 +20,7 @@ public class DemarrerUnePartieDeChasse : UseCaseTest
             (Robert, 12)
         };
         var terrainDeChasse = ("Pitibon sur Sauldre", 3);
+        
         var id = Service.Demarrer(
             terrainDeChasse,
             chasseurs);
@@ -40,7 +41,6 @@ public class DemarrerUnePartieDeChasse : UseCaseTest
                             Now,
                             "La partie de chasse commence à Pitibon sur Sauldre avec Dédé (20 balles), Bernard (8 balles), Robert (12 balles)"))
                     .Build());
-        
     }
 
     [Fact]
