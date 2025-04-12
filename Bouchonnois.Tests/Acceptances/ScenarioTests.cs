@@ -6,10 +6,10 @@ namespace Bouchonnois.Tests.Acceptances;
 public class ScenarioTests
 {
     private readonly PartieDeChasseRepositoryForTests _repository = new();
-    private readonly PartieDeChasseService _service;
+    private readonly PartieDeChasseService _;
     private DateTime _time = new(2024, 4, 25, 9, 0, 0);
 
-    public ScenarioTests() => _service = new PartieDeChasseService(_repository, () => _time);
+    public ScenarioTests() => _ = new PartieDeChasseService(_repository, () => _time);
 
     [Fact]
     public void DéroulerUnePartie()
@@ -22,31 +22,31 @@ public class ScenarioTests
         };
         var terrainDeChasse = ("Pitibon sur Sauldre", 4);
 
-        var id = _service.Demarrer(terrainDeChasse, chasseurs);
+        var id = _.Demarrer(terrainDeChasse, chasseurs);
 
         // @formatter:off
-        Act(10.MinutesLater(),  () => _service.Tirer(id, "Dédé"));
-        Act(30.MinutesLater(),  () => _service.TirerSurUneGalinette(id, "Robert"));
-        Act(20.MinutesLater(),  () => _service.PrendreLapéro(id));
-        Act(1.HoursLater(),     () => _service.ReprendreLaPartie(id));
-        Act(2.MinutesLater(),   () => _service.Tirer(id, "Bernard"));
-        Act(1.MinutesLater(),   () => _service.Tirer(id, "Bernard"));
-        Act(1.MinutesLater(),   () => _service.TirerSurUneGalinette(id, "Dédé"));
-        Act(26.MinutesLater(),  () => _service.TirerSurUneGalinette(id, "Robert"));
-        Act(10.MinutesLater(),  () => _service.PrendreLapéro(id));
-        Act(170.MinutesLater(), () => _service.ReprendreLaPartie(id));
-        Act(11.MinutesLater(),  () => _service.Tirer(id, "Bernard"));
-        Act(1.SecondsLater(),   () => _service.Tirer(id, "Bernard"));
-        Act(1.SecondsLater(),   () => _service.Tirer(id, "Bernard"));
-        Act(1.SecondsLater(),   () => _service.Tirer(id, "Bernard"));
-        Act(1.SecondsLater(),   () => _service.Tirer(id, "Bernard"));
-        Act(1.SecondsLater(),   () => _service.Tirer(id, "Bernard"));
-        Act(1.SecondsLater(),   () => _service.Tirer(id, "Bernard"));
-        Act(19.MinutesLater(),  () => _service.TirerSurUneGalinette(id, "Robert"));
-        Act(30.MinutesLater(),  () => _service.TerminerLaPartie(id));
+        Act(10.MinutesLater(),  () => _.Tirer(id, "Dédé"));
+        Act(30.MinutesLater(),  () => _.TirerSurUneGalinette(id, "Robert"));
+        Act(20.MinutesLater(),  () => _.PrendreLapéro(id));
+        Act(1.HoursLater(),     () => _.ReprendreLaPartie(id));
+        Act(2.MinutesLater(),   () => _.Tirer(id, "Bernard"));
+        Act(1.MinutesLater(),   () => _.Tirer(id, "Bernard"));
+        Act(1.MinutesLater(),   () => _.TirerSurUneGalinette(id, "Dédé"));
+        Act(26.MinutesLater(),  () => _.TirerSurUneGalinette(id, "Robert"));
+        Act(10.MinutesLater(),  () => _.PrendreLapéro(id));
+        Act(170.MinutesLater(), () => _.ReprendreLaPartie(id));
+        Act(11.MinutesLater(),  () => _.Tirer(id, "Bernard"));
+        Act(1.SecondsLater(),   () => _.Tirer(id, "Bernard"));
+        Act(1.SecondsLater(),   () => _.Tirer(id, "Bernard"));
+        Act(1.SecondsLater(),   () => _.Tirer(id, "Bernard"));
+        Act(1.SecondsLater(),   () => _.Tirer(id, "Bernard"));
+        Act(1.SecondsLater(),   () => _.Tirer(id, "Bernard"));
+        Act(1.SecondsLater(),   () => _.Tirer(id, "Bernard"));
+        Act(19.MinutesLater(),  () => _.TirerSurUneGalinette(id, "Robert"));
+        Act(30.MinutesLater(),  () => _.TerminerLaPartie(id));
         // @formatter:on
 
-        _service.ConsulterStatus(id)
+        _.ConsulterStatus(id)
             .Should()
             .BeEquivalentTo(
                 """
