@@ -95,7 +95,6 @@ public class TerminerLaPartieDeChasse : UseCaseTest
                     Bernard().AyantCapturéGalinettes(3),
                     Robert().AyantCapturéGalinettes(3)));
 
-
         var meilleurChasseur = Service.TerminerLaPartie(id);
 
         meilleurChasseur.Should().Be("Dédé, Bernard, Robert");
