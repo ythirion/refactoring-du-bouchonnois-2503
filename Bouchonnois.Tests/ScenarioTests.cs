@@ -45,9 +45,7 @@ public class ScenarioTests
         Act(1.SecondsLater(), () => _service.Tirer(id, "Bernard"));
         Act(1.SecondsLater(), () => _service.Tirer(id, "Bernard"));
         Act(19.MinutesLater(), () => _service.TirerSurUneGalinette(id, "Robert"));
-
-        _time = _time.Add(TimeSpan.FromMinutes(30));
-        _service.TerminerLaPartie(id);
+        Act(30.MinutesLater(), () => _service.TerminerLaPartie(id));
 
         _service.ConsulterStatus(id)
             .Should()
