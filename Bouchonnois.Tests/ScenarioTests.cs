@@ -1,4 +1,3 @@
-using System.Globalization;
 using Bouchonnois.Service;
 using Bouchonnois.Tests.Doubles;
 
@@ -10,11 +9,7 @@ public class ScenarioTests
     private readonly PartieDeChasseService _service;
     private DateTime _time = new(2024, 4, 25, 9, 0, 0);
 
-    public ScenarioTests()
-    {
-        Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");
-        _service = new PartieDeChasseService(_repository, () => _time);
-    }
+    public ScenarioTests() => _service = new PartieDeChasseService(_repository, () => _time);
 
     [Fact]
     public void DéroulerUnePartie()
