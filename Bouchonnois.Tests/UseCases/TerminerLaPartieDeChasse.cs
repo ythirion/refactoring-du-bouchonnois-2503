@@ -115,17 +115,18 @@ public class TerminerLaPartieDeChasse : UseCaseTest
         var id = Guid.NewGuid();
         var repository = new PartieDeChasseRepositoryForTests();
 
+        var partieDeChasse = new PartieDeChasse(
+            id: id,
+            chasseurs: new List<Chasseur>
+            {
+                new(nom: "Dédé", ballesRestantes: 20),
+                new(nom: "Bernard", ballesRestantes: 8),
+                new(nom: Robert, ballesRestantes: 12)
+            },
+            terrain: new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3),
+            status: PartieStatus.Terminée);
         repository.Add(
-            new PartieDeChasse(
-                id: id,
-                chasseurs: new List<Chasseur>
-                {
-                    new(nom: "Dédé", ballesRestantes: 20),
-                    new(nom: "Bernard", ballesRestantes: 8),
-                    new(nom: Robert, ballesRestantes: 12)
-                },
-                terrain: new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3),
-                status: PartieStatus.Terminée));
+            partieDeChasse);
 
         var service = new PartieDeChasseService(repository, () => DateTime.Now);
         var prendreLapéroQuandTerminée = () => service.TerminerLaPartie(id);
