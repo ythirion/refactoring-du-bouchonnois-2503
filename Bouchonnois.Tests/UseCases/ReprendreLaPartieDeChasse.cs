@@ -1,7 +1,4 @@
-using Bouchonnois.Domain;
-using Bouchonnois.Service;
 using Bouchonnois.Service.Exceptions;
-using Bouchonnois.Tests.Doubles;
 using Bouchonnois.Tests.Verifications;
 using static Bouchonnois.Tests.Builders.PartieDeChasseBuilder;
 
@@ -27,11 +24,11 @@ public class ReprendreLaPartieDeChasse : UseCaseTest
     public void EchoueCarPartieNexistePas()
     {
         var id = UnePartieDeChasseInexistante();
-      
+
         var reprendrePartieQuandPartieExistePas = () => Service.ReprendreLaPartie(id);
 
         reprendrePartieQuandPartieExistePas.Should().Throw<LaPartieDeChasseNexistePas>();
-        
+
         Repository.SavedPartieDeChasse().Should().BeNull();
     }
 
