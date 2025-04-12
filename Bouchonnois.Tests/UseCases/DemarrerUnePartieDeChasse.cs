@@ -59,15 +59,14 @@ public class DemarrerUnePartieDeChasse : UseCaseTest
     [Fact]
     public void EchoueAvecUnTerrainSansGalinettes()
     {
-        var repository = new PartieDeChasseRepositoryForTests();
-        var service = new PartieDeChasseService(repository, () => DateTime.Now);
         var chasseurs = new List<(string, int)>();
         var terrainDeChasse = ("Pitibon sur Sauldre", 0);
 
-        Action demarrerPartieSansChasseurs = () => service.Demarrer(terrainDeChasse, chasseurs);
+        Action demarrerPartieSansChasseurs = () => Service.Demarrer(terrainDeChasse, chasseurs);
 
-        demarrerPartieSansChasseurs.Should()
-            .Throw<ImpossibleDeDémarrerUnePartieSansGalinettes>();
+        demarrerPartieSansChasseurs.Should().Throw<ImpossibleDeDémarrerUnePartieSansGalinettes>();
+        
+        Repository.SavedPartieDeChasse().Should().BeNull();
     }
 
     [Fact]
