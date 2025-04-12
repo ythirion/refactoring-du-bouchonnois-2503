@@ -5,7 +5,7 @@ using Bouchonnois.Tests.Doubles;
 
 namespace Bouchonnois.Tests.UseCases;
 
-public class DemarrerUnePartieDeChasse
+public class DemarrerUnePartieDeChasse : UseCaseTest
 {
     [Fact]
     public void AvecPlusieursChasseurs()
