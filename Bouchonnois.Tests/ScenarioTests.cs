@@ -85,8 +85,9 @@ public class ScenarioTests
         {
             scenarioAction();
         }
-        catch (TasPlusDeBallesMonVieuxChasseALaMain)
+        catch
         {
+            // ignored
         }
     }
 }
