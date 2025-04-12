@@ -1,5 +1,6 @@
 using Bouchonnois.Service;
 using Bouchonnois.Tests.Doubles;
+using FluentAssertions.Extensions;
 
 namespace Bouchonnois.Tests.Acceptances;
 
@@ -34,7 +35,7 @@ public class ScenarioTests
         Act(1.MinutesLater(),   () => _service.TirerSurUneGalinette(id, "Dédé"));
         Act(26.MinutesLater(),  () => _service.TirerSurUneGalinette(id, "Robert"));
         Act(10.MinutesLater(),  () => _service.PrendreLapéro(id));
-        Act(170.MinutesLater(), () => _service.ReprendreLaPartie(id));
+        Act(170.Minutes(), () => _service.ReprendreLaPartie(id));
         Act(11.MinutesLater(),  () => _service.Tirer(id, "Bernard"));
         Act(1.SecondsLater(),   () => _service.Tirer(id, "Bernard"));
         Act(1.SecondsLater(),   () => _service.Tirer(id, "Bernard"));
