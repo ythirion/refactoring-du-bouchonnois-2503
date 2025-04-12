@@ -31,9 +31,9 @@ public class ScenarioTests
         Act(30.MinutesLater(), () => _service.TirerSurUneGalinette(id, "Robert"));
         Act(20.MinutesLater(), () => _service.PrendreLapéro(id));
         Act(60.MinutesLater(), () => _service.ReprendreLaPartie(id));
-        Act(2.MinutesLater(), () => _service.Tirer(id, "Bernard"));
-        Act(1.MinutesLater(), () => _service.Tirer(id, "Bernard"));
-        Act(1.MinutesLater(), () => _service.TirerSurUneGalinette(id, "Dédé"));
+        Act(02.MinutesLater(), () => _service.Tirer(id, "Bernard"));
+        Act(01.MinutesLater(), () => _service.Tirer(id, "Bernard"));
+        Act(01.MinutesLater(), () => _service.TirerSurUneGalinette(id, "Dédé"));
         Act(26.MinutesLater(), () => _service.TirerSurUneGalinette(id, "Robert"));
         Act(10.MinutesLater(), () => _service.PrendreLapéro(id));
         Act(170.MinutesLater(), () => _service.ReprendreLaPartie(id));
@@ -46,6 +46,7 @@ public class ScenarioTests
         Act(1.SecondsLater(), () => _service.Tirer(id, "Bernard"));
         Act(19.MinutesLater(), () => _service.TirerSurUneGalinette(id, "Robert"));
         Act(30.MinutesLater(), () => _service.TerminerLaPartie(id));
+        
 
         _service.ConsulterStatus(id)
             .Should()
