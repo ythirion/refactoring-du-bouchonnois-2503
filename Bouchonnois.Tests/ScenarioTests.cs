@@ -27,7 +27,7 @@ public class ScenarioTests
             terrainDeChasse,
             chasseurs);
 
-        Act(id, TimeSpan.FromMinutes(10));
+        Act(TimeSpan.FromMinutes(10),()=> _service.Tirer(id, "Dédé"));
 
         _time = _time.Add(TimeSpan.FromMinutes(30));
         _service.TirerSurUneGalinette(id, "Robert");
@@ -117,9 +117,9 @@ public class ScenarioTests
                 """);
     }
 
-    private void Act(Guid id, TimeSpan time)
+    private void Act( TimeSpan time, Action tirer)
     {
         _time = _time.Add(time);
-        _service.Tirer(id, "Dédé");
+        tirer();
     }
 }
