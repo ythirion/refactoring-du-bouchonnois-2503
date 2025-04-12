@@ -5,7 +5,7 @@ namespace Bouchonnois.Tests.Verifications;
 
 public static class Verification
 {
-    public static PartieDeChasse DoitAvoirEmis(
+    public static PartieDeChasse DevraitAvoirEmis(
         this PartieDeChasse partieDeChasse,
         DateTime date,
         string message)
@@ -30,7 +30,7 @@ public static class Verification
             .ContainSingle(c => c.Nom == nom, "Chasseur non présent dans la partie de chasse")
             .Subject;
 
-    public static PartieDeChasse ChasseurDoitAvoirTiréSurUneGalinette(
+    public static PartieDeChasse ChasseurDevraitAvoirTiréSurUneGalinette(
         this PartieDeChasse partieDeChasse,
         string nom,
         int ballesRestantes,
@@ -43,7 +43,7 @@ public static class Verification
                     .ATué(galinettesCapturées));
 
 
-    public static PartieDeChasse ChasseurATiré(
+    public static PartieDeChasse ChasseurDevraitAvoirTiré(
         this PartieDeChasse partieDeChasse,
         string nom,
         int ballesRestantes)
@@ -53,7 +53,7 @@ public static class Verification
                 p.Chasseur(nom)
                     .BallesRestantes(ballesRestantes));
 
-    public static PartieDeChasse GalinettesRestantesSurLeTerrain(
+    public static PartieDeChasse TerrainDevraitAvoirGalinettesRestantes(
         this PartieDeChasse partieDeChasse,
         int nbGalinettes)
         => Assert(
@@ -61,17 +61,17 @@ public static class Verification
             p =>
                 p.Terrain.GalinettesRestantes(nbGalinettes));
 
-    public static PartieDeChasse EstALApéro(this PartieDeChasse partieDeChasse)
+    public static PartieDeChasse DevraitEtreALApéro(this PartieDeChasse partieDeChasse)
         => Assert(
             partieDeChasse,
             p => p.Status.Should().Be(PartieStatus.Apéro, "Les chasseurs devraient être à l'apéro"));
 
-    public static PartieDeChasse EstEnCours(this PartieDeChasse partieDeChasse)
+    public static PartieDeChasse DevraitEtreEnCours(this PartieDeChasse partieDeChasse)
         => Assert(
             partieDeChasse,
             p => p.Status.Should().Be(PartieStatus.EnCours, "Les chasseurs devraient être en cours de chasse"));
 
-    public static PartieDeChasse EstTerminé(this PartieDeChasse partieDeChasse)
+    public static PartieDeChasse DevraitEtreTerminé(this PartieDeChasse partieDeChasse)
         => Assert(
             partieDeChasse,
             p => p.Status.Should().Be(PartieStatus.Terminée, "La partie de Chasse devrait être terminée"));

@@ -19,8 +19,8 @@ public class Tirer : UseCaseTest
         Service.Tirer(id, Bernard);
 
         Repository.SavedPartieDeChasse()
-            .DoitAvoirEmis(Now, "Bernard tire")
-            .ChasseurATiré(Bernard, ballesRestantes: 7);
+            .DevraitAvoirEmis(Now, "Bernard tire")
+            .ChasseurDevraitAvoirTiré(Bernard, ballesRestantes: 7);
     }
 
     [Fact]
@@ -48,7 +48,7 @@ public class Tirer : UseCaseTest
         tirerSansBalle.Should().Throw<TasPlusDeBallesMonVieuxChasseALaMain>();
 
         Repository.SavedPartieDeChasse()
-            .DoitAvoirEmis(Now, "Bernard tire -> T'as plus de balles mon vieux, chasse à la main");
+            .DevraitAvoirEmis(Now, "Bernard tire -> T'as plus de balles mon vieux, chasse à la main");
     }
 
     [Fact]
@@ -73,7 +73,7 @@ public class Tirer : UseCaseTest
         tirerEnPleinApéro.Should().Throw<OnTirePasPendantLapéroCestSacré>();
 
         Repository.SavedPartieDeChasse()
-            .DoitAvoirEmis(Now, "Chasseur inconnu veut tirer -> On tire pas pendant l'apéro, c'est sacré !!!");
+            .DevraitAvoirEmis(Now, "Chasseur inconnu veut tirer -> On tire pas pendant l'apéro, c'est sacré !!!");
     }
 
     [Fact]
@@ -86,6 +86,6 @@ public class Tirer : UseCaseTest
         tirerQuandTerminée.Should().Throw<OnTirePasQuandLaPartieEstTerminée>();
 
         Repository.SavedPartieDeChasse()
-            .DoitAvoirEmis(Now, "Chasseur inconnu veut tirer -> On tire pas quand la partie est terminée");
+            .DevraitAvoirEmis(Now, "Chasseur inconnu veut tirer -> On tire pas quand la partie est terminée");
     }
 }

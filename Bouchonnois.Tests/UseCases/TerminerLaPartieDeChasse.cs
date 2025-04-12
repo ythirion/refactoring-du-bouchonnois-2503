@@ -24,7 +24,7 @@ public class TerminerLaPartieDeChasse : UseCaseTest
         meilleurChasseur.Should().Be(Robert);
 
         Repository.SavedPartieDeChasse()
-            .DoitAvoirEmis(Now, "La partie de chasse est terminée, vainqueur : Robert - 2 galinettes");
+            .DevraitAvoirEmis(Now, "La partie de chasse est terminée, vainqueur : Robert - 2 galinettes");
     }
 
     [Fact]
@@ -40,7 +40,7 @@ public class TerminerLaPartieDeChasse : UseCaseTest
         meilleurChasseur.Should().Be(Robert);
 
         Repository.SavedPartieDeChasse()
-            .DoitAvoirEmis(Now, "La partie de chasse est terminée, vainqueur : Robert - 2 galinettes");
+            .DevraitAvoirEmis(Now, "La partie de chasse est terminée, vainqueur : Robert - 2 galinettes");
     }
 
     [Fact]
@@ -59,7 +59,7 @@ public class TerminerLaPartieDeChasse : UseCaseTest
         meilleurChasseur.Should().Be("Dédé, Bernard");
 
         Repository.SavedPartieDeChasse()
-            .DoitAvoirEmis(
+            .DevraitAvoirEmis(
                 Now,
                 "La partie de chasse est terminée, vainqueur : Dédé - 2 galinettes, Bernard - 2 galinettes");
     }
@@ -80,7 +80,7 @@ public class TerminerLaPartieDeChasse : UseCaseTest
         meilleurChasseur.Should().Be("Brocouille");
 
         Repository.SavedPartieDeChasse()
-            .DoitAvoirEmis(
+            .DevraitAvoirEmis(
                 Now,
                 "La partie de chasse est terminée, vainqueur : Brocouille");
     }
@@ -101,7 +101,7 @@ public class TerminerLaPartieDeChasse : UseCaseTest
         meilleurChasseur.Should().Be("Dédé, Bernard, Robert");
 
         Repository.SavedPartieDeChasse()
-            .DoitAvoirEmis(
+            .DevraitAvoirEmis(
                 Now,
                 "La partie de chasse est terminée, vainqueur : Dédé - 3 galinettes, Bernard - 3 galinettes, Robert - 3 galinettes");
     }

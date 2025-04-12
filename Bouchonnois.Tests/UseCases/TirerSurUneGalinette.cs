@@ -20,9 +20,9 @@ public class TirerSurUneGalinette : UseCaseTest
         Service.TirerSurUneGalinette(id, Bernard);
 
         Repository.SavedPartieDeChasse()
-            .DoitAvoirEmis(Now, "Bernard tire sur une galinette")
-            .GalinettesRestantesSurLeTerrain(2)
-            .ChasseurDoitAvoirTiréSurUneGalinette(Bernard, ballesRestantes: 7, galinettesCapturées: 1);
+            .DevraitAvoirEmis(Now, "Bernard tire sur une galinette")
+            .TerrainDevraitAvoirGalinettesRestantes(2)
+            .ChasseurDevraitAvoirTiréSurUneGalinette(Bernard, ballesRestantes: 7, galinettesCapturées: 1);
     }
 
     [Fact]
@@ -51,7 +51,7 @@ public class TirerSurUneGalinette : UseCaseTest
         tirerSansBalle.Should().Throw<TasPlusDeBallesMonVieuxChasseALaMain>();
 
         Repository.SavedPartieDeChasse()
-            .DoitAvoirEmis(
+            .DevraitAvoirEmis(
                 Now,
                 "Bernard veut tirer sur une galinette -> T'as plus de balles mon vieux, chasse à la main");
     }
@@ -100,7 +100,7 @@ public class TirerSurUneGalinette : UseCaseTest
         tirerEnPleinApéro.Should().Throw<OnTirePasPendantLapéroCestSacré>();
 
         Repository.SavedPartieDeChasse()
-            .DoitAvoirEmis(Now, "Chasseur inconnu veut tirer -> On tire pas pendant l'apéro, c'est sacré !!!");
+            .DevraitAvoirEmis(Now, "Chasseur inconnu veut tirer -> On tire pas pendant l'apéro, c'est sacré !!!");
     }
 
     [Fact]
@@ -113,6 +113,6 @@ public class TirerSurUneGalinette : UseCaseTest
         tirerQuandTerminée.Should().Throw<OnTirePasQuandLaPartieEstTerminée>();
 
         Repository.SavedPartieDeChasse()
-            .DoitAvoirEmis(Now, "Chasseur inconnu veut tirer -> On tire pas quand la partie est terminée");
+            .DevraitAvoirEmis(Now, "Chasseur inconnu veut tirer -> On tire pas quand la partie est terminée");
     }
 }
