@@ -14,7 +14,11 @@ public class ConsulterStatus : UseCaseTest
     {
         var id = UnePartieDeChasseExistante(
             UnePartieDeChasse()
-                .EnCours().Avec(Dédé().AyantDesBalles(20), Bernard().AyantDesBalles(8), Robert().AyantDesBalles(12))
+                .EnCours()
+                .Avec(
+                    Dédé().AyantDesBalles(20),
+                    Bernard().AyantDesBalles(8),
+                    Robert().AyantDesBalles(12))
                 .AvecEvenements(
                     new Event(
                         new DateTime(2024, 4, 25, 9, 0, 12),
