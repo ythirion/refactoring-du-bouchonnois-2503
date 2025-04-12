@@ -92,38 +92,18 @@ public class TirerSurUneGalinette : UseCaseTest
     [Fact]
     public void EchoueSiLesChasseursSontEnApero()
     {
-        var now = DateTime.Now;
+        var id = UnePartieDeChasseExistante(
+            UnePartieDeChasse()
+                .ALApéro()
+                .SurUnTerrainRicheEnGalinettes());
 
-        var id = Guid.NewGuid();
-        var repository = new PartieDeChasseRepositoryForTests();
+        var tirerEnPleinApéro = () => Service.TirerSurUneGalinette(id, ChasseurInconnu);
 
-        repository.Add(
-            new PartieDeChasse(
-                id: id,
-                chasseurs: new List<Chasseur>
-                {
-                    new(nom: "Dédé", ballesRestantes: 20),
-                    new(nom: "Bernard", ballesRestantes: 8),
-                    new(nom: "Robert", ballesRestantes: 12)
-                },
-                terrain: new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3),
-                status: PartieStatus.Apéro,
-                events: new List<Event>()));
+        tirerEnPleinApéro.Should().Throw<OnTirePasPendantLapéroCestSacré>();
 
-        var service = new PartieDeChasseService(repository, () => now);
-        var tirerEnPleinApéro = () => service.TirerSurUneGalinette(id, "Chasseur inconnu");
-
-        tirerEnPleinApéro.Should()
-            .Throw<OnTirePasPendantLapéroCestSacré>();
-
-        repository
+        Repository
             .SavedPartieDeChasse()
-            .Events
-            .Should()
-            .BeEquivalentTo(
-            [
-                new Event(now, "Chasseur inconnu veut tirer -> On tire pas pendant l'apéro, c'est sacré !!!")
-            ]);
+            .AEmisEvenement(Now, "Chasseur inconnu veut tirer -> On tire pas pendant l'apéro, c'est sacré !!!");
     }
 
     [Fact]
