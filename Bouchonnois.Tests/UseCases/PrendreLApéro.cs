@@ -62,23 +62,15 @@ public class PrendreLApéro
     [Fact]
     public void EchoueSiLesChasseursSontDéjaEnApero()
     {
-        var id = Guid.NewGuid();
         var repository = new PartieDeChasseRepositoryForTests();
 
-        repository.Add(
-            new PartieDeChasse(
-                id: id,
-                chasseurs: new List<Chasseur>
-                {
-                    new(nom: "Dédé", ballesRestantes: 20),
-                    new(nom: "Bernard", ballesRestantes: 8),
-                    new(nom: "Robert", ballesRestantes: 12),
-                },
-                terrain: new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3),
-                status: PartieStatus.Apéro));
+        var partieDeChasse = new PartieDeChasseBuilder()
+            .QuiEstApero()
+            .Build();
+        repository.Add(partieDeChasse);
 
         var service = new PartieDeChasseService(repository, () => DateTime.Now);
-        var prendreLApéroQuandOnPrendDéjàLapéro = () => service.PrendreLapéro(id);
+        var prendreLApéroQuandOnPrendDéjàLapéro = () => service.PrendreLapéro(partieDeChasse.Id);
 
         prendreLApéroQuandOnPrendDéjàLapéro.Should()
             .Throw<OnEstDéjàEnTrainDePrendreLapéro>();
