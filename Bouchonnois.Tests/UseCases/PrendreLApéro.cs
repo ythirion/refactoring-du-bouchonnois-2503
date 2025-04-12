@@ -38,27 +38,13 @@ public class PrendreLApéro : UseCaseTest
     [Fact]
     public void EchoueSiLesChasseursSontDéjaEnApero()
     {
-        var id = Guid.NewGuid();
-        var repository = new PartieDeChasseRepositoryForTests();
+        var id = UnePartieDeChasseExistante(UnePartieDeChasse().ALApéro());
+        
+        var prendreLApéroQuandOnPrendDéjàLapéro = () => Service.PrendreLapéro(id);
 
-        repository.Add(
-            new PartieDeChasse(
-                id: id,
-                chasseurs: new List<Chasseur>
-                {
-                    new(nom: "Dédé", ballesRestantes: 20),
-                    new(nom: "Bernard", ballesRestantes: 8),
-                    new(nom: "Robert", ballesRestantes: 12)
-                },
-                terrain: new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3),
-                status: PartieStatus.Apéro));
-
-        var service = new PartieDeChasseService(repository, () => DateTime.Now);
-        var prendreLApéroQuandOnPrendDéjàLapéro = () => service.PrendreLapéro(id);
-
-        prendreLApéroQuandOnPrendDéjàLapéro.Should()
-            .Throw<OnEstDéjàEnTrainDePrendreLapéro>();
-        repository.SavedPartieDeChasse().Should().BeNull();
+        prendreLApéroQuandOnPrendDéjàLapéro.Should().Throw<OnEstDéjàEnTrainDePrendreLapéro>();
+        
+        Repository.SavedPartieDeChasse().Should().BeNull();
     }
 
     [Fact]
