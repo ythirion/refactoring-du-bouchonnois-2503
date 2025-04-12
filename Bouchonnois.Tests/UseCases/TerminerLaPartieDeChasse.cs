@@ -90,7 +90,6 @@ public class TerminerLaPartieDeChasse : UseCaseTest
     [Fact]
     public void QuandLesChasseursSontALaperoEtTousExAequo()
     {
-
         var id = UnePartieDeChasseExistante(
             UnePartieDeChasse()
                 .ALApéro()
@@ -98,42 +97,31 @@ public class TerminerLaPartieDeChasse : UseCaseTest
                     Dédé().AyantCapturéGalinettes(3),
                     Bernard().AyantCapturéGalinettes(3),
                     Robert().AyantCapturéGalinettes(3)));
-    
+
 
         var meilleurChasseur = Service.TerminerLaPartie(id);
 
         meilleurChasseur.Should().Be("Dédé, Bernard, Robert");
 
         Repository.SavedPartieDeChasse()
-            .AEmisEvenement(Now,
+            .AEmisEvenement(
+                Now,
                 "La partie de chasse est terminée, vainqueur : Dédé - 3 galinettes, Bernard - 3 galinettes, Robert - 3 galinettes");
     }
 
     [Fact]
     public void EchoueSiLaPartieDeChasseEstDéjàTerminée()
     {
-        var id = Guid.NewGuid();
-        var repository = new PartieDeChasseRepositoryForTests();
+        var id = UnePartieDeChasseExistante(
+            UnePartieDeChasse()
+                .Terminée());
+      
 
-        var partieDeChasse = new PartieDeChasse(
-            id: id,
-            chasseurs: new List<Chasseur>
-            {
-                new(nom: "Dédé", ballesRestantes: 20),
-                new(nom: "Bernard", ballesRestantes: 8),
-                new(nom: Robert, ballesRestantes: 12)
-            },
-            terrain: new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3),
-            status: PartieStatus.Terminée);
-        repository.Add(
-            partieDeChasse);
-
-        var service = new PartieDeChasseService(repository, () => DateTime.Now);
-        var prendreLapéroQuandTerminée = () => service.TerminerLaPartie(id);
+        var prendreLapéroQuandTerminée = () => Service.TerminerLaPartie(id);
 
         prendreLapéroQuandTerminée.Should()
             .Throw<QuandCestFiniCestFini>();
 
-        repository.SavedPartieDeChasse().Should().BeNull();
+        Repository.SavedPartieDeChasse().Should().BeNull();
     }
 }
