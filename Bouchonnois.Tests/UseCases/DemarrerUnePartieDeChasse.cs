@@ -15,8 +15,8 @@ public class DemarrerUnePartieDeChasse : UseCaseTest
         var chasseurs = new List<(string, int)>
         {
             (Dédé, 20),
-            ("Bernard", 8),
-            ("Robert", 12)
+            (Bernard, 8),
+            (Robert, 12)
         };
         var terrainDeChasse = ("Pitibon sur Sauldre", 3);
         var id = service.Demarrer(
