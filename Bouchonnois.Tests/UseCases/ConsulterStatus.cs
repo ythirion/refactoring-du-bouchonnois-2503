@@ -54,7 +54,7 @@ public class ConsulterStatus : UseCaseTest
                     new Event(new DateTime(2024, 04, 25, 14, 41, 07), "Bernard tire -> T'as plus de balles mon vieux, chasse à la main"),
                     new Event(new DateTime(2024, 04, 25, 15, 00, 00), "Robert tire sur une galinette"),
                     new Event(new DateTime(2024, 04, 25, 15, 30, 00), "La partie de chasse est terminée, vainqueur :  Robert - 3 galinettes")));
-    // @formatter:on
+                    // @formatter:on
 
         var status = Service.ConsulterStatus(id);
 
