@@ -4,8 +4,6 @@ using Bouchonnois.Tests.Verifications;
 using static Bouchonnois.Tests.Builders.PartieDeChasseBuilder;
 using static Bouchonnois.Tests.Builders.ChasseurBuilder;
 
-using static Bouchonnois.Tests.UseCases.Data;
-
 namespace Bouchonnois.Tests.UseCases;
 
 public class Tirer : UseCaseTest
