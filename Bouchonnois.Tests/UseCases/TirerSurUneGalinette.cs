@@ -77,29 +77,16 @@ public class TirerSurUneGalinette : UseCaseTest
     [Fact]
     public void EchoueCarLeChasseurNestPasDansLaPartie()
     {
-        var id = Guid.NewGuid();
-        var repository = new PartieDeChasseRepositoryForTests();
+        var id = UnePartieDeChasseExistante(
+            UnePartieDeChasse()
+                .EnCours()
+                .SurUnTerrainRicheEnGalinettes());
 
-        repository.Add(
-            new PartieDeChasse(
-                id: id,
-                chasseurs: new List<Chasseur>
-                {
-                    new(nom: "Dédé", ballesRestantes: 20),
-                    new(nom: "Bernard", ballesRestantes: 8),
-                    new(nom: "Robert", ballesRestantes: 12)
-                },
-                terrain: new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3),
-                status: PartieStatus.EnCours));
+        var chasseurInconnuVeutTirer = () => Service.TirerSurUneGalinette(id, ChasseurInconnu);
 
-        var service = new PartieDeChasseService(repository, () => DateTime.Now);
-        var chasseurInconnuVeutTirer = () => service.TirerSurUneGalinette(id, "Chasseur inconnu");
+        chasseurInconnuVeutTirer.Should().Throw<ChasseurInconnu>().WithMessage("Chasseur inconnu Chasseur inconnu");
 
-        chasseurInconnuVeutTirer.Should()
-            .Throw<ChasseurInconnu>()
-            .WithMessage("Chasseur inconnu Chasseur inconnu");
-
-        repository.SavedPartieDeChasse().Should().BeNull();
+        Repository.SavedPartieDeChasse().Should().BeNull();
     }
 
     [Fact]

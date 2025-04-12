@@ -50,6 +50,8 @@ public class PartieDeChasseBuilder
         _nbGalinettes = nbGalinettes;
         return this;
     }
+
+    public PartieDeChasseBuilder SurUnTerrainRicheEnGalinettes() => SurUnTerrainAyantGalinettes(3);
     
     public PartieDeChasseBuilder SurUnTerrainSansGalinettes() => SurUnTerrainAyantGalinettes(0);
 
