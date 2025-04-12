@@ -72,8 +72,7 @@ public class ScenarioTests
                 09:00 - La partie de chasse commence à Pitibon sur Sauldre avec Dédé (20 balles), Bernard (8 balles), Robert (12 balles)
                 """);
     }
-
-
+    
     private void Act(TimeSpan time, Action scenarioAction)
     {
         _time = _time.Add(time);
@@ -87,11 +86,4 @@ public class ScenarioTests
             // ignored
         }
     }
-}
-
-public static class ScenarioTestsExtensions
-{
-    public static TimeSpan HoursLater(this int hours) => TimeSpan.FromHours(hours);
-    public static TimeSpan MinutesLater(this int minutes) => TimeSpan.FromMinutes(minutes);
-    public static TimeSpan SecondsLater(this int seconds) => TimeSpan.FromSeconds(seconds);
 }
