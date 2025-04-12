@@ -72,19 +72,17 @@ public class DemarrerUnePartieDeChasse : UseCaseTest
     [Fact]
     public void EchoueSiChasseurSansBalle()
     {
-        var repository = new PartieDeChasseRepositoryForTests();
-        var service = new PartieDeChasseService(repository, () => DateTime.Now);
         var chasseurs = new List<(string, int)>
         {
             (Dédé, 20),
-            ("Bernard", 0)
+            (Bernard, 0)
         };
         var terrainDeChasse = ("Pitibon sur Sauldre", 3);
 
-        Action demarrerPartieAvecChasseurSansBalle = () => service.Demarrer(terrainDeChasse, chasseurs);
+        Action demarrerPartieAvecChasseurSansBalle = () => Service.Demarrer(terrainDeChasse, chasseurs);
 
-        demarrerPartieAvecChasseurSansBalle.Should()
-            .Throw<ImpossibleDeDémarrerUnePartieAvecUnChasseurSansBalle>();
-        repository.SavedPartieDeChasse().Should().BeNull();
+        demarrerPartieAvecChasseurSansBalle.Should().Throw<ImpossibleDeDémarrerUnePartieAvecUnChasseurSansBalle>();
+      
+        Repository.SavedPartieDeChasse().Should().BeNull();
     }
 }
