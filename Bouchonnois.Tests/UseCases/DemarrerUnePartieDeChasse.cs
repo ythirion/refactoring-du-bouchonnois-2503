@@ -20,7 +20,7 @@ public class DemarrerUnePartieDeChasse : UseCaseTest
             (Robert, 12)
         };
         var terrainDeChasse = ("Pitibon sur Sauldre", 3);
-        
+
         var id = Service.Demarrer(
             terrainDeChasse,
             chasseurs);
@@ -52,7 +52,7 @@ public class DemarrerUnePartieDeChasse : UseCaseTest
         Action demarrerPartieSansChasseurs = () => Service.Demarrer(terrainDeChasse, chasseurs);
 
         demarrerPartieSansChasseurs.Should().Throw<ImpossibleDeDémarrerUnePartieSansChasseur>();
-        
+
         Repository.SavedPartieDeChasse().Should().BeNull();
     }
 
