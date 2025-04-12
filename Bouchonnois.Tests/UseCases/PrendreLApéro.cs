@@ -80,23 +80,15 @@ public class PrendreLApéro
     [Fact]
     public void EchoueSiLaPartieDeChasseEstTerminée()
     {
-        var id = Guid.NewGuid();
         var repository = new PartieDeChasseRepositoryForTests();
 
-        repository.Add(
-            new PartieDeChasse(
-                id: id,
-                chasseurs: new List<Chasseur>
-                {
-                    new(nom: "Dédé", ballesRestantes: 20),
-                    new(nom: "Bernard", ballesRestantes: 8),
-                    new(nom: "Robert", ballesRestantes: 12),
-                },
-                terrain: new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3),
-                status: PartieStatus.Terminée));
+        var partieDeChasse = new PartieDeChasseBuilder()
+            .QuiEstTerminee()
+            .Build();
+        repository.Add(partieDeChasse);
 
         var service = new PartieDeChasseService(repository, () => DateTime.Now);
-        var prendreLapéroQuandTerminée = () => service.PrendreLapéro(id);
+        var prendreLapéroQuandTerminée = () => service.PrendreLapéro(partieDeChasse.Id);
 
         prendreLapéroQuandTerminée.Should()
             .Throw<OnPrendPasLapéroQuandLaPartieEstTerminée>();

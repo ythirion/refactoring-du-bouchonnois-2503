@@ -28,6 +28,12 @@ public class PartieDeChasseBuilder
         return this;
     }
 
+    public PartieDeChasseBuilder QuiEstTerminee()
+    {
+        _status = PartieStatus.Terminée;
+        return this;
+    }
+
     public PartieDeChasseBuilder AvecDesChasseurs(List<Chasseur> chasseurs)
     {
         _chasseurs = chasseurs;
