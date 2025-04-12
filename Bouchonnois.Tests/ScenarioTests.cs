@@ -12,7 +12,7 @@ public class ScenarioTests
 
     public ScenarioTests()
     {
-        Thread.CurrentThread.CurrentCulture = new CultureInfo("fr-FR");
+        Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");
         _service = new PartieDeChasseService(_repository, () => _time);
     }
 
