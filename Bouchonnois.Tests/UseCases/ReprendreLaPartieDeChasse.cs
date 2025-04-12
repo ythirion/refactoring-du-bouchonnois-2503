@@ -18,7 +18,7 @@ public class ReprendreLaPartieDeChasse : UseCaseTest
 
         Repository.SavedPartieDeChasse()
             .EstEnCours()
-            .AEmisEvenement(Now, "Reprise de la chasse");
+            .DoitAvoirEmis(Now, "Reprise de la chasse");
     }
 
     [Fact]

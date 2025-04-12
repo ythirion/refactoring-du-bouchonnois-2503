@@ -18,7 +18,7 @@ public class PrendreLApéro : UseCaseTest
 
         Repository.SavedPartieDeChasse()
             .EstALApéro()
-            .AEmisEvenement(Now, "Petit apéro");
+            .DoitAvoirEmis(Now, "Petit apéro");
     }
 
     [Fact]

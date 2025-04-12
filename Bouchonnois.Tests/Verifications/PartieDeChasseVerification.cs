@@ -5,7 +5,7 @@ namespace Bouchonnois.Tests.Verifications;
 
 public static class Verification
 {
-    public static PartieDeChasse AEmisEvenement(
+    public static PartieDeChasse DoitAvoirEmis(
         this PartieDeChasse partieDeChasse,
         DateTime date,
         string message)
@@ -30,7 +30,7 @@ public static class Verification
             .ContainSingle(c => c.Nom == nom, "Chasseur non présent dans la partie de chasse")
             .Subject;
 
-    public static PartieDeChasse ChasseurATiréSurUneGalinette(
+    public static PartieDeChasse ChasseurDoitAvoirTiréSurUneGalinette(
         this PartieDeChasse partieDeChasse,
         string nom,
         int ballesRestantes,
