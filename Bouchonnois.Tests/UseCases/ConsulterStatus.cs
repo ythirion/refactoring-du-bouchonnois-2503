@@ -29,22 +29,8 @@ public class ConsulterStatus : UseCaseTest
     [Fact]
     public void QuandLaPartieEstTerminée()
     {
-        var id = Guid.NewGuid();
-        var repository = new PartieDeChasseRepositoryForTests();
-        var service = new PartieDeChasseService(repository, () => DateTime.Now);
-
-        repository.Add(
-            new PartieDeChasse(
-                id: id,
-                chasseurs: new List<Chasseur>
-                {
-                    new(nom: "Dédé", ballesRestantes: 20),
-                    new(nom: "Bernard", ballesRestantes: 8),
-                    new(nom: "Robert", ballesRestantes: 12, nbGalinettes: 2)
-                },
-                terrain: new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3),
-                status: PartieStatus.EnCours,
-                events: new List<Event>
+        var id = UnePartieDeChasseExistante(UnePartieDeChasse()
+            .AvecEvenements(new List<Event>
                 {
                     new(
                         new DateTime(2024, 4, 25, 9, 0, 12),
@@ -74,8 +60,9 @@ public class ConsulterStatus : UseCaseTest
                         new DateTime(2024, 4, 25, 15, 30, 0),
                         "La partie de chasse est terminée, vainqueur :  Robert - 3 galinettes")
                 }));
+    
 
-        var status = service.ConsulterStatus(id);
+        var status = Service.ConsulterStatus(id);
 
         status.Should()
             .BeEquivalentTo(
