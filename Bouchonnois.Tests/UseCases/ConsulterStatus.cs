@@ -33,7 +33,7 @@ public class ConsulterStatus : UseCaseTest
             UnePartieDeChasse()
                 .AvecEvenements(
                     // @formatter:off
-                    new Event(new DateTime(2024, 04, 25, 09, 0, 12), "La partie de chasse commence à Pitibon sur Sauldre avec Dédé (20 balles), Bernard (8 balles), Robert (12 balles)"),
+                    new Event(new DateTime(2024, 04, 25, 09, 00, 12), "La partie de chasse commence à Pitibon sur Sauldre avec Dédé (20 balles), Bernard (8 balles), Robert (12 balles)"),
                     new Event(new DateTime(2024, 04, 25, 09, 10, 00), "Dédé tire"),
                     new Event(new DateTime(2024, 04, 25, 09, 40, 00), "Robert tire sur une galinette"),
                     new Event(new DateTime(2024, 04, 25, 10, 00, 00), "Petit apéro"),
@@ -54,7 +54,7 @@ public class ConsulterStatus : UseCaseTest
                     new Event(new DateTime(2024, 04, 25, 14, 41, 07), "Bernard tire -> T'as plus de balles mon vieux, chasse à la main"),
                     new Event(new DateTime(2024, 04, 25, 15, 00, 00), "Robert tire sur une galinette"),
                     new Event(new DateTime(2024, 04, 25, 15, 30, 00), "La partie de chasse est terminée, vainqueur :  Robert - 3 galinettes")));
-                    // @formatter:on
+        // @formatter:on
 
         var status = Service.ConsulterStatus(id);
 
