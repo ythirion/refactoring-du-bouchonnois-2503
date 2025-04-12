@@ -19,7 +19,7 @@ public class Tirer : UseCaseTest
 
         Repository.SavedPartieDeChasse()
             .EvenementEmis(Now, "Bernard tire")
-            .ChasseurATiré(Bernard, 7);
+            .ChasseurATiré(Bernard, ballesRestantes: 7);
     }
 
     [Fact]

@@ -44,7 +44,7 @@ public class ConsulterStatus
                 {
                     new(nom: "Dédé", ballesRestantes: 20),
                     new(nom: "Bernard", ballesRestantes: 8),
-                    new(nom: "Robert", ballesRestantes: 12, nbGalinettes: 2),
+                    new(nom: "Robert", ballesRestantes: 12, nbGalinettes: 2)
                 },
                 terrain: new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3),
                 status: PartieStatus.EnCours,
@@ -76,7 +76,7 @@ public class ConsulterStatus
                     new(new DateTime(2024, 4, 25, 15, 0, 0), "Robert tire sur une galinette"),
                     new(
                         new DateTime(2024, 4, 25, 15, 30, 0),
-                        "La partie de chasse est terminée, vainqueur :  Robert - 3 galinettes"),
+                        "La partie de chasse est terminée, vainqueur :  Robert - 3 galinettes")
                 }));
 
         var status = service.ConsulterStatus(id);

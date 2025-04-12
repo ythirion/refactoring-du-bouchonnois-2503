@@ -18,9 +18,9 @@ public class ReprendreLaPartieDeChasse
                 id: id,
                 chasseurs: new List<Chasseur>
                 {
-                        new(nom: "Dédé", ballesRestantes: 20),
-                        new(nom: "Bernard", ballesRestantes: 8),
-                        new(nom: "Robert", ballesRestantes: 12),
+                    new(nom: "Dédé", ballesRestantes: 20),
+                    new(nom: "Bernard", ballesRestantes: 8),
+                    new(nom: "Robert", ballesRestantes: 12)
                 },
                 terrain: new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3),
                 status: PartieStatus.Apéro,
@@ -70,9 +70,9 @@ public class ReprendreLaPartieDeChasse
                 id: id,
                 chasseurs: new List<Chasseur>
                 {
-                        new(nom: "Dédé", ballesRestantes: 20),
-                        new(nom: "Bernard", ballesRestantes: 8),
-                        new(nom: "Robert", ballesRestantes: 12),
+                    new(nom: "Dédé", ballesRestantes: 20),
+                    new(nom: "Bernard", ballesRestantes: 8),
+                    new(nom: "Robert", ballesRestantes: 12)
                 },
                 terrain: new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3),
                 status: PartieStatus.EnCours));
@@ -97,9 +97,9 @@ public class ReprendreLaPartieDeChasse
                 id: id,
                 chasseurs: new List<Chasseur>
                 {
-                        new(nom: "Dédé", ballesRestantes: 20),
-                        new(nom: "Bernard", ballesRestantes: 8),
-                        new(nom: "Robert", ballesRestantes: 12),
+                    new(nom: "Dédé", ballesRestantes: 20),
+                    new(nom: "Bernard", ballesRestantes: 8),
+                    new(nom: "Robert", ballesRestantes: 12)
                 },
                 terrain: new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3),
                 status: PartieStatus.Terminée));

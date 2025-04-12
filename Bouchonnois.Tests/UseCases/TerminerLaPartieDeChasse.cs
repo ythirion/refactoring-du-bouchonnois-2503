@@ -18,9 +18,9 @@ public class TerminerLaPartieDeChasse
                 id: id,
                 chasseurs: new List<Chasseur>
                 {
-                        new(nom: "Dédé", ballesRestantes: 20),
-                        new(nom: "Bernard", ballesRestantes: 8),
-                        new(nom: "Robert", ballesRestantes: 12, nbGalinettes: 2),
+                    new(nom: "Dédé", ballesRestantes: 20),
+                    new(nom: "Bernard", ballesRestantes: 8),
+                    new(nom: "Robert", ballesRestantes: 12, nbGalinettes: 2)
                 },
                 terrain: new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3),
                 status: PartieStatus.EnCours,
@@ -59,7 +59,7 @@ public class TerminerLaPartieDeChasse
                 id: id,
                 chasseurs: new List<Chasseur>
                 {
-                        new(nom: "Robert", ballesRestantes: 12, nbGalinettes: 2)
+                    new(nom: "Robert", ballesRestantes: 12, nbGalinettes: 2)
                 },
                 terrain: new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3),
                 status: PartieStatus.EnCours,
@@ -92,9 +92,9 @@ public class TerminerLaPartieDeChasse
                 id: id,
                 chasseurs: new List<Chasseur>
                 {
-                        new(nom: "Dédé", ballesRestantes: 20, nbGalinettes: 2),
-                        new(nom: "Bernard", ballesRestantes: 8, nbGalinettes: 2),
-                        new(nom: "Robert", ballesRestantes: 12),
+                    new(nom: "Dédé", ballesRestantes: 20, nbGalinettes: 2),
+                    new(nom: "Bernard", ballesRestantes: 8, nbGalinettes: 2),
+                    new(nom: "Robert", ballesRestantes: 12)
                 },
                 terrain: new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3),
                 status: PartieStatus.EnCours,
@@ -135,9 +135,9 @@ public class TerminerLaPartieDeChasse
                 id: id,
                 chasseurs: new List<Chasseur>
                 {
-                        new(nom: "Dédé", ballesRestantes: 20),
-                        new(nom: "Bernard", ballesRestantes: 8),
-                        new(nom: "Robert", ballesRestantes: 12),
+                    new(nom: "Dédé", ballesRestantes: 20),
+                    new(nom: "Bernard", ballesRestantes: 8),
+                    new(nom: "Robert", ballesRestantes: 12)
                 },
                 terrain: new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3),
                 status: PartieStatus.EnCours,
@@ -183,9 +183,9 @@ public class TerminerLaPartieDeChasse
                 id: id,
                 chasseurs: new List<Chasseur>
                 {
-                        new(nom: "Dédé", ballesRestantes: 20, nbGalinettes: 3),
-                        new(nom: "Bernard", ballesRestantes: 8, nbGalinettes: 3),
-                        new(nom: "Robert", ballesRestantes: 12, nbGalinettes: 3)
+                    new(nom: "Dédé", ballesRestantes: 20, nbGalinettes: 3),
+                    new(nom: "Bernard", ballesRestantes: 8, nbGalinettes: 3),
+                    new(nom: "Robert", ballesRestantes: 12, nbGalinettes: 3)
                 },
                 terrain: new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3),
                 status: PartieStatus.Apéro,
@@ -218,8 +218,8 @@ public class TerminerLaPartieDeChasse
             .BeEquivalentTo(
             [
                 new Event(
-                        now,
-                        "La partie de chasse est terminée, vainqueur : Dédé - 3 galinettes, Bernard - 3 galinettes, Robert - 3 galinettes")
+                    now,
+                    "La partie de chasse est terminée, vainqueur : Dédé - 3 galinettes, Bernard - 3 galinettes, Robert - 3 galinettes")
             ]);
     }
 
@@ -234,9 +234,9 @@ public class TerminerLaPartieDeChasse
                 id: id,
                 chasseurs: new List<Chasseur>
                 {
-                        new(nom: "Dédé", ballesRestantes: 20),
-                        new(nom: "Bernard", ballesRestantes: 8),
-                        new(nom: "Robert", ballesRestantes: 12),
+                    new(nom: "Dédé", ballesRestantes: 20),
+                    new(nom: "Bernard", ballesRestantes: 8),
+                    new(nom: "Robert", ballesRestantes: 12)
                 },
                 terrain: new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3),
                 status: PartieStatus.Terminée));

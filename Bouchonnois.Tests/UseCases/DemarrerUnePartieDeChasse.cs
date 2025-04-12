@@ -13,16 +13,15 @@ public class DemarrerUnePartieDeChasse
         var repository = new PartieDeChasseRepositoryForTests();
         var service = new PartieDeChasseService(repository, () => DateTime.Now);
         var chasseurs = new List<(string, int)>
-            {
-                ("Dédé", 20),
-                ("Bernard", 8),
-                ("Robert", 12)
-            };
+        {
+            ("Dédé", 20),
+            ("Bernard", 8),
+            ("Robert", 12)
+        };
         var terrainDeChasse = ("Pitibon sur Sauldre", 3);
         var id = service.Demarrer(
             terrainDeChasse,
-            chasseurs
-        );
+            chasseurs);
 
         var savedPartieDeChasse = repository.SavedPartieDeChasse();
         savedPartieDeChasse.Id.Should().Be(id);
@@ -76,10 +75,10 @@ public class DemarrerUnePartieDeChasse
         var repository = new PartieDeChasseRepositoryForTests();
         var service = new PartieDeChasseService(repository, () => DateTime.Now);
         var chasseurs = new List<(string, int)>
-            {
-                ("Dédé", 20),
-                ("Bernard", 0),
-            };
+        {
+            ("Dédé", 20),
+            ("Bernard", 0)
+        };
         var terrainDeChasse = ("Pitibon sur Sauldre", 3);
 
         Action demarrerPartieAvecChasseurSansBalle = () => service.Demarrer(terrainDeChasse, chasseurs);

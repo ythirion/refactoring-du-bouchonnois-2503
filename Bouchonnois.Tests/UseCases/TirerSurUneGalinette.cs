@@ -18,9 +18,9 @@ public class TirerSurUneGalinette
                 id: id,
                 chasseurs: new List<Chasseur>
                 {
-                        new(nom: "Dédé", ballesRestantes: 20),
-                        new(nom: "Bernard", ballesRestantes: 8),
-                        new(nom: "Robert", ballesRestantes: 12),
+                    new(nom: "Dédé", ballesRestantes: 20),
+                    new(nom: "Bernard", ballesRestantes: 8),
+                    new(nom: "Robert", ballesRestantes: 12)
                 },
                 terrain: new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3),
                 status: PartieStatus.EnCours,
@@ -68,13 +68,13 @@ public class TirerSurUneGalinette
         var id = Guid.NewGuid();
         var repository = new PartieDeChasseRepositoryForTests();
 
-        PartieDeChasse partieDeChasse = new PartieDeChasse(
+        var partieDeChasse = new PartieDeChasse(
             id: id,
             chasseurs: new List<Chasseur>
             {
-                    new(nom: "Dédé", ballesRestantes: 20),
-                    new(nom: "Bernard", ballesRestantes: 0),
-                    new(nom: "Robert", ballesRestantes: 12),
+                new(nom: "Dédé", ballesRestantes: 20),
+                new(nom: "Bernard", ballesRestantes: 0),
+                new(nom: "Robert", ballesRestantes: 12)
             },
             terrain: new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3),
             status: PartieStatus.EnCours,
@@ -95,8 +95,8 @@ public class TirerSurUneGalinette
             .BeEquivalentTo(
             [
                 new Event(
-                        now,
-                        "Bernard veut tirer sur une galinette -> T'as plus de balles mon vieux, chasse à la main")
+                    now,
+                    "Bernard veut tirer sur une galinette -> T'as plus de balles mon vieux, chasse à la main")
             ]);
     }
 
@@ -111,9 +111,9 @@ public class TirerSurUneGalinette
                 id: id,
                 chasseurs: new List<Chasseur>
                 {
-                        new(nom: "Dédé", ballesRestantes: 20),
-                        new(nom: "Bernard", ballesRestantes: 8),
-                        new(nom: "Robert", ballesRestantes: 12),
+                    new(nom: "Dédé", ballesRestantes: 20),
+                    new(nom: "Bernard", ballesRestantes: 8),
+                    new(nom: "Robert", ballesRestantes: 12)
                 },
                 terrain: new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 0),
                 status: PartieStatus.EnCours));
@@ -137,9 +137,9 @@ public class TirerSurUneGalinette
                 id: id,
                 chasseurs: new List<Chasseur>
                 {
-                        new(nom: "Dédé", ballesRestantes: 20),
-                        new(nom: "Bernard", ballesRestantes: 8),
-                        new(nom: "Robert", ballesRestantes: 12),
+                    new(nom: "Dédé", ballesRestantes: 20),
+                    new(nom: "Bernard", ballesRestantes: 8),
+                    new(nom: "Robert", ballesRestantes: 12)
                 },
                 terrain: new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3),
                 status: PartieStatus.EnCours));
@@ -167,9 +167,9 @@ public class TirerSurUneGalinette
                 id: id,
                 chasseurs: new List<Chasseur>
                 {
-                        new(nom: "Dédé", ballesRestantes: 20),
-                        new(nom: "Bernard", ballesRestantes: 8),
-                        new(nom: "Robert", ballesRestantes: 12),
+                    new(nom: "Dédé", ballesRestantes: 20),
+                    new(nom: "Bernard", ballesRestantes: 8),
+                    new(nom: "Robert", ballesRestantes: 12)
                 },
                 terrain: new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3),
                 status: PartieStatus.Apéro,
@@ -204,9 +204,9 @@ public class TirerSurUneGalinette
                 id: id,
                 chasseurs: new List<Chasseur>
                 {
-                        new(nom: "Dédé", ballesRestantes: 20),
-                        new(nom: "Bernard", ballesRestantes: 8),
-                        new(nom: "Robert", ballesRestantes: 12),
+                    new(nom: "Dédé", ballesRestantes: 20),
+                    new(nom: "Bernard", ballesRestantes: 8),
+                    new(nom: "Robert", ballesRestantes: 12)
                 },
                 terrain: new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3),
                 status: PartieStatus.Terminée,
