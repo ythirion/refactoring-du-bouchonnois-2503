@@ -1,0 +1,9 @@
+toolchains:
+  default: dotnet
+  compatible-with: [dotnet, make]
+source-files:
+  directories: [Bouchonnois]
+  patterns: ['(?i)^.*\.cs(x)?$']
+test-files:
+  directories: [Bouchonnois.Tests]
+  patterns: ['(?i)^.*\.cs(x)?$']
