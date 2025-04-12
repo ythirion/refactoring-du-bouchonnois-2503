@@ -1,7 +1,7 @@
 using Bouchonnois.Service;
 using Bouchonnois.Tests.Doubles;
 
-namespace Bouchonnois.Tests;
+namespace Bouchonnois.Tests.Acceptances;
 
 public class ScenarioTests
 {
