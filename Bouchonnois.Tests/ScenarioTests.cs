@@ -27,6 +27,7 @@ public class ScenarioTests
             terrainDeChasse,
             chasseurs);
 
+        // @formatter:off
         Act(10.MinutesLater(),  () => _service.Tirer(id, "Dédé"));
         Act(30.MinutesLater(),  () => _service.TirerSurUneGalinette(id, "Robert"));
         Act(20.MinutesLater(),  () => _service.PrendreLapéro(id));
@@ -46,7 +47,7 @@ public class ScenarioTests
         Act(1.SecondsLater(),   () => _service.Tirer(id, "Bernard"));
         Act(19.MinutesLater(),  () => _service.TirerSurUneGalinette(id, "Robert"));
         Act(30.MinutesLater(),  () => _service.TerminerLaPartie(id));
-        
+        // @formatter:on
 
         _service.ConsulterStatus(id)
             .Should()
@@ -79,7 +80,7 @@ public class ScenarioTests
     private void Act(TimeSpan time, Action scenarioAction)
     {
         _time = _time.Add(time);
-        
+
         try
         {
             scenarioAction();
