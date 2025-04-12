@@ -2,6 +2,7 @@ using Bouchonnois.Domain;
 using Bouchonnois.Service;
 using Bouchonnois.Service.Exceptions;
 using Bouchonnois.Tests.Doubles;
+using static Bouchonnois.Tests.Builders.ChasseurBuilder;
 using static Bouchonnois.Tests.Builders.PartieDeChasseBuilder;
 
 namespace Bouchonnois.Tests.UseCases;
@@ -13,6 +14,7 @@ public class ConsulterStatus : UseCaseTest
     {
         var id = UnePartieDeChasseExistante(
             UnePartieDeChasse()
+                .EnCours().Avec(Dédé().AyantDesBalles(20), Bernard().AyantDesBalles(8), Robert().AyantDesBalles(12))
                 .AvecEvenements(
                     new Event(
                         new DateTime(2024, 4, 25, 9, 0, 12),
