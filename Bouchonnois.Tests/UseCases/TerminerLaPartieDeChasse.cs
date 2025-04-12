@@ -1,7 +1,7 @@
 using Bouchonnois.Domain;
 using Bouchonnois.Service;
 using Bouchonnois.Service.Exceptions;
-using Bouchonnois.Tests.Assertions;
+using Bouchonnois.Tests.DataBuilders;
 using Bouchonnois.Tests.Doubles;
 
 namespace Bouchonnois.Tests.UseCases;
@@ -11,27 +11,25 @@ public class TerminerLaPartieDeChasse
     [Fact]
     public void QuandLaPartieEstEnCoursEt1SeulChasseurGagne()
     {
-        var id = Guid.NewGuid();
         var repository = new PartieDeChasseRepositoryForTests();
 
-        repository.Add(
-            new PartieDeChasse(
-                id: id,
-                chasseurs: new List<Chasseur>
+        var partieDeChasse = new PartieDeChasseBuilder()
+            .QuiEstEnCours()
+            .AvecDesChasseurs(new List<Chasseur>
                 {
                     new(nom: "Dédé", ballesRestantes: 20),
                     new(nom: "Bernard", ballesRestantes: 8),
                     new(nom: "Robert", ballesRestantes: 12, nbGalinettes: 2),
-                },
-                terrain: new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3),
-                status: PartieStatus.EnCours,
-                events: new List<Event>()));
+                }
+            )
+            .Build();
+        repository.Add(partieDeChasse);
 
         var service = new PartieDeChasseService(repository, () => DateTime.Now);
-        var meilleurChasseur = service.TerminerLaPartie(id);
+        var meilleurChasseur = service.TerminerLaPartie(partieDeChasse.Id);
 
         var savedPartieDeChasse = repository.SavedPartieDeChasse();
-        savedPartieDeChasse.Id.Should().Be(id);
+        savedPartieDeChasse.Id.Should().Be(partieDeChasse.Id);
         savedPartieDeChasse.Status.Should().Be(PartieStatus.Terminée);
         savedPartieDeChasse.Terrain.Nom.Should().Be("Pitibon sur Sauldre");
         savedPartieDeChasse.Terrain.NbGalinettes.Should().Be(3);
@@ -52,25 +50,23 @@ public class TerminerLaPartieDeChasse
     [Fact]
     public void QuandLaPartieEstEnCoursEt1SeulChasseurDansLaPartie()
     {
-        var id = Guid.NewGuid();
         var repository = new PartieDeChasseRepositoryForTests();
 
-        repository.Add(
-            new PartieDeChasse(
-                id: id,
-                chasseurs: new List<Chasseur>
+        var partieDeChasse = new PartieDeChasseBuilder()
+            .QuiEstEnCours()
+            .AvecDesChasseurs(new List<Chasseur>
                 {
                     new(nom: "Robert", ballesRestantes: 12, nbGalinettes: 2)
-                },
-                terrain: new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3),
-                status: PartieStatus.EnCours,
-                events: new List<Event>()));
+                }
+            )
+            .Build();
+        repository.Add(partieDeChasse);
 
         var service = new PartieDeChasseService(repository, () => DateTime.Now);
-        var meilleurChasseur = service.TerminerLaPartie(id);
+        var meilleurChasseur = service.TerminerLaPartie(partieDeChasse.Id);
 
         var savedPartieDeChasse = repository.SavedPartieDeChasse();
-        savedPartieDeChasse.Id.Should().Be(id);
+        savedPartieDeChasse.Id.Should().Be(partieDeChasse.Id);
         savedPartieDeChasse.Status.Should().Be(PartieStatus.Terminée);
         savedPartieDeChasse.Terrain.Nom.Should().Be("Pitibon sur Sauldre");
         savedPartieDeChasse.Terrain.NbGalinettes.Should().Be(3);
@@ -85,27 +81,25 @@ public class TerminerLaPartieDeChasse
     [Fact]
     public void QuandLaPartieEstEnCoursEt2ChasseursExAequo()
     {
-        var id = Guid.NewGuid();
         var repository = new PartieDeChasseRepositoryForTests();
 
-        repository.Add(
-            new PartieDeChasse(
-                id: id,
-                chasseurs: new List<Chasseur>
+        var partieDeChasse = new PartieDeChasseBuilder()
+            .QuiEstEnCours()
+            .AvecDesChasseurs(new List<Chasseur>
                 {
                     new(nom: "Dédé", ballesRestantes: 20, nbGalinettes: 2),
                     new(nom: "Bernard", ballesRestantes: 8, nbGalinettes: 2),
                     new(nom: "Robert", ballesRestantes: 12),
-                },
-                terrain: new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3),
-                status: PartieStatus.EnCours,
-                events: new List<Event>()));
+                }
+            )
+            .Build();
+        repository.Add(partieDeChasse);
 
         var service = new PartieDeChasseService(repository, () => DateTime.Now);
-        var meilleurChasseur = service.TerminerLaPartie(id);
+        var meilleurChasseur = service.TerminerLaPartie(partieDeChasse.Id);
 
         var savedPartieDeChasse = repository.SavedPartieDeChasse();
-        savedPartieDeChasse.Id.Should().Be(id);
+        savedPartieDeChasse.Id.Should().Be(partieDeChasse.Id);
         savedPartieDeChasse.Status.Should().Be(PartieStatus.Terminée);
         savedPartieDeChasse.Terrain.Nom.Should().Be("Pitibon sur Sauldre");
         savedPartieDeChasse.Terrain.NbGalinettes.Should().Be(3);
@@ -127,28 +121,25 @@ public class TerminerLaPartieDeChasse
     public void QuandLaPartieEstEnCoursEtToutLeMondeBrocouille()
     {
         var now = DateTime.Now;
-
-        var id = Guid.NewGuid();
         var repository = new PartieDeChasseRepositoryForTests();
 
-        repository.Add(
-            new PartieDeChasse(
-                id: id,
-                chasseurs: new List<Chasseur>
+        var partieDeChasse = new PartieDeChasseBuilder()
+            .QuiEstEnCours()
+            .AvecDesChasseurs(new List<Chasseur>
                 {
                     new(nom: "Dédé", ballesRestantes: 20),
                     new(nom: "Bernard", ballesRestantes: 8),
                     new(nom: "Robert", ballesRestantes: 12),
-                },
-                terrain: new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3),
-                status: PartieStatus.EnCours,
-                events: new List<Event>()));
+                }
+            )
+            .Build();
+        repository.Add(partieDeChasse);
 
         var service = new PartieDeChasseService(repository, () => now);
-        var meilleurChasseur = service.TerminerLaPartie(id);
+        var meilleurChasseur = service.TerminerLaPartie(partieDeChasse.Id);
 
         var savedPartieDeChasse = repository.SavedPartieDeChasse();
-        savedPartieDeChasse.Id.Should().Be(id);
+        savedPartieDeChasse.Id.Should().Be(partieDeChasse.Id);
         savedPartieDeChasse.Status.Should().Be(PartieStatus.Terminée);
         savedPartieDeChasse.Terrain.Nom.Should().Be("Pitibon sur Sauldre");
         savedPartieDeChasse.Terrain.NbGalinettes.Should().Be(3);
@@ -176,27 +167,25 @@ public class TerminerLaPartieDeChasse
     {
         var now = DateTime.Now;
 
-        var id = Guid.NewGuid();
         var repository = new PartieDeChasseRepositoryForTests();
 
-        repository.Add(
-            new PartieDeChasse(
-                id: id,
-                chasseurs: new List<Chasseur>
+        var partieDeChasse = new PartieDeChasseBuilder()
+            .QuiEstApero()
+            .AvecDesChasseurs(new List<Chasseur>
                 {
                     new(nom: "Dédé", ballesRestantes: 20, nbGalinettes: 3),
                     new(nom: "Bernard", ballesRestantes: 8, nbGalinettes: 3),
                     new(nom: "Robert", ballesRestantes: 12, nbGalinettes: 3)
-                },
-                terrain: new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3),
-                status: PartieStatus.Apéro,
-                events: new List<Event>()));
+                }
+            )
+            .Build();
+        repository.Add(partieDeChasse);
 
         var service = new PartieDeChasseService(repository, () => now);
-        var meilleurChasseur = service.TerminerLaPartie(id);
+        var meilleurChasseur = service.TerminerLaPartie(partieDeChasse.Id);
 
         var savedPartieDeChasse = repository.SavedPartieDeChasse();
-        savedPartieDeChasse.Id.Should().Be(id);
+        savedPartieDeChasse.Id.Should().Be(partieDeChasse.Id);
         savedPartieDeChasse.Status.Should().Be(PartieStatus.Terminée);
         savedPartieDeChasse.Terrain.Nom.Should().Be("Pitibon sur Sauldre");
         savedPartieDeChasse.Terrain.NbGalinettes.Should().Be(3);
@@ -227,23 +216,15 @@ public class TerminerLaPartieDeChasse
     [Fact]
     public void EchoueSiLaPartieDeChasseEstDéjàTerminée()
     {
-        var id = Guid.NewGuid();
         var repository = new PartieDeChasseRepositoryForTests();
 
-        repository.Add(
-            new PartieDeChasse(
-                id: id,
-                chasseurs: new List<Chasseur>
-                {
-                    new(nom: "Dédé", ballesRestantes: 20),
-                    new(nom: "Bernard", ballesRestantes: 8),
-                    new(nom: "Robert", ballesRestantes: 12),
-                },
-                terrain: new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3),
-                status: PartieStatus.Terminée));
+        var partieDeChasse = new PartieDeChasseBuilder()
+            .QuiEstTerminee()
+            .Build();
+        repository.Add(partieDeChasse);
 
         var service = new PartieDeChasseService(repository, () => DateTime.Now);
-        var prendreLapéroQuandTerminée = () => service.TerminerLaPartie(id);
+        var prendreLapéroQuandTerminée = () => service.TerminerLaPartie(partieDeChasse.Id);
 
         prendreLapéroQuandTerminée.Should()
             .Throw<QuandCestFiniCestFini>();
