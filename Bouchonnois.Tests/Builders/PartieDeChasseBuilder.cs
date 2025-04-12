@@ -1,16 +1,14 @@
 using Bouchonnois.Domain;
-using Bouchonnois.Service;
 
 namespace Bouchonnois.Tests.Builders;
 
 public class PartieDeChasseBuilder
 {
-    private const string PitibonSurSauldre = "Pitibon sur Sauldre";
     private readonly Guid _id = Guid.NewGuid();
     private List<Chasseur> _chasseurs = [];
     private List<Event> _events = [];
-    private int _nbGalinettes;
     private PartieStatus _status = PartieStatus.EnCours;
+    private TerrainBuilder _terrainBuilder = new();
 
     public static PartieDeChasseBuilder UnePartieDeChasse() => new();
 
@@ -40,13 +38,21 @@ public class PartieDeChasseBuilder
 
     public PartieDeChasseBuilder SurUnTerrainAyantGalinettes(int nbGalinettes)
     {
-        _nbGalinettes = nbGalinettes;
+        _terrainBuilder = _terrainBuilder.AyantGalinettes(nbGalinettes);
         return this;
     }
 
-    public PartieDeChasseBuilder SurUnTerrainRicheEnGalinettes() => SurUnTerrainAyantGalinettes(3);
+    public PartieDeChasseBuilder SurUnTerrainRicheEnGalinettes()
+    {
+        _terrainBuilder = _terrainBuilder.RicheEnGalinettes();
+        return this;
+    }
 
-    public PartieDeChasseBuilder SurUnTerrainSansGalinettes() => SurUnTerrainAyantGalinettes(0);
+    public PartieDeChasseBuilder SurUnTerrainSansGalinettes()
+    {
+        _terrainBuilder = _terrainBuilder.SansGalinettes();
+        return this;
+    }
 
     public PartieDeChasseBuilder AvecSesEvenements(params List<Event> events)
     {
@@ -58,7 +64,7 @@ public class PartieDeChasseBuilder
         => new(
             _id,
             chasseurs: _chasseurs,
-            terrain: new Terrain(PitibonSurSauldre, _nbGalinettes),
+            terrain: _terrainBuilder.Build(),
             status: _status,
             events: _events);
 }
