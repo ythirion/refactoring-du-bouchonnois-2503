@@ -5,7 +5,7 @@ namespace Bouchonnois.Tests.DataBuilders;
 
 public class PartieDeChasseBuilder
 {
-    private readonly Guid _id = Guid.NewGuid();
+    private Guid _id = Guid.NewGuid();
 
     private List<Chasseur> _chasseurs = new List<Chasseur>
     {
@@ -17,6 +17,12 @@ public class PartieDeChasseBuilder
     private Terrain _terrain = new TerrainBuilder().AvecGalinettes(3).Build();
     private PartieStatus _status = PartieStatus.EnCours;
     private List<Event> _events = new();
+
+    public PartieDeChasseBuilder AyantLId(Guid id)
+    {
+        _id = id;
+        return this;
+    }
 
     public PartieDeChasseBuilder QuiEstEnCours()
     {
