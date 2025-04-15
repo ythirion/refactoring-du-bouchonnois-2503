@@ -6,12 +6,14 @@ namespace Bouchonnois.Tests.DataBuilders;
 public class PartieDeChasseBuilder
 {
     private readonly Guid _id = Guid.NewGuid();
+
     private List<Chasseur> _chasseurs = new List<Chasseur>
     {
-        new(nom: "Dédé", ballesRestantes: 20),
-        new(nom: "Bernard", ballesRestantes: 8),
-        new(nom: "Robert", ballesRestantes: 12, nbGalinettes: 2),
+        new ChasseurBuilder().Nommé("Dédé").AyantDesBallesRestantes(20).Build(),
+        new ChasseurBuilder().Nommé("Bernard").AyantDesBallesRestantes(8).Build(),
+        new ChasseurBuilder().Nommé("Robert").AyantDesBallesRestantes(12).AyantDesGalinettes(2).Build(),
     };
+
     private Terrain _terrain = new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3);
     private PartieStatus _status = PartieStatus.EnCours;
     private List<Event> _events = new();
@@ -60,5 +62,38 @@ public class PartieDeChasseBuilder
             terrain: _terrain,
             status: _status,
             events: _events);
+    }
+}
+
+public class ChasseurBuilder
+{
+    private string _nom = "Chasseur inconnu";
+    private int _ballesRestantes;
+    private int _nbGalinettes;
+
+    public ChasseurBuilder Nommé(string nom)
+    {
+        _nom = nom;
+        return this;
+    }
+
+    public ChasseurBuilder AyantDesBallesRestantes(int ballesRestantes)
+    {
+        _ballesRestantes = ballesRestantes;
+        return this;
+    }
+
+    public ChasseurBuilder AyantDesGalinettes(int galinettes)
+    {
+        _nbGalinettes = galinettes;
+        return this;
+    }
+
+    public Chasseur Build()
+    {
+        return new Chasseur(
+            nom: _nom,
+            ballesRestantes: _ballesRestantes,
+            nbGalinettes: _nbGalinettes);
     }
 }
