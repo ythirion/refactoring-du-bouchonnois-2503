@@ -14,7 +14,7 @@ public class PartieDeChasseBuilder
         new ChasseurBuilder().Nommé("Robert").AyantDesBallesRestantes(12).AyantDesGalinettes(2).Build(),
     };
 
-    private Terrain _terrain = new TerrainBuilder().Nommé("Pitibon sur Sauldre").AvecGalinettes(3).Build();
+    private Terrain _terrain = new TerrainBuilder().AvecGalinettes(3).Build();
     private PartieStatus _status = PartieStatus.EnCours;
     private List<Event> _events = new();
 

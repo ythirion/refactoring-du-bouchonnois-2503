@@ -81,11 +81,7 @@ public class TirerSurUneGalinette
         var repository = new PartieDeChasseRepositoryForTests();
         var partieDeChasse = new PartieDeChasseBuilder()
             .QuiEstEnCours()
-            .SurUnTerrain(new Terrain(
-                    nom: "Pitibon sur Sauldre",
-                    nbGalinettes: 0
-                )
-            )
+            .SurUnTerrain(new TerrainBuilder().SansGalinettes().Build())
             .Build();
         repository.Add(partieDeChasse);
 

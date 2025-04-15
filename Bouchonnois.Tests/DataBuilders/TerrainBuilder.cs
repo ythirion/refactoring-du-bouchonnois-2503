@@ -5,11 +5,16 @@ namespace Bouchonnois.Tests.DataBuilders;
 public class TerrainBuilder
 {
     private string _nom = "Pitibon sur Sauldre";
-    private int _nbGalinettes;
+    private int _nbGalinettes = 0;
 
     public TerrainBuilder Nommé(string nom)
     {
         _nom = nom;
+        return this;
+    }
+
+    public TerrainBuilder SansGalinettes()
+    {
         return this;
     }
 
