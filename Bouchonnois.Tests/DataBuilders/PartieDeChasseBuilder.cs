@@ -14,7 +14,7 @@ public class PartieDeChasseBuilder
         new ChasseurBuilder().Nommé("Robert").AyantDesBallesRestantes(12).AyantDesGalinettes(2).Build(),
     };
 
-    private Terrain _terrain = new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3);
+    private Terrain _terrain = new TerrainBuilder().Nommé("Pitibon sur Sauldre").AvecGalinettes(3).Build();
     private PartieStatus _status = PartieStatus.EnCours;
     private List<Event> _events = new();
 
@@ -65,35 +65,28 @@ public class PartieDeChasseBuilder
     }
 }
 
-public class ChasseurBuilder
+public class TerrainBuilder
 {
-    private string _nom = "Chasseur inconnu";
-    private int _ballesRestantes;
+    private string _nom = "Pitibon sur Sauldre";
     private int _nbGalinettes;
 
-    public ChasseurBuilder Nommé(string nom)
+    public TerrainBuilder Nommé(string nom)
     {
         _nom = nom;
         return this;
     }
 
-    public ChasseurBuilder AyantDesBallesRestantes(int ballesRestantes)
+    public TerrainBuilder AvecGalinettes(int nbGalinettes)
     {
-        _ballesRestantes = ballesRestantes;
+        _nbGalinettes = nbGalinettes;
         return this;
     }
 
-    public ChasseurBuilder AyantDesGalinettes(int galinettes)
+    public Terrain Build()
     {
-        _nbGalinettes = galinettes;
-        return this;
-    }
-
-    public Chasseur Build()
-    {
-        return new Chasseur(
+        return new Terrain(
             nom: _nom,
-            ballesRestantes: _ballesRestantes,
-            nbGalinettes: _nbGalinettes);
+            nbGalinettes: _nbGalinettes
+        );
     }
 }
