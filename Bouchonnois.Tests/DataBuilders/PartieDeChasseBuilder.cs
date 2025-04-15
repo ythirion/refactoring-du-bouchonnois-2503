@@ -5,13 +5,13 @@ namespace Bouchonnois.Tests.DataBuilders;
 
 public class PartieDeChasseBuilder
 {
+    private readonly Guid _id = Guid.NewGuid();
     private List<Chasseur> _chasseurs = new List<Chasseur>
     {
         new(nom: "Dédé", ballesRestantes: 20),
         new(nom: "Bernard", ballesRestantes: 8),
         new(nom: "Robert", ballesRestantes: 12, nbGalinettes: 2),
     };
-
     private Terrain _terrain = new Terrain(nom: "Pitibon sur Sauldre", nbGalinettes: 3);
     private PartieStatus _status = PartieStatus.EnCours;
     private List<Event> _events = new();
@@ -54,9 +54,8 @@ public class PartieDeChasseBuilder
 
     public PartieDeChasse Build()
     {
-        var id = Guid.NewGuid();
         return new PartieDeChasse(
-            id: id,
+            id: _id,
             chasseurs: _chasseurs,
             terrain: _terrain,
             status: _status,
