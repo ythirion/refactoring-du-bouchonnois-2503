@@ -12,36 +12,36 @@ public class ReprendreLaPartieDeChasse
     public void QuandLapéroEstEnCours()
     {
         var repository = new PartieDeChasseRepositoryForTests();
-
+        var now = DateTime.Now;
+        var chasseurs = new List<Chasseur>
+        {
+            ChasseurBuilder.UnChasseurNomméDédé(),
+            ChasseurBuilder.UnChasseurNomméBernard(),
+            ChasseurBuilder.UnChasseurNomméRobert()
+        };
         var partieDeChasse = new PartieDeChasseBuilder()
             .QuiEstApero()
-            .AvecDesChasseurs(new List<Chasseur>
-            {
-                new(nom: "Dédé", ballesRestantes: 20),
-                new(nom: "Bernard", ballesRestantes: 8),
-                new(nom: "Robert", ballesRestantes: 12),
-            })
+            .AvecDesChasseurs(chasseurs)
             .Build();
         repository.Add(partieDeChasse);
 
-        var service = new PartieDeChasseService(repository, () => DateTime.Now);
+        var service = new PartieDeChasseService(repository, () => now);
         service.ReprendreLaPartie(partieDeChasse.Id);
 
         var savedPartieDeChasse = repository.SavedPartieDeChasse();
-        savedPartieDeChasse.Id.Should().Be(partieDeChasse.Id);
-        savedPartieDeChasse.Status.Should().Be(PartieStatus.EnCours);
-        savedPartieDeChasse.Terrain.Nom.Should().Be("Pitibon sur Sauldre");
-        savedPartieDeChasse.Terrain.NbGalinettes.Should().Be(3);
-        savedPartieDeChasse.Chasseurs.Should().HaveCount(3);
-        savedPartieDeChasse.Chasseurs[0].Nom.Should().Be("Dédé");
-        savedPartieDeChasse.Chasseurs[0].BallesRestantes.Should().Be(20);
-        savedPartieDeChasse.Chasseurs[0].NbGalinettes.Should().Be(0);
-        savedPartieDeChasse.Chasseurs[1].Nom.Should().Be("Bernard");
-        savedPartieDeChasse.Chasseurs[1].BallesRestantes.Should().Be(8);
-        savedPartieDeChasse.Chasseurs[1].NbGalinettes.Should().Be(0);
-        savedPartieDeChasse.Chasseurs[2].Nom.Should().Be("Robert");
-        savedPartieDeChasse.Chasseurs[2].BallesRestantes.Should().Be(12);
-        savedPartieDeChasse.Chasseurs[2].NbGalinettes.Should().Be(0);
+
+
+        savedPartieDeChasse.Should().BeEquivalentTo(new PartieDeChasseBuilder()
+            .AyantLId(partieDeChasse.Id)
+            .QuiEstEnCours()
+            .AvecDesChasseurs(chasseurs)
+            .AvecSesEvenements(new List<Event>
+            {
+                new(now,
+                    "Reprise de la chasse")
+            })
+            .Build()
+        );
     }
 
     [Fact]

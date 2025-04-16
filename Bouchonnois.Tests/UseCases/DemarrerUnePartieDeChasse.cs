@@ -32,9 +32,9 @@ public class DemarrerUnePartieDeChasse
             .QuiEstEnCours()
             .AvecDesChasseurs(new List<Chasseur>
                 {
-                    new ChasseurBuilder().Nommé("Dédé").AyantDesBallesRestantes(20).Build(),
-                    new ChasseurBuilder().Nommé("Bernard").AyantDesBallesRestantes(8).Build(),
-                    new ChasseurBuilder().Nommé("Robert").AyantDesBallesRestantes(12).Build(),
+                    ChasseurBuilder.UnChasseurNomméDédé(),
+                    ChasseurBuilder.UnChasseurNomméBernard(),
+                    ChasseurBuilder.UnChasseurNomméRobert(),
                 }
             )
             .AvecSesEvenements(new List<Event>
