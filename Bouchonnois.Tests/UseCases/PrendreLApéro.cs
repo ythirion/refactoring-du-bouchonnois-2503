@@ -12,12 +12,14 @@ public class PrendreLApéro
     public void QuandLaPartieEstEnCours()
     {
         var repository = new PartieDeChasseRepositoryForTests();
-        var dédé = new ChasseurBuilder().Nommé("Dédé").AyantDesBallesRestantes(20).Build();
-        var bernard = new ChasseurBuilder().Nommé("Bernard").AyantDesBallesRestantes(8).Build();
-        var robert = new ChasseurBuilder().Nommé("Robert").AyantDesBallesRestantes(12).Build();
         var partieDeChasse = new PartieDeChasseBuilder()
             .QuiEstEnCours()
-            .AvecDesChasseurs(new List<Chasseur> { dédé, bernard, robert })
+            .AvecDesChasseurs(new List<Chasseur>
+            {
+                ChasseurBuilder.UnChasseurNomméDédé(),
+                ChasseurBuilder.UnChasseurNomméBernard(),
+                ChasseurBuilder.UnChasseurNomméRobert()
+            })
             .Build();
         repository.Add(partieDeChasse);
         var now = DateTime.Now;
@@ -30,7 +32,12 @@ public class PrendreLApéro
         savedPartieDeChasse.Should().BeEquivalentTo(new PartieDeChasseBuilder()
             .AyantLId(partieDeChasse.Id)
             .QuiEstApero()
-            .AvecDesChasseurs(new List<Chasseur> { dédé, bernard, robert })
+            .AvecDesChasseurs(new List<Chasseur>
+            {
+                ChasseurBuilder.UnChasseurNomméDédé(),
+                ChasseurBuilder.UnChasseurNomméBernard(),
+                ChasseurBuilder.UnChasseurNomméRobert()
+            })
             .AvecSesEvenements(new List<Event>
             {
                 new(now,
