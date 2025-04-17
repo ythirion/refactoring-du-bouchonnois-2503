@@ -12,7 +12,7 @@ public class ScenarioTests
     public ScenarioTests() => _ = new PartieDeChasseService(_repository, () => _time);
 
     [Fact]
-    public void DéroulerUnePartie()
+    public async Task DéroulerUnePartie()
     {
         var chasseurs = new List<(string, int)>
         {
@@ -46,33 +46,9 @@ public class ScenarioTests
         Act(30.MinutesLater(),  () => _.TerminerLaPartie(id));
         // @formatter:on
 
-        _.ConsulterStatus(id)
-            .Should()
-            .BeEquivalentTo(
-                """
-                15:30 - La partie de chasse est terminée, vainqueur : Robert - 3 galinettes
-                15:00 - Robert tire sur une galinette
-                14:41 - Bernard tire -> T'as plus de balles mon vieux, chasse à la main
-                14:41 - Bernard tire
-                14:41 - Bernard tire
-                14:41 - Bernard tire
-                14:41 - Bernard tire
-                14:41 - Bernard tire
-                14:41 - Bernard tire
-                14:30 - Reprise de la chasse
-                11:40 - Petit apéro
-                11:30 - Robert tire sur une galinette
-                11:04 - Dédé tire sur une galinette
-                11:03 - Bernard tire
-                11:02 - Bernard tire
-                11:00 - Reprise de la chasse
-                10:00 - Petit apéro
-                09:40 - Robert tire sur une galinette
-                09:10 - Dédé tire
-                09:00 - La partie de chasse commence à Pitibon sur Sauldre avec Dédé (20 balles), Bernard (8 balles), Robert (12 balles)
-                """);
+        await Verify(_.ConsulterStatus(id));
     }
-    
+
     private void Act(TimeSpan time, Action scenarioAction)
     {
         _time = _time.Add(time);
