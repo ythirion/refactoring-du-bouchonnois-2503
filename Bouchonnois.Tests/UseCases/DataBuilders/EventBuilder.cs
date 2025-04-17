@@ -16,19 +16,19 @@ public class EventBuilder
         _message = message;
     }
 
-    public EventBuilder AtHour(int hours)
+    public EventBuilder Hour(int hours)
     {
         _hours = hours;
         return this;
     }
 
-    public EventBuilder AndMinutes(int minutes)
+    public EventBuilder Minutes(int minutes)
     {
         _minutes = minutes;
         return this;
     }
 
-    public EventBuilder AndSeconds(int seconds)
+    public EventBuilder Seconds(int seconds)
     {
         _seconds = seconds;
         return this;
@@ -40,4 +40,6 @@ public class EventBuilder
             .AddMinutes(_minutes)
             .AddSeconds(_seconds),
         _message);
+
+    public static implicit operator Event(EventBuilder builder) => builder.Build();
 }

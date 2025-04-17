@@ -5,22 +5,29 @@ namespace Bouchonnois.Tests.UseCases.DataBuilders;
 
 public class PartieDeChasseBuilder
 {
-    private List<ChasseurBuilder> _chasseurs = new();
-    private List<Event> _events = new();
-    private PartieStatus _status = PartieStatus.EnCours;
+    private readonly PartieStatus _status;
+    private List<Chasseur> _chasseurs = [];
+    private List<Event> _events = [];
     private int _nbGalinettes = Data.GalinettesSurUnTerrainRiche;
 
-    private PartieDeChasseBuilder()
+    private PartieDeChasseBuilder(PartieStatus status)
     {
+        _status = status;
     }
 
-    public static PartieDeChasseBuilder UnePartieDeChasseEnCours => new() { _status = PartieStatus.EnCours };
+    public static PartieDeChasseBuilder UnePartieDeChasseEnCours => new(PartieStatus.EnCours);
 
-    public static PartieDeChasseBuilder UnePartieDeChasseALapero => new() { _status = PartieStatus.Apéro };
+    public static PartieDeChasseBuilder UnePartieDeChasseALapero => new(PartieStatus.Apéro);
 
-    public static PartieDeChasseBuilder UnePartieDeChasseTerminée => new() { _status = PartieStatus.Terminée };
+    public static PartieDeChasseBuilder UnePartieDeChasseTerminée => new(PartieStatus.Terminée);
 
-    public PartieDeChasseBuilder AvecDesChasseurs(List<ChasseurBuilder> chasseurs)
+    public PartieDeChasseBuilder AvecUnTerrainSansGalinette()
+    {
+        _nbGalinettes = 0;
+        return this;
+    }
+
+    public PartieDeChasseBuilder AvecDesChasseurs(List<Chasseur> chasseurs)
     {
         _chasseurs = chasseurs;
         return this;
@@ -37,14 +44,9 @@ public class PartieDeChasseBuilder
         var id = Guid.NewGuid();
         return new PartieDeChasse(
             id,
-            chasseurs: _chasseurs.Select(chasseur => chasseur.Build()).ToList(),
+            chasseurs: _chasseurs,
             terrain: new Terrain("Pitibon sur Sauldre", _nbGalinettes),
             status: _status,
             events: _events);
-    }
-    public PartieDeChasseBuilder AvecUnTerrainSansGalinette()
-    {
-        _nbGalinettes = 0;
-        return this;
     }
 }

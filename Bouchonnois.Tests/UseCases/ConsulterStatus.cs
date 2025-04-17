@@ -22,7 +22,7 @@ public class ConsulterStatus : PartieDeChasseBaseTests
             {
                 new EventBuilder(
                         "La partie de chasse commence à Pitibon sur Sauldre avec Dédé (20 balles), Bernard (8 balles), Robert (12 balles)")
-                    .AtHour(9).AndSeconds(12).Build()
+                    .Hour(9).Seconds(12)
             })
             .Build();
 
@@ -39,7 +39,6 @@ public class ConsulterStatus : PartieDeChasseBaseTests
     {
         var service = new PartieDeChasseService(Repository, () => DateTime.Now);
 
-
         var partieDeChasse = UnePartieDeChasseEnCours
             .AvecDesChasseurs([
                 Dédé,
@@ -49,29 +48,29 @@ public class ConsulterStatus : PartieDeChasseBaseTests
             .AvecSesEvenements([
                 new EventBuilder(
                         "La partie de chasse commence à Pitibon sur Sauldre avec Dédé (20 balles), Bernard (8 balles), Robert (12 balles)")
-                    .AtHour(9).AndSeconds(12).Build(),
-                new EventBuilder("Dédé tire").AtHour(9).AndMinutes(10).Build(),
-                new EventBuilder("Robert tire sur une galinette").AtHour(9).AndMinutes(40).Build(),
-                new EventBuilder("Petit apéro").AtHour(10).Build(),
-                new EventBuilder("Reprise de la chasse").AtHour(11).Build(),
-                new EventBuilder("Bernard tire").AtHour(11).AndMinutes(2).Build(),
-                new EventBuilder("Bernard tire").AtHour(11).AndMinutes(3).Build(),
-                new EventBuilder("Dédé tire sur une galinette").AtHour(11).AndMinutes(4).Build(),
-                new EventBuilder("Robert tire sur une galinette").AtHour(11).AndMinutes(30).Build(),
-                new EventBuilder("Petit apéro").AtHour(11).AndMinutes(40).Build(),
-                new EventBuilder("Reprise de la chasse").AtHour(14).AndMinutes(30).Build(),
-                new EventBuilder("Bernard tire").AtHour(14).AndMinutes(41).Build(),
-                new EventBuilder("Bernard tire").AtHour(14).AndMinutes(41).AndSeconds(1).Build(),
-                new EventBuilder("Bernard tire").AtHour(14).AndMinutes(41).AndSeconds(2).Build(),
-                new EventBuilder("Bernard tire").AtHour(14).AndMinutes(41).AndSeconds(3).Build(),
-                new EventBuilder("Bernard tire").AtHour(14).AndMinutes(41).AndSeconds(4).Build(),
-                new EventBuilder("Bernard tire").AtHour(14).AndMinutes(41).AndSeconds(5).Build(),
-                new EventBuilder("Bernard tire").AtHour(14).AndMinutes(41).AndSeconds(6).Build(),
+                    .Hour(9).Seconds(12),
+                new EventBuilder("Dédé tire").Hour(9).Minutes(10),
+                new EventBuilder("Robert tire sur une galinette").Hour(9).Minutes(40),
+                new EventBuilder("Petit apéro").Hour(10),
+                new EventBuilder("Reprise de la chasse").Hour(11),
+                new EventBuilder("Bernard tire").Hour(11).Minutes(2),
+                new EventBuilder("Bernard tire").Hour(11).Minutes(3),
+                new EventBuilder("Dédé tire sur une galinette").Hour(11).Minutes(4),
+                new EventBuilder("Robert tire sur une galinette").Hour(11).Minutes(30),
+                new EventBuilder("Petit apéro").Hour(11).Minutes(40),
+                new EventBuilder("Reprise de la chasse").Hour(14).Minutes(30),
+                new EventBuilder("Bernard tire").Hour(14).Minutes(41),
+                new EventBuilder("Bernard tire").Hour(14).Minutes(41).Seconds(1),
+                new EventBuilder("Bernard tire").Hour(14).Minutes(41).Seconds(2),
+                new EventBuilder("Bernard tire").Hour(14).Minutes(41).Seconds(3),
+                new EventBuilder("Bernard tire").Hour(14).Minutes(41).Seconds(4),
+                new EventBuilder("Bernard tire").Hour(14).Minutes(41).Seconds(5),
+                new EventBuilder("Bernard tire").Hour(14).Minutes(41).Seconds(6),
                 new EventBuilder("Bernard tire -> T'as plus de balles mon vieux, chasse à la main")
-                    .AtHour(14).AndMinutes(41).AndSeconds(7).Build(),
-                new EventBuilder("Robert tire sur une galinette").AtHour(15).Build(),
+                    .Hour(14).Minutes(41).Seconds(7),
+                new EventBuilder("Robert tire sur une galinette").Hour(15),
                 new EventBuilder("La partie de chasse est terminée, vainqueur :  Robert - 3 galinettes")
-                    .AtHour(15).AndMinutes(30).Build()
+                    .Hour(15).Minutes(30)
             ])
             .Build();
 
