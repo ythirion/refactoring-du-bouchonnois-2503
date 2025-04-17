@@ -5,7 +5,7 @@ namespace Bouchonnois.Tests.Abstractions;
 
 public abstract class PartieDeChasseBaseTests
 {
-    protected PartieDeChasseRepositoryForTests Repository = new();
+    protected readonly PartieDeChasseRepositoryForTests Repository = new();
 
     protected ChasseurBuilder Dédé = new ChasseurBuilder(Data.Dédé)
         .AvecDesBalles(20);
