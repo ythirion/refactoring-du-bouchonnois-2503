@@ -6,17 +6,8 @@ using Bouchonnois.Tests.Doubles;
 
 namespace Bouchonnois.Tests.UseCases;
 
-public class DemarrerUnePartieDeChasse
+public class DemarrerUnePartieDeChasse : PartieDeChasseTestBase
 {
-    private readonly PartieDeChasseRepositoryForTests _repository;
-    private readonly PartieDeChasseService _service;
-
-    public DemarrerUnePartieDeChasse()
-    {
-        _repository = new PartieDeChasseRepositoryForTests();
-        _service = new PartieDeChasseService(_repository, () => DateTime.Now);
-    }
-
     [Fact]
     public void AvecPlusieursChasseurs()
     {
@@ -85,5 +76,17 @@ public class DemarrerUnePartieDeChasse
         demarrerPartieAvecChasseurSansBalle.Should()
             .Throw<ImpossibleDeDémarrerUnePartieAvecUnChasseurSansBalle>();
         _repository.SavedPartieDeChasse().Should().BeNull();
+    }
+}
+
+public abstract class PartieDeChasseTestBase
+{
+    protected readonly PartieDeChasseRepositoryForTests _repository;
+    protected readonly PartieDeChasseService _service;
+
+    protected PartieDeChasseTestBase()
+    {
+        _repository = new PartieDeChasseRepositoryForTests();
+        _service = new PartieDeChasseService(_repository, () => DateTime.Now);
     }
 }
