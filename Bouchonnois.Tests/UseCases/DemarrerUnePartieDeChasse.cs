@@ -1,14 +1,13 @@
 using Bouchonnois.Domain;
 using Bouchonnois.Service.Exceptions;
 using Bouchonnois.Tests.UseCases.Common;
-
 using FsCheck;
 using FsCheck.Fluent;
 using FsCheck.Xunit;
-
 using static Bouchonnois.Tests.Builders.ChasseurBuilder;
 using static Bouchonnois.Tests.Builders.PartieDeChasseBuilder;
 using static Bouchonnois.Tests.Builders.TerrainBuilder;
+using static Bouchonnois.Tests.UseCases.ArbitraryExtensions;
 
 namespace Bouchonnois.Tests.UseCases;
 
@@ -21,7 +20,7 @@ public static class ArbitraryExtensions
             from nbGalinette in Gen.Choose(minGalinettes, maxGalinettes)
             select (nom, nbGalinette)).ToArbitrary();
 
-    private static Arbitrary<(string nom, int nbGalinettes)> TerrainRicheEnGalinettes()
+    public static Arbitrary<(string nom, int nbGalinettes)> TerrainRicheEnGalinettes()
         => TerrainGenerator(1, int.MaxValue);
 
     private static Arbitrary<(string nom, int nbGalinettes)> TerrainSansGalinettes()
@@ -32,15 +31,14 @@ public static class ArbitraryExtensions
             from nbBalles in Gen.Choose(minBalles, maxBalles)
             select (nom, nbBalles)).ToArbitrary();
 
-    private static Arbitrary<(string nom, int nbBalles)[]> GroupeDeChasseurs(int minBalles, int maxBalles)
+    public static Arbitrary<(string nom, int nbBalles)[]> GroupeDeChasseurs(int minBalles, int maxBalles)
         => (from nbChasseurs in Gen.Choose(1, 1_000)
             select Chasseurs(minBalles, maxBalles).Generator.Sample(nbChasseurs)).ToArbitrary();
 
     private static Arbitrary<(string nom, int nbBalles)[]> DesChasseursAvecDesBalles()
         => GroupeDeChasseurs(1, int.MaxValue);
 
-    private static Arbitrary<(string nom, int nbBalles)[]> DesChasseursSansBalles()
-        => GroupeDeChasseurs(0, 0);
+    private static Arbitrary<(string nom, int nbBalles)[]> DesChasseursSansBalles() => GroupeDeChasseurs(0, 0);
 }
 
 public class DemarrerUnePartieDeChasse : UseCaseTest
@@ -76,13 +74,20 @@ public class DemarrerUnePartieDeChasse : UseCaseTest
                             "La partie de chasse commence à Pitibon sur Sauldre avec Dédé (20 balles), Bernard (8 balles), Robert (12 balles)"))
                     .Build());
     }
-    
+
 
     [Property]
-    public Property DémarrerAvecSucces() => Prop.ForAll(
-        Gen.Choose(1, 1000).ToArbitrary(),
-        Gen.Choose(1, 1000).ToArbitrary(),
-        (chasseurs, balles) => false);
+    public Property DémarrerAvecSucces()
+        => Prop.ForAll(
+            GroupeDeChasseurs(1, 20),
+            TerrainRicheEnGalinettes(),
+            (chasseurs, terrainDeChasse) =>
+            {
+                Service.Demarrer(terrainDeChasse, chasseurs.ToList());
+
+
+                return Repository.SavedPartieDeChasse() is not null;
+            });
 
     [Fact]
     public void EchoueSansChasseurs()
