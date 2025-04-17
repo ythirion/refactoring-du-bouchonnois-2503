@@ -5,15 +5,15 @@ namespace Bouchonnois.Tests.Abstractions;
 
 public abstract class PartieDeChasseBaseTests
 {
-    protected readonly PartieDeChasseRepositoryForTests Repository = new();
-
-    protected ChasseurBuilder Dédé = new ChasseurBuilder(Data.Dédé)
-        .AvecDesBalles(20);
-
-    protected ChasseurBuilder Bernard = new ChasseurBuilder(Data.Bernard)
+    protected readonly ChasseurBuilder Bernard = new ChasseurBuilder(Data.Bernard)
         .AvecDesBalles(8);
 
-    protected ChasseurBuilder Robert = new ChasseurBuilder(Data.Robert)
+    protected readonly ChasseurBuilder Dédé = new ChasseurBuilder(Data.Dédé)
+        .AvecDesBalles(20);
+
+    protected readonly PartieDeChasseRepositoryForTests Repository = new();
+
+    protected readonly ChasseurBuilder Robert = new ChasseurBuilder(Data.Robert)
         .AvecDesBalles(12);
 
     protected static PartieDeChasseBuilder UnePartieDeChasseEnCours => PartieDeChasseBuilder.UnePartieDeChasseEnCours;

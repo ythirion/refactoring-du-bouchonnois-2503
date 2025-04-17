@@ -2,6 +2,7 @@ using Bouchonnois.Domain;
 using Bouchonnois.Service;
 using Bouchonnois.Service.Exceptions;
 using Bouchonnois.Tests.Abstractions;
+using Bouchonnois.Tests.UseCases.DataBuilders;
 
 namespace Bouchonnois.Tests.UseCases;
 
@@ -19,9 +20,9 @@ public class ConsulterStatus : PartieDeChasseBaseTests
             ])
             .AvecSesEvenements(new List<Event>
             {
-                new(
-                    new DateTime(2024, 4, 25, 9, 0, 12),
-                    "La partie de chasse commence à Pitibon sur Sauldre avec Dédé (20 balles), Bernard (8 balles), Robert (12 balles)")
+                new EventBuilder(
+                        "La partie de chasse commence à Pitibon sur Sauldre avec Dédé (20 balles), Bernard (8 balles), Robert (12 balles)")
+                    .AtHour(9).AndSeconds(12).Build()
             })
             .Build();
 
@@ -38,43 +39,42 @@ public class ConsulterStatus : PartieDeChasseBaseTests
     {
         var service = new PartieDeChasseService(Repository, () => DateTime.Now);
 
+
         var partieDeChasse = UnePartieDeChasseEnCours
             .AvecDesChasseurs([
                 Dédé,
                 Bernard,
                 Robert.AvecDesGalinettesDansSaBesace(2)
             ])
-            .AvecSesEvenements(new List<Event>
-            {
-                new(
-                    new DateTime(2024, 4, 25, 9, 0, 12),
-                    "La partie de chasse commence à Pitibon sur Sauldre avec Dédé (20 balles), Bernard (8 balles), Robert (12 balles)"),
-                new(new DateTime(2024, 4, 25, 9, 10, 0), "Dédé tire"),
-                new(new DateTime(2024, 4, 25, 9, 40, 0), "Robert tire sur une galinette"),
-                new(new DateTime(2024, 4, 25, 10, 0, 0), "Petit apéro"),
-                new(new DateTime(2024, 4, 25, 11, 0, 0), "Reprise de la chasse"),
-                new(new DateTime(2024, 4, 25, 11, 2, 0), "Bernard tire"),
-                new(new DateTime(2024, 4, 25, 11, 3, 0), "Bernard tire"),
-                new(new DateTime(2024, 4, 25, 11, 4, 0), "Dédé tire sur une galinette"),
-                new(new DateTime(2024, 4, 25, 11, 30, 0), "Robert tire sur une galinette"),
-                new(new DateTime(2024, 4, 25, 11, 40, 0), "Petit apéro"),
-                new(new DateTime(2024, 4, 25, 14, 30, 0), "Reprise de la chasse"),
-                new(new DateTime(2024, 4, 25, 14, 41, 0), "Bernard tire"),
-                new(new DateTime(2024, 4, 25, 14, 41, 1), "Bernard tire"),
-                new(new DateTime(2024, 4, 25, 14, 41, 2), "Bernard tire"),
-                new(new DateTime(2024, 4, 25, 14, 41, 3), "Bernard tire"),
-                new(new DateTime(2024, 4, 25, 14, 41, 4), "Bernard tire"),
-                new(new DateTime(2024, 4, 25, 14, 41, 5), "Bernard tire"),
-                new(new DateTime(2024, 4, 25, 14, 41, 6), "Bernard tire"),
-                new(
-                    new DateTime(2024, 4, 25, 14, 41, 7),
-                    "Bernard tire -> T'as plus de balles mon vieux, chasse à la main"),
-                new(new DateTime(2024, 4, 25, 15, 0, 0), "Robert tire sur une galinette"),
-                new(
-                    new DateTime(2024, 4, 25, 15, 30, 0),
-                    "La partie de chasse est terminée, vainqueur :  Robert - 3 galinettes")
-            })
+            .AvecSesEvenements([
+                new EventBuilder(
+                        "La partie de chasse commence à Pitibon sur Sauldre avec Dédé (20 balles), Bernard (8 balles), Robert (12 balles)")
+                    .AtHour(9).AndSeconds(12).Build(),
+                new EventBuilder("Dédé tire").AtHour(9).AndMinutes(10).Build(),
+                new EventBuilder("Robert tire sur une galinette").AtHour(9).AndMinutes(40).Build(),
+                new EventBuilder("Petit apéro").AtHour(10).Build(),
+                new EventBuilder("Reprise de la chasse").AtHour(11).Build(),
+                new EventBuilder("Bernard tire").AtHour(11).AndMinutes(2).Build(),
+                new EventBuilder("Bernard tire").AtHour(11).AndMinutes(3).Build(),
+                new EventBuilder("Dédé tire sur une galinette").AtHour(11).AndMinutes(4).Build(),
+                new EventBuilder("Robert tire sur une galinette").AtHour(11).AndMinutes(30).Build(),
+                new EventBuilder("Petit apéro").AtHour(11).AndMinutes(40).Build(),
+                new EventBuilder("Reprise de la chasse").AtHour(14).AndMinutes(30).Build(),
+                new EventBuilder("Bernard tire").AtHour(14).AndMinutes(41).Build(),
+                new EventBuilder("Bernard tire").AtHour(14).AndMinutes(41).AndSeconds(1).Build(),
+                new EventBuilder("Bernard tire").AtHour(14).AndMinutes(41).AndSeconds(2).Build(),
+                new EventBuilder("Bernard tire").AtHour(14).AndMinutes(41).AndSeconds(3).Build(),
+                new EventBuilder("Bernard tire").AtHour(14).AndMinutes(41).AndSeconds(4).Build(),
+                new EventBuilder("Bernard tire").AtHour(14).AndMinutes(41).AndSeconds(5).Build(),
+                new EventBuilder("Bernard tire").AtHour(14).AndMinutes(41).AndSeconds(6).Build(),
+                new EventBuilder("Bernard tire -> T'as plus de balles mon vieux, chasse à la main")
+                    .AtHour(14).AndMinutes(41).AndSeconds(7).Build(),
+                new EventBuilder("Robert tire sur une galinette").AtHour(15).Build(),
+                new EventBuilder("La partie de chasse est terminée, vainqueur :  Robert - 3 galinettes")
+                    .AtHour(15).AndMinutes(30).Build()
+            ])
             .Build();
+
         Repository.Add(partieDeChasse);
 
         var status = service.ConsulterStatus(partieDeChasse.Id);
@@ -112,6 +112,7 @@ public class ConsulterStatus : PartieDeChasseBaseTests
 
         reprendrePartieQuandPartieExistePas.Should()
             .Throw<LaPartieDeChasseNexistePas>();
+
         Repository.SavedPartieDeChasse().Should().BeNull();
     }
 }
