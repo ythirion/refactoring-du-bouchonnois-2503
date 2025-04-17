@@ -24,32 +24,31 @@ public class ScenarioTests
 
         var id = _.Demarrer(terrainDeChasse, chasseurs);
 
-        // @formatter:off
-        Act(10.MinutesLater(),  () => _.Tirer(id, "Dédé"));
-        Act(30.MinutesLater(),  () => _.TirerSurUneGalinette(id, "Robert"));
-        Act(20.MinutesLater(),  () => _.PrendreLapéro(id));
-        Act(1.HoursLater(),     () => _.ReprendreLaPartie(id));
-        Act(2.MinutesLater(),   () => _.Tirer(id, "Bernard"));
-        Act(1.MinutesLater(),   () => _.Tirer(id, "Bernard"));
-        Act(1.MinutesLater(),   () => _.TirerSurUneGalinette(id, "Dédé"));
-        Act(26.MinutesLater(),  () => _.TirerSurUneGalinette(id, "Robert"));
-        Act(10.MinutesLater(),  () => _.PrendreLapéro(id));
-        Act(170.MinutesLater(), () => _.ReprendreLaPartie(id));
-        Act(11.MinutesLater(),  () => _.Tirer(id, "Bernard"));
-        Act(1.SecondsLater(),   () => _.Tirer(id, "Bernard"));
-        Act(1.SecondsLater(),   () => _.Tirer(id, "Bernard"));
-        Act(1.SecondsLater(),   () => _.Tirer(id, "Bernard"));
-        Act(1.SecondsLater(),   () => _.Tirer(id, "Bernard"));
-        Act(1.SecondsLater(),   () => _.Tirer(id, "Bernard"));
-        Act(1.SecondsLater(),   () => _.Tirer(id, "Bernard"));
-        Act(19.MinutesLater(),  () => _.TirerSurUneGalinette(id, "Robert"));
-        Act(30.MinutesLater(),  () => _.TerminerLaPartie(id));
+        After(10.MinutesLater(), () => _.Tirer(id, "Dédé"));
+        After(30.MinutesLater(), () => _.TirerSurUneGalinette(id, "Robert"));
+        After(20.MinutesLater(), () => _.PrendreLapéro(id));
+        After(1.HoursLater(), () => _.ReprendreLaPartie(id));
+        After(2.MinutesLater(), () => _.Tirer(id, "Bernard"));
+        After(1.MinutesLater(), () => _.Tirer(id, "Bernard"));
+        After(1.MinutesLater(), () => _.TirerSurUneGalinette(id, "Dédé"));
+        After(26.MinutesLater(), () => _.TirerSurUneGalinette(id, "Robert"));
+        After(10.MinutesLater(), () => _.PrendreLapéro(id));
+        After(170.MinutesLater(), () => _.ReprendreLaPartie(id));
+        After(11.MinutesLater(), () => _.Tirer(id, "Bernard"));
+        After(1.SecondsLater(), () => _.Tirer(id, "Bernard"));
+        After(1.SecondsLater(), () => _.Tirer(id, "Bernard"));
+        After(1.SecondsLater(), () => _.Tirer(id, "Bernard"));
+        After(1.SecondsLater(), () => _.Tirer(id, "Bernard"));
+        After(1.SecondsLater(), () => _.Tirer(id, "Bernard"));
+        After(1.SecondsLater(), () => _.Tirer(id, "Bernard"));
+        After(19.MinutesLater(), () => _.TirerSurUneGalinette(id, "Robert"));
+        After(30.MinutesLater(), () => _.TerminerLaPartie(id));
         // @formatter:on
 
         await Verify(_.ConsulterStatus(id));
     }
 
-    private void Act(TimeSpan time, Action scenarioAction)
+    private void After(TimeSpan time, Action scenarioAction)
     {
         _time = _time.Add(time);
 
