@@ -23,7 +23,7 @@ public static class ArbitraryExtensions
     public static Arbitrary<(string nom, int nbGalinettes)> TerrainRicheEnGalinettes()
         => TerrainGenerator(1, int.MaxValue);
 
-    private static Arbitrary<(string nom, int nbGalinettes)> TerrainSansGalinettes()
+    public static Arbitrary<(string nom, int nbGalinettes)> TerrainSansGalinettes()
         => TerrainGenerator(-int.MaxValue, 0);
 
     private static Arbitrary<(string nom, int nbBalles)> Chasseurs(int minBalles, int maxBalles)
@@ -31,14 +31,14 @@ public static class ArbitraryExtensions
             from nbBalles in Gen.Choose(minBalles, maxBalles)
             select (nom, nbBalles)).ToArbitrary();
 
-    public static Arbitrary<(string nom, int nbBalles)[]> GroupeDeChasseurs(int minBalles, int maxBalles)
+    private static Arbitrary<(string nom, int nbBalles)[]> GroupeDeChasseurs(int minBalles, int maxBalles)
         => (from nbChasseurs in Gen.Choose(1, 1_000)
             select Chasseurs(minBalles, maxBalles).Generator.Sample(nbChasseurs)).ToArbitrary();
 
-    private static Arbitrary<(string nom, int nbBalles)[]> DesChasseursAvecDesBalles()
+    public static Arbitrary<(string nom, int nbBalles)[]> DesChasseursAvecDesBalles()
         => GroupeDeChasseurs(1, int.MaxValue);
 
-    private static Arbitrary<(string nom, int nbBalles)[]> DesChasseursSansBalles() => GroupeDeChasseurs(0, 0);
+    public static Arbitrary<(string nom, int nbBalles)[]> DesChasseursSansBalles() => GroupeDeChasseurs(0, 0);
 }
 
 public class DemarrerUnePartieDeChasse : UseCaseTest
@@ -79,7 +79,7 @@ public class DemarrerUnePartieDeChasse : UseCaseTest
     [Property]
     public Property DémarrerAvecSucces()
         => Prop.ForAll(
-            GroupeDeChasseurs(1, 20),
+            DesChasseursAvecDesBalles(),
             TerrainRicheEnGalinettes(),
             (chasseurs, terrainDeChasse) =>
             {
