@@ -77,17 +77,12 @@ public class DemarrerUnePartieDeChasse : UseCaseTest
 
 
     [Property]
-    public Property DémarrerAvecSucces()
+    public Property DémarrerLaPartieAvecSuccès()
         => Prop.ForAll(
             DesChasseursAvecDesBalles(),
             TerrainRicheEnGalinettes(),
             (chasseurs, terrainDeChasse) =>
-            {
-                Service.Demarrer(terrainDeChasse, chasseurs.ToList());
-
-
-                return Repository.SavedPartieDeChasse() is not null;
-            });
+                Service.Demarrer(terrainDeChasse, chasseurs.ToList()) == Repository.SavedPartieDeChasse().Id);
 
     [Fact]
     public void EchoueSansChasseurs()
