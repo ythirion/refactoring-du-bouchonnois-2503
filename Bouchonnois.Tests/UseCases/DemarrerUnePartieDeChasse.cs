@@ -1,6 +1,11 @@
 using Bouchonnois.Domain;
 using Bouchonnois.Service.Exceptions;
 using Bouchonnois.Tests.UseCases.Common;
+
+using FsCheck;
+using FsCheck.Fluent;
+using FsCheck.Xunit;
+
 using static Bouchonnois.Tests.Builders.ChasseurBuilder;
 using static Bouchonnois.Tests.Builders.PartieDeChasseBuilder;
 using static Bouchonnois.Tests.Builders.TerrainBuilder;
@@ -18,6 +23,7 @@ public class DemarrerUnePartieDeChasse : UseCaseTest
             (Bernard, 8),
             (Robert, 12)
         };
+
         var terrainDeChasse = ("Pitibon sur Sauldre", 3);
 
         var id = Service.Demarrer(terrainDeChasse, chasseurs);
@@ -39,6 +45,12 @@ public class DemarrerUnePartieDeChasse : UseCaseTest
                             "La partie de chasse commence à Pitibon sur Sauldre avec Dédé (20 balles), Bernard (8 balles), Robert (12 balles)"))
                     .Build());
     }
+
+    [Property]
+    public Property DémarrerAvecSucces() => Prop.ForAll(
+        Gen.Choose(1, 1000).ToArbitrary(),
+        Gen.Choose(1, 1000).ToArbitrary(),
+        (chasseurs, balles) => false);
 
     [Fact]
     public void EchoueSansChasseurs()
@@ -74,6 +86,7 @@ public class DemarrerUnePartieDeChasse : UseCaseTest
             (Dédé, 20),
             (Bernard, 0)
         };
+
         var terrainDeChasse = ("Pitibon sur Sauldre", 3);
 
         var demarrerPartieAvecChasseurSansBalle = () => Service.Demarrer(terrainDeChasse, chasseurs);
