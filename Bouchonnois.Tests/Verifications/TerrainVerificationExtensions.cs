@@ -1,8 +1,8 @@
 using Bouchonnois.Service;
 
-namespace Bouchonnois.Tests.Assertions;
+namespace Bouchonnois.Tests.Verifications;
 
-public static class TerrainExtensions
+public static class TerrainVerificationExtensions
 {
     public static Terrain GalinettesRestantes(this Terrain terrain, int nbGalinettes)
     {
