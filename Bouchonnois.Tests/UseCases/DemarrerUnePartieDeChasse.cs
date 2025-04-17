@@ -4,6 +4,7 @@ using Bouchonnois.Tests.UseCases.Common;
 using FsCheck;
 using FsCheck.Fluent;
 using FsCheck.Xunit;
+using JetBrains.Annotations;
 using static Bouchonnois.Tests.Builders.ChasseurBuilder;
 using static Bouchonnois.Tests.Builders.PartieDeChasseBuilder;
 using static Bouchonnois.Tests.Builders.TerrainBuilder;
@@ -11,34 +12,46 @@ using static Bouchonnois.Tests.UseCases.ArbitraryExtensions;
 
 namespace Bouchonnois.Tests.UseCases;
 
+using Terrain = (string nom, int nbGalinettes);
+using GroupDeChasseurs = (string nom, int nbBalles)[];
+
+public static class DesChasseursAvecDesBalles
+{
+    [UsedImplicitly]
+    public static Arbitrary<GroupDeChasseurs> Generate() => DesChasseursAvecDesBalles();
+}
+
+public static class TerrainRicheEnGalinettes
+{
+    [UsedImplicitly]
+    public static Arbitrary<Terrain> Generate() => TerrainRicheEnGalinettes();
+}
+
 public static class ArbitraryExtensions
 {
     private static Gen<string> RandomString() => ArbMap.Default.ArbFor<string>().Generator;
 
-    private static Arbitrary<(string nom, int nbGalinettes)> TerrainGenerator(int minGalinettes, int maxGalinettes)
+    private static Arbitrary<Terrain> TerrainGenerator(int minGalinettes, int maxGalinettes)
         => (from nom in RandomString()
             from nbGalinette in Gen.Choose(minGalinettes, maxGalinettes)
             select (nom, nbGalinette)).ToArbitrary();
 
-    public static Arbitrary<(string nom, int nbGalinettes)> TerrainRicheEnGalinettes()
-        => TerrainGenerator(1, int.MaxValue);
+    public static Arbitrary<Terrain> TerrainRicheEnGalinettes() => TerrainGenerator(1, int.MaxValue);
 
-    public static Arbitrary<(string nom, int nbGalinettes)> TerrainSansGalinettes()
-        => TerrainGenerator(-int.MaxValue, 0);
+    public static Arbitrary<Terrain> TerrainSansGalinettes() => TerrainGenerator(-int.MaxValue, 0);
 
     private static Arbitrary<(string nom, int nbBalles)> Chasseurs(int minBalles, int maxBalles)
         => (from nom in RandomString()
             from nbBalles in Gen.Choose(minBalles, maxBalles)
             select (nom, nbBalles)).ToArbitrary();
 
-    private static Arbitrary<(string nom, int nbBalles)[]> GroupeDeChasseurs(int minBalles, int maxBalles)
+    private static Arbitrary<GroupDeChasseurs> GroupeDeChasseurs(int minBalles, int maxBalles)
         => (from nbChasseurs in Gen.Choose(1, 1_000)
             select Chasseurs(minBalles, maxBalles).Generator.Sample(nbChasseurs)).ToArbitrary();
 
-    public static Arbitrary<(string nom, int nbBalles)[]> DesChasseursAvecDesBalles()
-        => GroupeDeChasseurs(1, int.MaxValue);
+    public static Arbitrary<GroupDeChasseurs> DesChasseursAvecDesBalles() => GroupeDeChasseurs(1, int.MaxValue);
 
-    public static Arbitrary<(string nom, int nbBalles)[]> DesChasseursSansBalles() => GroupeDeChasseurs(0, 0);
+    public static Arbitrary<GroupDeChasseurs> DesChasseursSansBalles() => GroupeDeChasseurs(0, 0);
 }
 
 public class DemarrerUnePartieDeChasse : UseCaseTest
@@ -74,15 +87,23 @@ public class DemarrerUnePartieDeChasse : UseCaseTest
                             "La partie de chasse commence à Pitibon sur Sauldre avec Dédé (20 balles), Bernard (8 balles), Robert (12 balles)"))
                     .Build());
     }
-
-
+    
     [Property]
-    public Property DémarrerLaPartieAvecSuccès()
+    public Property Sur1TerrainRicheEnGalinettesEtAvecDesChasseurAvecDesBalles()
         => Prop.ForAll(
-            DesChasseursAvecDesBalles(),
             TerrainRicheEnGalinettes(),
-            (chasseurs, terrainDeChasse) =>
-                Service.Demarrer(terrainDeChasse, chasseurs.ToList()) == Repository.SavedPartieDeChasse().Id);
+            DesChasseursAvecDesBalles(),
+            DémarrerLaPartieAvecSuccès);
+
+    [Property(Arbitrary = [typeof(TerrainRicheEnGalinettes), typeof(DesChasseursAvecDesBalles)])]
+    public Property Sur1TerrainRicheEnGalinettesEtAvecDesChasseurAvecDesBalles_2(
+        Terrain terrainRicheEnGalinettes,
+        GroupDeChasseurs chasseursAvecDesBalles)
+        => DémarrerLaPartieAvecSuccès(terrainRicheEnGalinettes, chasseursAvecDesBalles);
+
+    private Property DémarrerLaPartieAvecSuccès(Terrain terrainDeChasse, GroupDeChasseurs chasseurs)
+        => (Service.Demarrer(terrainDeChasse, chasseurs.ToList()) == Repository.SavedPartieDeChasse().Id)
+            .Label("Démarrer la partie avec succès");
 
     [Fact]
     public void EchoueSansChasseurs()
