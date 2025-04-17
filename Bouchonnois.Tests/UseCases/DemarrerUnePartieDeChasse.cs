@@ -12,6 +12,37 @@ using static Bouchonnois.Tests.Builders.TerrainBuilder;
 
 namespace Bouchonnois.Tests.UseCases;
 
+public static class ArbitraryExtensions
+{
+    private static Gen<string> RandomString() => ArbMap.Default.ArbFor<string>().Generator;
+
+    private static Arbitrary<(string nom, int nbGalinettes)> TerrainGenerator(int minGalinettes, int maxGalinettes)
+        => (from nom in RandomString()
+            from nbGalinette in Gen.Choose(minGalinettes, maxGalinettes)
+            select (nom, nbGalinette)).ToArbitrary();
+
+    private static Arbitrary<(string nom, int nbGalinettes)> TerrainRicheEnGalinettes()
+        => TerrainGenerator(1, int.MaxValue);
+
+    private static Arbitrary<(string nom, int nbGalinettes)> TerrainSansGalinettes()
+        => TerrainGenerator(-int.MaxValue, 0);
+
+    private static Arbitrary<(string nom, int nbBalles)> Chasseurs(int minBalles, int maxBalles)
+        => (from nom in RandomString()
+            from nbBalles in Gen.Choose(minBalles, maxBalles)
+            select (nom, nbBalles)).ToArbitrary();
+
+    private static Arbitrary<(string nom, int nbBalles)[]> GroupeDeChasseurs(int minBalles, int maxBalles)
+        => (from nbChasseurs in Gen.Choose(1, 1_000)
+            select Chasseurs(minBalles, maxBalles).Generator.Sample(nbChasseurs)).ToArbitrary();
+
+    private static Arbitrary<(string nom, int nbBalles)[]> DesChasseursAvecDesBalles()
+        => GroupeDeChasseurs(1, int.MaxValue);
+
+    private static Arbitrary<(string nom, int nbBalles)[]> DesChasseursSansBalles()
+        => GroupeDeChasseurs(0, 0);
+}
+
 public class DemarrerUnePartieDeChasse : UseCaseTest
 {
     [Fact]
@@ -45,6 +76,7 @@ public class DemarrerUnePartieDeChasse : UseCaseTest
                             "La partie de chasse commence à Pitibon sur Sauldre avec Dédé (20 balles), Bernard (8 balles), Robert (12 balles)"))
                     .Build());
     }
+    
 
     [Property]
     public Property DémarrerAvecSucces() => Prop.ForAll(
