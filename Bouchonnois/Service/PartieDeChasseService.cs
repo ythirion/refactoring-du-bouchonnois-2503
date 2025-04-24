@@ -7,7 +7,7 @@ namespace Bouchonnois.Service
         private readonly DemarrerUnePartieDeChasseUseCase _demarrerUnePartieDeChasseUseCase;
         private readonly TirerUseCase _tirerUseCase;
         private readonly PrendreLapéroUseCase _prendreLapéroUseCase;
-        private readonly ReprendreLaPartieUseCase _reprendreLaPartieUseCase;
+        private readonly ReprendreLaPartieDeChasseUseCase _reprendreLaPartieDeChasseUseCase;
         private readonly TerminerLaPartieDeChasseUseCase _terminerLaPartieDeChasseUseCase;
         private readonly ConsulterStatusUseCase _consulterStatusUseCase;
 
@@ -17,7 +17,7 @@ namespace Bouchonnois.Service
         {
             _consulterStatusUseCase = new ConsulterStatusUseCase(repository);
             _terminerLaPartieDeChasseUseCase = new TerminerLaPartieDeChasseUseCase(repository, timeProvider);
-            _reprendreLaPartieUseCase = new ReprendreLaPartieUseCase(repository, timeProvider);
+            _reprendreLaPartieDeChasseUseCase = new ReprendreLaPartieDeChasseUseCase(repository, timeProvider);
             _prendreLapéroUseCase = new PrendreLapéroUseCase(repository, timeProvider);
             _tirerUseCase = new TirerUseCase(repository, timeProvider);
             _demarrerUnePartieDeChasseUseCase = new DemarrerUnePartieDeChasseUseCase(repository, timeProvider);
@@ -30,7 +30,7 @@ namespace Bouchonnois.Service
 
         public void PrendreLapéro(Guid id) => _prendreLapéroUseCase.PrendreLapéro(id);
 
-        public void ReprendreLaPartie(Guid id) => _reprendreLaPartieUseCase.ReprendreLaPartie(id);
+        public void ReprendreLaPartie(Guid id) => _reprendreLaPartieDeChasseUseCase.ReprendreLaPartie(id);
 
         public string TerminerLaPartie(Guid id) => _terminerLaPartieDeChasseUseCase.TerminerLaPartie(id);
 
