@@ -11,6 +11,7 @@ public class ScenarioTests
     private readonly TirerUseCase _tirer;
     private readonly PrendreLapéroUseCase _prendreLapéro;
     private readonly ReprendreLaPartieDeChasseUseCase _reprendreLaPartie;
+    private readonly TerminerLaPartieDeChasseUseCase _terminerLaPartie;
 
     private DateTime _time = new(2024, 4, 25, 9, 0, 0);
 
@@ -21,9 +22,9 @@ public class ScenarioTests
         _tirerSurGalinette = new TirerSurGalinetteUseCase(_repository, () => _time);
         _prendreLapéro = new PrendreLapéroUseCase(_repository, () => _time);
         _reprendreLaPartie = new ReprendreLaPartieDeChasseUseCase(_repository, () => _time);
+        _terminerLaPartie = new TerminerLaPartieDeChasseUseCase(_repository, () => _time);
     }
-
-
+    
     [Fact]
     public async Task DéroulerUnePartie()
     {
@@ -55,7 +56,7 @@ public class ScenarioTests
         After(1.SecondsLater(), () => _tirer.Tirer(id, "Bernard"));
         After(1.SecondsLater(), () => _tirer.Tirer(id, "Bernard"));
         After(19.MinutesLater(), () => _tirerSurGalinette.TirerSurUneGalinette(id, "Robert"));
-        After(30.MinutesLater(), () => _.TerminerLaPartie(id));
+        After(30.MinutesLater(), () => _terminerLaPartie.TerminerLaPartie(id));
         // @formatter:on
 
         await Verify(_.ConsulterStatus(id));
