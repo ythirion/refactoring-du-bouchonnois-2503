@@ -1,4 +1,5 @@
 using ArchUnitNET.Fluent.Syntax.Elements.Members.MethodMembers;
+using ArchUnitNET.xUnit;
 
 using static ArchUnitNET.Fluent.ArchRuleDefinition;
 
@@ -14,7 +15,11 @@ public class LinguisticAntiPatterns
 
     [Fact]
     public void NoGetMethodShouldReturnVoid()
-        => Assert.Fail("FIX ME");
+        => Methods()
+            .HaveNameStartingWith("get")
+            .Should()
+            .NotHaveReturnType(typeof(void))
+            .Check();
 
     [Fact]
     public void IserAndHaserShouldReturnBooleans()
