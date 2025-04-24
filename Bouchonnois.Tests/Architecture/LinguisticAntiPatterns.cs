@@ -16,7 +16,7 @@ public class LinguisticAntiPatterns
     [Fact]
     public void NoGetMethodShouldReturnVoid()
         => Methods()
-            .HaveNameStartingWith("get")
+            .HaveName("[Gg]et.*", useRegularExpressions:true)
             .Should()
             .NotHaveReturnType(typeof(void))
             .Check();
