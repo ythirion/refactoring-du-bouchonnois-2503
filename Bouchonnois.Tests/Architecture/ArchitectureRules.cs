@@ -20,15 +20,15 @@ namespace Bouchonnois.Tests.Architecture
                 .Should()
                 .OnlyDependOn(Domain())
                 .And(
-                    ApplicationServices()
+                    UseCases()
                         .Should()
                         .NotDependOnAny(Infrastructure())
                 )
                 .Check();
 
-        private static GivenTypesConjunctionWithDescription ApplicationServices() =>
-            TypesIn("Service")
-                .As("Application Business Rules");
+        private static GivenTypesConjunctionWithDescription UseCases() =>
+            TypesIn("UseCases")
+                .As("Use Cases");
 
         private static GivenTypesConjunctionWithDescription Infrastructure() =>
             TypesIn("Repository")
