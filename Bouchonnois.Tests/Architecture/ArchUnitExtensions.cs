@@ -2,7 +2,6 @@ using ArchUnitNET.Domain;
 using ArchUnitNET.Fluent;
 using ArchUnitNET.Loader;
 using ArchUnitNET.xUnit;
-using Bouchonnois.Service;
 
 namespace Bouchonnois.Tests.Architecture
 {
