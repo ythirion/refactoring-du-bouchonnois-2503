@@ -1,6 +1,8 @@
+using ArchUnitNET.Fluent;
+
 namespace Bouchonnois.Tests.Architecture;
 
-using static ArchUnitNET.Fluent.ArchRuleDefinition;
+using static ArchRuleDefinition;
 
 public class NamingConvention
 {
@@ -18,5 +20,8 @@ public class NamingConvention
 
     [Fact]
     public void InterfacesShouldStartWithI()
-        => Assert.Fail("FIX ME");
+        => Interfaces()
+            .Should()
+            .HaveNameStartingWith("I")
+            .Check();
 }
