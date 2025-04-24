@@ -9,6 +9,7 @@ public class ScenarioTests
     private readonly PartieDeChasseService _;
     private readonly TirerSurGalinetteUseCase _tirerSurGalinette;
     private readonly TirerUseCase _tirer;
+    private readonly PrendreLapéroUseCase _prendreLapéro;
 
     private DateTime _time = new(2024, 4, 25, 9, 0, 0);
 
@@ -17,6 +18,7 @@ public class ScenarioTests
         _ = new PartieDeChasseService(_repository, () => _time);
         _tirer = new TirerUseCase(_repository, () => _time);
         _tirerSurGalinette = new TirerSurGalinetteUseCase(_repository, () => _time);
+        _prendreLapéro = new PrendreLapéroUseCase(_repository, () => _time);
     }
 
 
@@ -35,13 +37,13 @@ public class ScenarioTests
 
         After(10.MinutesLater(), () => _tirer.Tirer(id, "Dédé"));
         After(30.MinutesLater(), () => _tirerSurGalinette.TirerSurUneGalinette(id, "Robert"));
-        After(20.MinutesLater(), () => _.PrendreLapéro(id));
+        After(20.MinutesLater(), () => _prendreLapéro.PrendreLapéro(id));
         After(1.HoursLater(), () => _.ReprendreLaPartie(id));
         After(2.MinutesLater(), () => _tirer.Tirer(id, "Bernard"));
         After(1.MinutesLater(), () => _tirer.Tirer(id, "Bernard"));
         After(1.MinutesLater(), () => _tirerSurGalinette.TirerSurUneGalinette(id, "Dédé"));
         After(26.MinutesLater(), () => _tirerSurGalinette.TirerSurUneGalinette(id, "Robert"));
-        After(10.MinutesLater(), () => _.PrendreLapéro(id));
+        After(10.MinutesLater(), () => _prendreLapéro.PrendreLapéro(id));
         After(170.MinutesLater(), () => _.ReprendreLaPartie(id));
         After(11.MinutesLater(), () => _tirer.Tirer(id, "Bernard"));
         After(1.SecondsLater(), () => _tirer.Tirer(id, "Bernard"));
