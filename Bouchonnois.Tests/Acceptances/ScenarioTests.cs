@@ -1,5 +1,5 @@
-using Bouchonnois.Service;
 using Bouchonnois.Tests.Doubles;
+using Bouchonnois.UseCases;
 
 namespace Bouchonnois.Tests.Acceptances;
 
