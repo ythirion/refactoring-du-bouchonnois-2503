@@ -59,7 +59,6 @@ public class ScenarioTests
         After(1.SecondsLater(), () => _tirer.Tirer(id, "Bernard"));
         After(19.MinutesLater(), () => _tirerSurGalinette.TirerSurUneGalinette(id, "Robert"));
         After(30.MinutesLater(), () => _terminerLaPartie.TerminerLaPartie(id));
-        // @formatter:on
 
         await Verify(_consulterStatus.ConsulterStatus(id));
     }
