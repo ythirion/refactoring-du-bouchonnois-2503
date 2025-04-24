@@ -3,12 +3,12 @@ using Bouchonnois.Service.Exceptions;
 
 namespace Bouchonnois.Service;
 
-public class TerminerLaPartieUseCase
+public class TerminerLaPartieDeChasseUseCase
 {
     private readonly IPartieDeChasseRepository _repository;
     private readonly Func<DateTime> _timeProvider;
 
-    public TerminerLaPartieUseCase(IPartieDeChasseRepository repository, Func<DateTime> timeProvider)
+    public TerminerLaPartieDeChasseUseCase(IPartieDeChasseRepository repository, Func<DateTime> timeProvider)
     {
         _repository = repository;
         _timeProvider = timeProvider;

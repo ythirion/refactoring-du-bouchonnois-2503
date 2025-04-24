@@ -8,7 +8,7 @@ namespace Bouchonnois.Service
         private readonly TirerUseCase _tirerUseCase;
         private readonly PrendreLapéroUseCase _prendreLapéroUseCase;
         private readonly ReprendreLaPartieUseCase _reprendreLaPartieUseCase;
-        private readonly TerminerLaPartieUseCase _terminerLaPartieUseCase;
+        private readonly TerminerLaPartieDeChasseUseCase _terminerLaPartieDeChasseUseCase;
         private readonly ConsulterStatusUseCase _consulterStatusUseCase;
 
         public PartieDeChasseService(
@@ -16,7 +16,7 @@ namespace Bouchonnois.Service
             Func<DateTime> timeProvider)
         {
             _consulterStatusUseCase = new ConsulterStatusUseCase(repository);
-            _terminerLaPartieUseCase = new TerminerLaPartieUseCase(repository, timeProvider);
+            _terminerLaPartieDeChasseUseCase = new TerminerLaPartieDeChasseUseCase(repository, timeProvider);
             _reprendreLaPartieUseCase = new ReprendreLaPartieUseCase(repository, timeProvider);
             _prendreLapéroUseCase = new PrendreLapéroUseCase(repository, timeProvider);
             _tirerUseCase = new TirerUseCase(repository, timeProvider);
@@ -32,7 +32,7 @@ namespace Bouchonnois.Service
 
         public void ReprendreLaPartie(Guid id) => _reprendreLaPartieUseCase.ReprendreLaPartie(id);
 
-        public string TerminerLaPartie(Guid id) => _terminerLaPartieUseCase.TerminerLaPartie(id);
+        public string TerminerLaPartie(Guid id) => _terminerLaPartieDeChasseUseCase.TerminerLaPartie(id);
 
         public string ConsulterStatus(Guid id) => _consulterStatusUseCase.ConsulterStatus(id);
     }
