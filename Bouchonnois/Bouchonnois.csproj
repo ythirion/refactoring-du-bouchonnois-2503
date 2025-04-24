@@ -7,8 +7,4 @@
         <LangVersion>latestmajor</LangVersion>
     </PropertyGroup>
 
-    <ItemGroup>
-      <Folder Include="Repository\" />
-    </ItemGroup>
-
 </Project>
