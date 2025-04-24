@@ -7,7 +7,6 @@ namespace Bouchonnois.Service
     {
         private readonly IPartieDeChasseRepository _repository;
         private readonly Func<DateTime> _timeProvider;
-        private readonly TirerSurGalinetteUseCase _tirerSurGalinetteUseCase;
 
         public PartieDeChasseService(
             IPartieDeChasseRepository repository,
@@ -15,12 +14,6 @@ namespace Bouchonnois.Service
         {
             _repository = repository;
             _timeProvider = timeProvider;
-            _tirerSurGalinetteUseCase = new TirerSurGalinetteUseCase(repository, timeProvider);
-        }
-
-        public TirerSurGalinetteUseCase TirerSurGalinetteUseCase
-        {
-            get { return _tirerSurGalinetteUseCase; }
         }
 
         public Guid Demarrer((string nom, int nbGalinettes) terrainDeChasse, List<(string nom, int nbBalles)> chasseurs)

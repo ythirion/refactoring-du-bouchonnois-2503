@@ -7,9 +7,15 @@ public class ScenarioTests
 {
     private readonly PartieDeChasseRepositoryForTests _repository = new();
     private readonly PartieDeChasseService _;
+    private readonly TirerSurGalinetteUseCase _tirerSurGalinetteUseCase;
     private DateTime _time = new(2024, 4, 25, 9, 0, 0);
 
-    public ScenarioTests() => _ = new PartieDeChasseService(_repository, () => _time);
+    public ScenarioTests()
+    {
+        _ = new PartieDeChasseService(_repository, () => _time);
+        _tirerSurGalinetteUseCase = new TirerSurGalinetteUseCase(_repository, () => _time);
+    }
+
 
     [Fact]
     public async Task DéroulerUnePartie()
@@ -25,13 +31,13 @@ public class ScenarioTests
         var id = _.Demarrer(terrainDeChasse, chasseurs);
 
         After(10.MinutesLater(), () => _.Tirer(id, "Dédé"));
-        After(30.MinutesLater(), () => _.TirerSurGalinetteUseCase.TirerSurUneGalinette(id, "Robert"));
+        After(30.MinutesLater(), () => _tirerSurGalinetteUseCase.TirerSurUneGalinette(id, "Robert"));
         After(20.MinutesLater(), () => _.PrendreLapéro(id));
         After(1.HoursLater(), () => _.ReprendreLaPartie(id));
         After(2.MinutesLater(), () => _.Tirer(id, "Bernard"));
         After(1.MinutesLater(), () => _.Tirer(id, "Bernard"));
-        After(1.MinutesLater(), () => _.TirerSurGalinetteUseCase.TirerSurUneGalinette(id, "Dédé"));
-        After(26.MinutesLater(), () => _.TirerSurGalinetteUseCase.TirerSurUneGalinette(id, "Robert"));
+        After(1.MinutesLater(), () => _tirerSurGalinetteUseCase.TirerSurUneGalinette(id, "Dédé"));
+        After(26.MinutesLater(), () => _tirerSurGalinetteUseCase.TirerSurUneGalinette(id, "Robert"));
         After(10.MinutesLater(), () => _.PrendreLapéro(id));
         After(170.MinutesLater(), () => _.ReprendreLaPartie(id));
         After(11.MinutesLater(), () => _.Tirer(id, "Bernard"));
@@ -41,7 +47,7 @@ public class ScenarioTests
         After(1.SecondsLater(), () => _.Tirer(id, "Bernard"));
         After(1.SecondsLater(), () => _.Tirer(id, "Bernard"));
         After(1.SecondsLater(), () => _.Tirer(id, "Bernard"));
-        After(19.MinutesLater(), () => _.TirerSurGalinetteUseCase.TirerSurUneGalinette(id, "Robert"));
+        After(19.MinutesLater(), () => _tirerSurGalinetteUseCase.TirerSurUneGalinette(id, "Robert"));
         After(30.MinutesLater(), () => _.TerminerLaPartie(id));
         // @formatter:on
 
