@@ -10,7 +10,7 @@ namespace Bouchonnois.Tests.Architecture
     {
         private static readonly ArchUnitNET.Domain.Architecture Architecture =
             new ArchLoader()
-                .LoadAssemblies(typeof(PartieDeChasseService).Assembly)
+                .LoadAssemblies(typeof(CoreModule).Assembly)
                 .Build();
 
         public static void Check(this IArchRule rule) => rule.Check(Architecture);
