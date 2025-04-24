@@ -12,7 +12,7 @@ public class ConsulterStatusUseCase
         _repository = repository;
     }
 
-    public string ConsulterStatus(Guid id)
+    public string Handle(Guid id)
     {
         var partieDeChasse = _repository.GetById(id);
 

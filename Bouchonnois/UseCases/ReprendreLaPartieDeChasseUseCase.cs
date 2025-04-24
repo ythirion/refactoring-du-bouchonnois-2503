@@ -14,7 +14,7 @@ public class ReprendreLaPartieDeChasseUseCase
         _timeProvider = timeProvider;
     }
 
-    public void ReprendreLaPartie(Guid id)
+    public void Handle(Guid id)
     {
         var partieDeChasse = _repository.GetById(id);
 

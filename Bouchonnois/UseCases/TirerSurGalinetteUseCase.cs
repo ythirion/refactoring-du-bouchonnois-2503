@@ -14,7 +14,7 @@ public class TirerSurGalinetteUseCase
         _repository = repository;
     }
 
-    public void TirerSurUneGalinette(Guid id, string chasseur)
+    public void Handle(Guid id, string chasseur)
     {
         var partieDeChasse = _repository.GetById(id);
 

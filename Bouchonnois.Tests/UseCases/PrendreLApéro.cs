@@ -19,7 +19,7 @@ public class PrendreLApéro : UseCaseTest
             UnePartieDeChasse()
                 .EnCours());
 
-        _useCase.PrendreLapéro(id);
+        _useCase.Handle(id);
 
         Repository.SavedPartieDeChasse()
             .DevraitEtreALApéro()
@@ -31,7 +31,7 @@ public class PrendreLApéro : UseCaseTest
     {
         var id = UnePartieDeChasseInexistante();
 
-        var apéroQuandPartieExistePas = () => _useCase.PrendreLapéro(id);
+        var apéroQuandPartieExistePas = () => _useCase.Handle(id);
 
         apéroQuandPartieExistePas.Should().Throw<LaPartieDeChasseNexistePas>();
 
@@ -43,7 +43,7 @@ public class PrendreLApéro : UseCaseTest
     {
         var id = UnePartieDeChasseExistante(UnePartieDeChasse().ALApéro());
 
-        var prendreLApéroQuandOnPrendDéjàLapéro = () => _useCase.PrendreLapéro(id);
+        var prendreLApéroQuandOnPrendDéjàLapéro = () => _useCase.Handle(id);
 
         prendreLApéroQuandOnPrendDéjàLapéro.Should().Throw<OnEstDéjàEnTrainDePrendreLapéro>();
 
@@ -55,7 +55,7 @@ public class PrendreLApéro : UseCaseTest
     {
         var id = UnePartieDeChasseExistante(UnePartieDeChasse().Terminée());
 
-        var prendreLapéroQuandTerminée = () => _useCase.PrendreLapéro(id);
+        var prendreLapéroQuandTerminée = () => _useCase.Handle(id);
 
         prendreLapéroQuandTerminée.Should().Throw<OnPrendPasLapéroQuandLaPartieEstTerminée>();
 

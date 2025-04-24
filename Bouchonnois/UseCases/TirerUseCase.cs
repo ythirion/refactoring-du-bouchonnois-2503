@@ -14,7 +14,7 @@ public class TirerUseCase
         _timeProvider = timeProvider;
     }
 
-    public void Tirer(Guid id, string chasseur)
+    public void Handle(Guid id, string chasseur)
     {
         var partieDeChasse = _repository.GetById(id);
 

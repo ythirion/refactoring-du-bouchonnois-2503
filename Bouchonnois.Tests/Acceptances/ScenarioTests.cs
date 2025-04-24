@@ -38,29 +38,29 @@ public class ScenarioTests
         };
         var terrainDeChasse = ("Pitibon sur Sauldre", 4);
 
-        var id = _demarrerUnePartie.Demarrer(terrainDeChasse, chasseurs);
+        var id = _demarrerUnePartie.Handle(terrainDeChasse, chasseurs);
 
-        After(10.MinutesLater(), () => _tirer.Tirer(id, "Dédé"));
-        After(30.MinutesLater(), () => _tirerSurGalinette.TirerSurUneGalinette(id, "Robert"));
-        After(20.MinutesLater(), () => _prendreLapéro.PrendreLapéro(id));
-        After(1.HoursLater(), () => _reprendreLaPartie.ReprendreLaPartie(id));
-        After(2.MinutesLater(), () => _tirer.Tirer(id, "Bernard"));
-        After(1.MinutesLater(), () => _tirer.Tirer(id, "Bernard"));
-        After(1.MinutesLater(), () => _tirerSurGalinette.TirerSurUneGalinette(id, "Dédé"));
-        After(26.MinutesLater(), () => _tirerSurGalinette.TirerSurUneGalinette(id, "Robert"));
-        After(10.MinutesLater(), () => _prendreLapéro.PrendreLapéro(id));
-        After(170.MinutesLater(), () => _reprendreLaPartie.ReprendreLaPartie(id));
-        After(11.MinutesLater(), () => _tirer.Tirer(id, "Bernard"));
-        After(1.SecondsLater(), () => _tirer.Tirer(id, "Bernard"));
-        After(1.SecondsLater(), () => _tirer.Tirer(id, "Bernard"));
-        After(1.SecondsLater(), () => _tirer.Tirer(id, "Bernard"));
-        After(1.SecondsLater(), () => _tirer.Tirer(id, "Bernard"));
-        After(1.SecondsLater(), () => _tirer.Tirer(id, "Bernard"));
-        After(1.SecondsLater(), () => _tirer.Tirer(id, "Bernard"));
-        After(19.MinutesLater(), () => _tirerSurGalinette.TirerSurUneGalinette(id, "Robert"));
-        After(30.MinutesLater(), () => _terminerLaPartie.TerminerLaPartie(id));
+        After(10.MinutesLater(), () => _tirer.Handle(id, "Dédé"));
+        After(30.MinutesLater(), () => _tirerSurGalinette.Handle(id, "Robert"));
+        After(20.MinutesLater(), () => _prendreLapéro.Handle(id));
+        After(1.HoursLater(), () => _reprendreLaPartie.Handle(id));
+        After(2.MinutesLater(), () => _tirer.Handle(id, "Bernard"));
+        After(1.MinutesLater(), () => _tirer.Handle(id, "Bernard"));
+        After(1.MinutesLater(), () => _tirerSurGalinette.Handle(id, "Dédé"));
+        After(26.MinutesLater(), () => _tirerSurGalinette.Handle(id, "Robert"));
+        After(10.MinutesLater(), () => _prendreLapéro.Handle(id));
+        After(170.MinutesLater(), () => _reprendreLaPartie.Handle(id));
+        After(11.MinutesLater(), () => _tirer.Handle(id, "Bernard"));
+        After(1.SecondsLater(), () => _tirer.Handle(id, "Bernard"));
+        After(1.SecondsLater(), () => _tirer.Handle(id, "Bernard"));
+        After(1.SecondsLater(), () => _tirer.Handle(id, "Bernard"));
+        After(1.SecondsLater(), () => _tirer.Handle(id, "Bernard"));
+        After(1.SecondsLater(), () => _tirer.Handle(id, "Bernard"));
+        After(1.SecondsLater(), () => _tirer.Handle(id, "Bernard"));
+        After(19.MinutesLater(), () => _tirerSurGalinette.Handle(id, "Robert"));
+        After(30.MinutesLater(), () => _terminerLaPartie.Handle(id));
 
-        await Verify(_consulterStatus.ConsulterStatus(id));
+        await Verify(_consulterStatus.Handle(id));
     }
 
     private void After(TimeSpan time, Action scenarioAction)

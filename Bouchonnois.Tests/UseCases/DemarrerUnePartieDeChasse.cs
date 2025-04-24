@@ -73,7 +73,7 @@ public class DemarrerUnePartieDeChasse : UseCaseTest
 
         var terrainDeChasse = ("Pitibon sur Sauldre", 3);
 
-        var id = _useCase.Demarrer(terrainDeChasse, chasseurs);
+        var id = _useCase.Handle(terrainDeChasse, chasseurs);
 
         Repository.SavedPartieDeChasse()
             .Should()
@@ -107,7 +107,7 @@ public class DemarrerUnePartieDeChasse : UseCaseTest
         => DémarrerLaPartieAvecSuccès(terrainRicheEnGalinettes, chasseursAvecDesBalles);
 
     private Property DémarrerLaPartieAvecSuccès(Terrain terrainDeChasse, GroupDeChasseurs chasseurs)
-        => (_useCase.Demarrer(terrainDeChasse, chasseurs.ToList()) == Repository.SavedPartieDeChasse().Id)
+        => (_useCase.Handle(terrainDeChasse, chasseurs.ToList()) == Repository.SavedPartieDeChasse().Id)
             .Label("Démarrer la partie avec succès");
 
     [Fact]
@@ -116,7 +116,7 @@ public class DemarrerUnePartieDeChasse : UseCaseTest
         var chasseurs = new List<(string, int)>();
         var terrainDeChasse = ("Pitibon sur Sauldre", 3);
 
-        var demarrerPartieSansChasseurs = () => _useCase.Demarrer(terrainDeChasse, chasseurs);
+        var demarrerPartieSansChasseurs = () => _useCase.Handle(terrainDeChasse, chasseurs);
 
         demarrerPartieSansChasseurs.Should().Throw<ImpossibleDeDémarrerUnePartieSansChasseur>();
 
@@ -129,7 +129,7 @@ public class DemarrerUnePartieDeChasse : UseCaseTest
         var chasseurs = new List<(string, int)>();
         var terrainDeChasse = ("Pitibon sur Sauldre", 0);
 
-        var demarrerPartieSansChasseurs = () => _useCase.Demarrer(terrainDeChasse, chasseurs);
+        var demarrerPartieSansChasseurs = () => _useCase.Handle(terrainDeChasse, chasseurs);
 
         demarrerPartieSansChasseurs.Should().Throw<ImpossibleDeDémarrerUnePartieSansGalinettes>();
 
@@ -147,7 +147,7 @@ public class DemarrerUnePartieDeChasse : UseCaseTest
 
         var terrainDeChasse = ("Pitibon sur Sauldre", 3);
 
-        var demarrerPartieAvecChasseurSansBalle = () => _useCase.Demarrer(terrainDeChasse, chasseurs);
+        var demarrerPartieAvecChasseurSansBalle = () => _useCase.Handle(terrainDeChasse, chasseurs);
 
         demarrerPartieAvecChasseurSansBalle.Should().Throw<ImpossibleDeDémarrerUnePartieAvecUnChasseurSansBalle>();
 

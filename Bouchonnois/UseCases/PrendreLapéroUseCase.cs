@@ -14,7 +14,7 @@ public class PrendreLapéroUseCase
         _timeProvider = timeProvider;
     }
 
-    public void PrendreLapéro(Guid id)
+    public void Handle(Guid id)
     {
         var partieDeChasse = _repository.GetById(id);
 

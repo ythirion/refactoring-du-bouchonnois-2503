@@ -14,7 +14,7 @@ public class DemarrerUnePartieDeChasseUseCase
         _timeProvider = timeProvider;
     }
 
-    public Guid Demarrer((string nom, int nbGalinettes) terrainDeChasse, List<(string nom, int nbBalles)> chasseurs)
+    public Guid Handle((string nom, int nbGalinettes) terrainDeChasse, List<(string nom, int nbBalles)> chasseurs)
     {
         if (terrainDeChasse.nbGalinettes <= 0)
         {
