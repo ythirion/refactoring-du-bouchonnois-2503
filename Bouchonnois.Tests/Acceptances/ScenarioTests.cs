@@ -25,13 +25,13 @@ public class ScenarioTests
         var id = _.Demarrer(terrainDeChasse, chasseurs);
 
         After(10.MinutesLater(), () => _.Tirer(id, "Dédé"));
-        After(30.MinutesLater(), () => _.TirerSurUneGalinette(id, "Robert"));
+        After(30.MinutesLater(), () => _.TirerSurGalinetteUseCase.TirerSurUneGalinette(id, "Robert"));
         After(20.MinutesLater(), () => _.PrendreLapéro(id));
         After(1.HoursLater(), () => _.ReprendreLaPartie(id));
         After(2.MinutesLater(), () => _.Tirer(id, "Bernard"));
         After(1.MinutesLater(), () => _.Tirer(id, "Bernard"));
-        After(1.MinutesLater(), () => _.TirerSurUneGalinette(id, "Dédé"));
-        After(26.MinutesLater(), () => _.TirerSurUneGalinette(id, "Robert"));
+        After(1.MinutesLater(), () => _.TirerSurGalinetteUseCase.TirerSurUneGalinette(id, "Dédé"));
+        After(26.MinutesLater(), () => _.TirerSurGalinetteUseCase.TirerSurUneGalinette(id, "Robert"));
         After(10.MinutesLater(), () => _.PrendreLapéro(id));
         After(170.MinutesLater(), () => _.ReprendreLaPartie(id));
         After(11.MinutesLater(), () => _.Tirer(id, "Bernard"));
@@ -41,7 +41,7 @@ public class ScenarioTests
         After(1.SecondsLater(), () => _.Tirer(id, "Bernard"));
         After(1.SecondsLater(), () => _.Tirer(id, "Bernard"));
         After(1.SecondsLater(), () => _.Tirer(id, "Bernard"));
-        After(19.MinutesLater(), () => _.TirerSurUneGalinette(id, "Robert"));
+        After(19.MinutesLater(), () => _.TirerSurGalinetteUseCase.TirerSurUneGalinette(id, "Robert"));
         After(30.MinutesLater(), () => _.TerminerLaPartie(id));
         // @formatter:on
 
