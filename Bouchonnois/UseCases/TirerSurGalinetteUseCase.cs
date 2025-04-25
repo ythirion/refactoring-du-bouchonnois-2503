@@ -1,7 +1,7 @@
 using Bouchonnois.Domain;
-using Bouchonnois.Service.Exceptions;
+using Bouchonnois.UseCases.Exceptions;
 
-namespace Bouchonnois.Service;
+namespace Bouchonnois.UseCases;
 
 public class TirerSurGalinetteUseCase
 {
@@ -14,7 +14,7 @@ public class TirerSurGalinetteUseCase
         _repository = repository;
     }
 
-    public void TirerSurUneGalinette(Guid id, string chasseur)
+    public void Handle(Guid id, string chasseur)
     {
         var partieDeChasse = _repository.GetById(id);
 

@@ -1,12 +1,17 @@
 using Bouchonnois.Domain;
-using Bouchonnois.Service.Exceptions;
 using Bouchonnois.Tests.UseCases.Common;
+using Bouchonnois.UseCases;
+using Bouchonnois.UseCases.Exceptions;
 using static Bouchonnois.Tests.Builders.PartieDeChasseBuilder;
 
 namespace Bouchonnois.Tests.UseCases;
 
 public class ConsulterStatus : UseCaseTest
 {
+    private readonly ConsulterStatusUseCase _useCase;
+
+    public ConsulterStatus() => _useCase = new ConsulterStatusUseCase(Repository);
+
     [Fact]
     public void QuandLaPartieVientDeDémarrer()
     {
@@ -16,9 +21,8 @@ public class ConsulterStatus : UseCaseTest
                     new Event(
                         new DateTime(2024, 4, 25, 9, 0, 12),
                         "La partie de chasse commence à Pitibon sur Sauldre avec Dédé (20 balles), Bernard (8 balles), Robert (12 balles)")));
-
-
-        var status = Service.ConsulterStatus(id);
+        
+        var status = _useCase.Handle(id);
 
         status.Should()
             .Be(
@@ -55,7 +59,7 @@ public class ConsulterStatus : UseCaseTest
                     new Event(new DateTime(2024, 04, 25, 15, 30, 00), "La partie de chasse est terminée, vainqueur :  Robert - 3 galinettes")));
         // @formatter:on
 
-        var status = Service.ConsulterStatus(id);
+        var status = _useCase.Handle(id);
 
         status.Should()
             .BeEquivalentTo(
@@ -88,11 +92,11 @@ public class ConsulterStatus : UseCaseTest
     public void EchoueCarPartieNexistePas()
     {
         var id = UnePartieDeChasseInexistante();
-    
-        var reprendrePartieQuandPartieExistePas = () => Service.ConsulterStatus(id);
+
+        var reprendrePartieQuandPartieExistePas = () => _useCase.Handle(id);
 
         reprendrePartieQuandPartieExistePas.Should().Throw<LaPartieDeChasseNexistePas>();
-        
+
         Repository.SavedPartieDeChasse().Should().BeNull();
     }
 }

@@ -1,5 +1,4 @@
 using Bouchonnois.Domain;
-using Bouchonnois.Service;
 
 namespace Bouchonnois.Tests.Builders;
 

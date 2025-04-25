@@ -1,12 +1,17 @@
-using Bouchonnois.Service.Exceptions;
 using Bouchonnois.Tests.UseCases.Common;
 using Bouchonnois.Tests.Verifications;
+using Bouchonnois.UseCases;
+using Bouchonnois.UseCases.Exceptions;
 using static Bouchonnois.Tests.Builders.PartieDeChasseBuilder;
 
 namespace Bouchonnois.Tests.UseCases;
 
 public class PrendreLApéro : UseCaseTest
 {
+    private readonly PrendreLapéroUseCase _useCase;
+
+    public PrendreLApéro() => _useCase = new PrendreLapéroUseCase(Repository, () => Now);
+
     [Fact]
     public void QuandLaPartieEstEnCours()
     {
@@ -14,7 +19,7 @@ public class PrendreLApéro : UseCaseTest
             UnePartieDeChasse()
                 .EnCours());
 
-        Service.PrendreLapéro(id);
+        _useCase.Handle(id);
 
         Repository.SavedPartieDeChasse()
             .DevraitEtreALApéro()
@@ -26,7 +31,7 @@ public class PrendreLApéro : UseCaseTest
     {
         var id = UnePartieDeChasseInexistante();
 
-        var apéroQuandPartieExistePas = () => Service.PrendreLapéro(id);
+        var apéroQuandPartieExistePas = () => _useCase.Handle(id);
 
         apéroQuandPartieExistePas.Should().Throw<LaPartieDeChasseNexistePas>();
 
@@ -38,7 +43,7 @@ public class PrendreLApéro : UseCaseTest
     {
         var id = UnePartieDeChasseExistante(UnePartieDeChasse().ALApéro());
 
-        var prendreLApéroQuandOnPrendDéjàLapéro = () => Service.PrendreLapéro(id);
+        var prendreLApéroQuandOnPrendDéjàLapéro = () => _useCase.Handle(id);
 
         prendreLApéroQuandOnPrendDéjàLapéro.Should().Throw<OnEstDéjàEnTrainDePrendreLapéro>();
 
@@ -50,7 +55,7 @@ public class PrendreLApéro : UseCaseTest
     {
         var id = UnePartieDeChasseExistante(UnePartieDeChasse().Terminée());
 
-        var prendreLapéroQuandTerminée = () => Service.PrendreLapéro(id);
+        var prendreLapéroQuandTerminée = () => _useCase.Handle(id);
 
         prendreLapéroQuandTerminée.Should().Throw<OnPrendPasLapéroQuandLaPartieEstTerminée>();
 
