@@ -18,7 +18,7 @@ public class ScenarioTests
 
     public ScenarioTests()
     {
-        _ = new PartieDeChasseService(_repository, () => _time);
+        _ = new PartieDeChasseService(_repository);
 
         _tirerSurGalinetteUseCase = new TirerSurGalinetteUseCase(_repository, () => _time);
         _demarrerUseCase = new DemarrerUseCase(_repository, () => _time);

@@ -19,7 +19,7 @@ public class UseCaseTest
     {
         Now = DateTime.Now;
         Repository = new PartieDeChasseRepositoryForTests();
-        Service = new PartieDeChasseService(Repository, () => Now);
+        Service = new PartieDeChasseService(Repository);
     }
 
     protected Guid UnePartieDeChasseExistante(PartieDeChasseBuilder partieDeChasseBuilder)

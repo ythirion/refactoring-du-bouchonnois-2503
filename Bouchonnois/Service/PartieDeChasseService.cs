@@ -6,14 +6,10 @@ namespace Bouchonnois.Service;
 public class PartieDeChasseService
 {
     private readonly IPartieDeChasseRepository _repository;
-    private readonly Func<DateTime> _timeProvider;
 
-    public PartieDeChasseService(
-        IPartieDeChasseRepository repository,
-        Func<DateTime> timeProvider)
+    public PartieDeChasseService(IPartieDeChasseRepository repository)
     {
         _repository = repository;
-        _timeProvider = timeProvider;
     }
 
     public string ConsulterStatus(Guid id)
