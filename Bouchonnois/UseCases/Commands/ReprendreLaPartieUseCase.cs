@@ -6,7 +6,7 @@ namespace Bouchonnois.UseCases.Commands;
 public class ReprendreLaPartieUseCase(IPartieDeChasseRepository repository, Func<DateTime> timeProvider)
 {
 
-    public void ReprendreLaPartie(Guid id)
+    public void Handle(Guid id)
     {
         var partieDeChasse = repository.GetById(id);
 

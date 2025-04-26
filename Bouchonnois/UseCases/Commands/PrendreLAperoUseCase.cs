@@ -6,7 +6,7 @@ namespace Bouchonnois.UseCases.Commands;
 public class PrendreLAperoUseCase(IPartieDeChasseRepository repository, Func<DateTime> timeProvider)
 {
 
-    public void PrendreLapéro(Guid id)
+    public void Handle(Guid id)
     {
         var partieDeChasse = repository.GetById(id);
 

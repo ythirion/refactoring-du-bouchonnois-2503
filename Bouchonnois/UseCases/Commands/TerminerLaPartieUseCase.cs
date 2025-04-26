@@ -6,7 +6,7 @@ namespace Bouchonnois.UseCases.Commands;
 public class TerminerLaPartieUseCase(IPartieDeChasseRepository repository, Func<DateTime> timeProvider)
 {
 
-    public string TerminerLaPartie(Guid id)
+    public string Handle(Guid id)
     {
         var partieDeChasse = repository.GetById(id);
 

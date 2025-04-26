@@ -27,7 +27,7 @@ public class ConsulterStatus : UseCaseTest
                         "La partie de chasse commence à Pitibon sur Sauldre avec Dédé (20 balles), Bernard (8 balles), Robert (12 balles)")));
 
 
-        var status = _consulterStatusUseCase.ConsulterStatus(id);
+        var status = _consulterStatusUseCase.Handle(id);
 
         status.Should()
             .Be(
@@ -64,7 +64,7 @@ public class ConsulterStatus : UseCaseTest
                     new Event(new DateTime(2024, 04, 25, 15, 30, 00), "La partie de chasse est terminée, vainqueur :  Robert - 3 galinettes")));
         // @formatter:on
 
-        var status = _consulterStatusUseCase.ConsulterStatus(id);
+        var status = _consulterStatusUseCase.Handle(id);
 
         status.Should()
             .BeEquivalentTo(
@@ -98,7 +98,7 @@ public class ConsulterStatus : UseCaseTest
     {
         var id = UnePartieDeChasseInexistante();
 
-        var reprendrePartieQuandPartieExistePas = () => _consulterStatusUseCase.ConsulterStatus(id);
+        var reprendrePartieQuandPartieExistePas = () => _consulterStatusUseCase.Handle(id);
 
         reprendrePartieQuandPartieExistePas.Should().Throw<LaPartieDeChasseNexistePas>();
 

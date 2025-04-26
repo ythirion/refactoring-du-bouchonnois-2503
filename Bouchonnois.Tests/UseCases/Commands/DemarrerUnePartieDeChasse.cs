@@ -38,7 +38,7 @@ public class DemarrerUnePartieDeChasse : UseCaseTest
 
         var terrainDeChasse = ("Pitibon sur Sauldre", 3);
 
-        var id = sut.Demarrer(terrainDeChasse, chasseurs);
+        var id = sut.Handle(terrainDeChasse, chasseurs);
 
         Repository.SavedPartieDeChasse()
             .Should()
@@ -72,7 +72,7 @@ public class DemarrerUnePartieDeChasse : UseCaseTest
         => DémarrerLaPartieAvecSuccès(terrainRicheEnGalinettes, chasseursAvecDesBalles);
 
     private Property DémarrerLaPartieAvecSuccès(Terrain terrainDeChasse, GroupDeChasseurs chasseurs)
-        => (sut.Demarrer(terrainDeChasse, chasseurs.ToList()) == Repository.SavedPartieDeChasse().Id)
+        => (sut.Handle(terrainDeChasse, chasseurs.ToList()) == Repository.SavedPartieDeChasse().Id)
             .Label("Démarrer la partie avec succès");
 
     [Fact]
@@ -81,7 +81,7 @@ public class DemarrerUnePartieDeChasse : UseCaseTest
         var chasseurs = new List<(string, int)>();
         var terrainDeChasse = ("Pitibon sur Sauldre", 3);
 
-        var demarrerPartieSansChasseurs = () => sut.Demarrer(terrainDeChasse, chasseurs);
+        var demarrerPartieSansChasseurs = () => sut.Handle(terrainDeChasse, chasseurs);
 
         demarrerPartieSansChasseurs.Should().Throw<ImpossibleDeDémarrerUnePartieSansChasseur>();
 
@@ -94,7 +94,7 @@ public class DemarrerUnePartieDeChasse : UseCaseTest
         var chasseurs = new List<(string, int)>();
         var terrainDeChasse = ("Pitibon sur Sauldre", 0);
 
-        var demarrerPartieSansChasseurs = () => sut.Demarrer(terrainDeChasse, chasseurs);
+        var demarrerPartieSansChasseurs = () => sut.Handle(terrainDeChasse, chasseurs);
 
         demarrerPartieSansChasseurs.Should().Throw<ImpossibleDeDémarrerUnePartieSansGalinettes>();
 
@@ -112,7 +112,7 @@ public class DemarrerUnePartieDeChasse : UseCaseTest
 
         var terrainDeChasse = ("Pitibon sur Sauldre", 3);
 
-        var demarrerPartieAvecChasseurSansBalle = () => sut.Demarrer(terrainDeChasse, chasseurs);
+        var demarrerPartieAvecChasseurSansBalle = () => sut.Handle(terrainDeChasse, chasseurs);
 
         demarrerPartieAvecChasseurSansBalle.Should().Throw<ImpossibleDeDémarrerUnePartieAvecUnChasseurSansBalle>();
 

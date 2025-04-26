@@ -6,7 +6,7 @@ namespace Bouchonnois.UseCases.Commands;
 public class TirerUseCase(IPartieDeChasseRepository repository, Func<DateTime> timeProvider)
 {
 
-    public void Tirer(Guid id, string chasseur)
+    public void Handle(Guid id, string chasseur)
     {
         var partieDeChasse = repository.GetById(id);
 

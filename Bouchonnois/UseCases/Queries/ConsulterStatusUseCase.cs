@@ -5,7 +5,7 @@ namespace Bouchonnois.UseCases.Queries;
 
 public class ConsulterStatusUseCase(IPartieDeChasseRepository repository)
 {
-    public string ConsulterStatus(Guid id)
+    public string Handle(Guid id)
     {
         var partieDeChasse = repository.GetById(id);
 

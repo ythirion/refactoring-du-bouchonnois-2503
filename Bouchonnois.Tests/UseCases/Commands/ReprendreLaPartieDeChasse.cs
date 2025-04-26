@@ -21,7 +21,7 @@ public class ReprendreLaPartieDeChasse : UseCaseTest
             UnePartieDeChasse()
                 .ALApéro());
 
-        _reprendreLaPartieUseCase.ReprendreLaPartie(id);
+        _reprendreLaPartieUseCase.Handle(id);
 
         Repository.SavedPartieDeChasse()
             .DevraitEtreEnCours()
@@ -33,7 +33,7 @@ public class ReprendreLaPartieDeChasse : UseCaseTest
     {
         var id = UnePartieDeChasseInexistante();
 
-        var reprendrePartieQuandPartieExistePas = () => _reprendreLaPartieUseCase.ReprendreLaPartie(id);
+        var reprendrePartieQuandPartieExistePas = () => _reprendreLaPartieUseCase.Handle(id);
 
         reprendrePartieQuandPartieExistePas.Should().Throw<LaPartieDeChasseNexistePas>();
 
@@ -45,7 +45,7 @@ public class ReprendreLaPartieDeChasse : UseCaseTest
     {
         var id = UnePartieDeChasseExistante(UnePartieDeChasse().EnCours());
 
-        var reprendreLaPartieQuandChasseEnCours = () => _reprendreLaPartieUseCase.ReprendreLaPartie(id);
+        var reprendreLaPartieQuandChasseEnCours = () => _reprendreLaPartieUseCase.Handle(id);
 
         reprendreLaPartieQuandChasseEnCours.Should().Throw<LaChasseEstDéjàEnCours>();
 
@@ -57,7 +57,7 @@ public class ReprendreLaPartieDeChasse : UseCaseTest
     {
         var id = UnePartieDeChasseExistante(UnePartieDeChasse().Terminée());
 
-        var prendreLapéroQuandTerminée = () => _reprendreLaPartieUseCase.ReprendreLaPartie(id);
+        var prendreLapéroQuandTerminée = () => _reprendreLaPartieUseCase.Handle(id);
 
         prendreLapéroQuandTerminée.Should().Throw<QuandCestFiniCestFini>();
 
