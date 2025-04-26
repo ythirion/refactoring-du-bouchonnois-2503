@@ -9,11 +9,14 @@ public class ScenarioTests
     private readonly PartieDeChasseService _;
     private readonly TirerSurGalinetteUseCase _tirerSurGalinetteUseCase;
     private DateTime _time = new(2024, 4, 25, 9, 0, 0);
+    private readonly DemarrerUseCase _demarreUseCase;
 
     public ScenarioTests()
     {
         _ = new PartieDeChasseService(_repository, () => _time);
+
         _tirerSurGalinetteUseCase = new TirerSurGalinetteUseCase(_repository, () => _time);
+        _demarreUseCase = new DemarrerUseCase(_repository, () => _time);
     }
 
 
@@ -28,7 +31,7 @@ public class ScenarioTests
         };
         var terrainDeChasse = ("Pitibon sur Sauldre", 4);
 
-        var id = _.Demarrer(terrainDeChasse, chasseurs);
+        var id = _demarreUseCase.Demarrer(terrainDeChasse, chasseurs);
 
         After(10.MinutesLater(), () => _.Tirer(id, "Dédé"));
         After(30.MinutesLater(), () => _tirerSurGalinetteUseCase.TirerSurUneGalinette(id, "Robert"));
