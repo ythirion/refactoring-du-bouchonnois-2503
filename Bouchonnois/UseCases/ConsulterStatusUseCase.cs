@@ -1,17 +1,15 @@
-using Bouchonnois.Domain;
-using Bouchonnois.Service.Exceptions;
+﻿using Bouchonnois.Domain;
+using Bouchonnois.UseCases.Exceptions;
 
-namespace Bouchonnois.Service;
+namespace Bouchonnois.UseCases;
 
-public class PartieDeChasseService
+public class ConsulterStatusUseCase
 {
     private readonly IPartieDeChasseRepository _repository;
-
-    public PartieDeChasseService(IPartieDeChasseRepository repository)
+    public ConsulterStatusUseCase(IPartieDeChasseRepository repository)
     {
         _repository = repository;
     }
-
     public string ConsulterStatus(Guid id)
     {
         var partieDeChasse = _repository.GetById(id);

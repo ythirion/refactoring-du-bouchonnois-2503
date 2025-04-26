@@ -1,7 +1,7 @@
 ﻿using Bouchonnois.Domain;
-using Bouchonnois.Service.Exceptions;
+using Bouchonnois.UseCases.Exceptions;
 
-namespace Bouchonnois.Service;
+namespace Bouchonnois.UseCases;
 
 public class TirerUseCase
 {

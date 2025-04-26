@@ -1,12 +1,11 @@
-using Bouchonnois.Service;
 using Bouchonnois.Tests.Doubles;
+using Bouchonnois.UseCases;
 
 namespace Bouchonnois.Tests.Acceptances;
 
 public class ScenarioTests
 {
     private readonly PartieDeChasseRepositoryForTests _repository = new();
-    private readonly PartieDeChasseService _;
     private DateTime _time = new(2024, 4, 25, 9, 0, 0);
 
     private readonly TirerSurGalinetteUseCase _tirerSurGalinetteUseCase;
@@ -15,17 +14,17 @@ public class ScenarioTests
     private readonly PrendreLAperoUseCase _prendreLAperoUseCase;
     private readonly ReprendreLaPartieUseCase _reprendreLaPartieUseCase;
     private readonly TerminerLaPartieUseCase _terminerLaPartieUseCase;
+    private readonly ConsulterStatusUseCase _consulterStatus;
 
     public ScenarioTests()
     {
-        _ = new PartieDeChasseService(_repository);
-
         _tirerSurGalinetteUseCase = new TirerSurGalinetteUseCase(_repository, () => _time);
         _demarrerUseCase = new DemarrerUseCase(_repository, () => _time);
         _tirerUseCase = new TirerUseCase(_repository, () => _time);
         _prendreLAperoUseCase = new PrendreLAperoUseCase(_repository, () => _time);
         _reprendreLaPartieUseCase = new ReprendreLaPartieUseCase(_repository, () => _time);
         _terminerLaPartieUseCase = new TerminerLaPartieUseCase(_repository, () => _time);
+        _consulterStatus = new ConsulterStatusUseCase(_repository);
     }
 
 
@@ -63,7 +62,7 @@ public class ScenarioTests
         After(30.MinutesLater(), () => _terminerLaPartieUseCase.TerminerLaPartie(id));
         // @formatter:on
 
-        await Verify(_.ConsulterStatus(id));
+        await Verify(_consulterStatus.ConsulterStatus(id));
     }
 
     private void After(TimeSpan time, Action scenarioAction)
