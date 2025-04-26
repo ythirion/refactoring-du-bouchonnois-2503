@@ -1,12 +1,22 @@
+using Bouchonnois.Service;
 using Bouchonnois.Service.Exceptions;
 using Bouchonnois.Tests.UseCases.Common;
 using Bouchonnois.Tests.Verifications;
+
 using static Bouchonnois.Tests.Builders.PartieDeChasseBuilder;
 
 namespace Bouchonnois.Tests.UseCases;
 
 public class PrendreLApéro : UseCaseTest
 {
+    private readonly PrendreLAperoUseCase _prendereLAperoUseCase;
+    public PrendreLApéro()
+    {
+        _prendereLAperoUseCase = new PrendreLAperoUseCase(
+            Repository,
+            () => Now
+        );
+    }
     [Fact]
     public void QuandLaPartieEstEnCours()
     {
@@ -14,7 +24,7 @@ public class PrendreLApéro : UseCaseTest
             UnePartieDeChasse()
                 .EnCours());
 
-        Service.PrendreLapéro(id);
+        _prendereLAperoUseCase.PrendreLapéro(id);
 
         Repository.SavedPartieDeChasse()
             .DevraitEtreALApéro()
@@ -26,7 +36,7 @@ public class PrendreLApéro : UseCaseTest
     {
         var id = UnePartieDeChasseInexistante();
 
-        var apéroQuandPartieExistePas = () => Service.PrendreLapéro(id);
+        var apéroQuandPartieExistePas = () => _prendereLAperoUseCase.PrendreLapéro(id);
 
         apéroQuandPartieExistePas.Should().Throw<LaPartieDeChasseNexistePas>();
 
@@ -38,7 +48,7 @@ public class PrendreLApéro : UseCaseTest
     {
         var id = UnePartieDeChasseExistante(UnePartieDeChasse().ALApéro());
 
-        var prendreLApéroQuandOnPrendDéjàLapéro = () => Service.PrendreLapéro(id);
+        var prendreLApéroQuandOnPrendDéjàLapéro = () => _prendereLAperoUseCase.PrendreLapéro(id);
 
         prendreLApéroQuandOnPrendDéjàLapéro.Should().Throw<OnEstDéjàEnTrainDePrendreLapéro>();
 
@@ -50,7 +60,7 @@ public class PrendreLApéro : UseCaseTest
     {
         var id = UnePartieDeChasseExistante(UnePartieDeChasse().Terminée());
 
-        var prendreLapéroQuandTerminée = () => Service.PrendreLapéro(id);
+        var prendreLapéroQuandTerminée = () => _prendereLAperoUseCase.PrendreLapéro(id);
 
         prendreLapéroQuandTerminée.Should().Throw<OnPrendPasLapéroQuandLaPartieEstTerminée>();
 
