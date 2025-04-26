@@ -16,30 +16,6 @@ public class PartieDeChasseService
         _timeProvider = timeProvider;
     }
 
-    public void ReprendreLaPartie(Guid id)
-    {
-        var partieDeChasse = _repository.GetById(id);
-
-        if (partieDeChasse == null)
-        {
-            throw new LaPartieDeChasseNexistePas();
-        }
-
-        if (partieDeChasse.Status == PartieStatus.EnCours)
-        {
-            throw new LaChasseEstDéjàEnCours();
-        }
-
-        if (partieDeChasse.Status == PartieStatus.Terminée)
-        {
-            throw new QuandCestFiniCestFini();
-        }
-
-        partieDeChasse.Status = PartieStatus.EnCours;
-        partieDeChasse.Events.Add(new Event(_timeProvider(), "Reprise de la chasse"));
-        _repository.Save(partieDeChasse);
-    }
-
     public string TerminerLaPartie(Guid id)
     {
         var partieDeChasse = _repository.GetById(id);
