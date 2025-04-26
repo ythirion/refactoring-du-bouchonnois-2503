@@ -1,6 +1,5 @@
-namespace Bouchonnois.UseCases.Exceptions
+namespace Bouchonnois.UseCases.Exceptions;
+
+public class ImpossibleDeDémarrerUnePartieSansChasseur : Exception
 {
-    public class ImpossibleDeDémarrerUnePartieSansChasseur : Exception
-    {
-    }
 }

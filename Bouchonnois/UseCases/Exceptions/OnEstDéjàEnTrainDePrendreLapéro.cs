@@ -1,6 +1,5 @@
-namespace Bouchonnois.UseCases.Exceptions
+namespace Bouchonnois.UseCases.Exceptions;
+
+public class OnEstDéjàEnTrainDePrendreLapéro : Exception
 {
-    public class OnEstDéjàEnTrainDePrendreLapéro : Exception
-    {
-    }
 }

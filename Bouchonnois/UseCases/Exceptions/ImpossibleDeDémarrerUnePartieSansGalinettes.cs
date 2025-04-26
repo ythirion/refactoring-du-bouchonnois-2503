@@ -1,6 +1,5 @@
-namespace Bouchonnois.UseCases.Exceptions
+namespace Bouchonnois.UseCases.Exceptions;
+
+public class ImpossibleDeDémarrerUnePartieSansGalinettes : Exception
 {
-    public class ImpossibleDeDémarrerUnePartieSansGalinettes : Exception
-    {
-    }
 }

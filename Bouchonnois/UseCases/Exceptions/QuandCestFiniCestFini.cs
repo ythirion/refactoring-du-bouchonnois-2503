@@ -1,6 +1,5 @@
-namespace Bouchonnois.UseCases.Exceptions
+namespace Bouchonnois.UseCases.Exceptions;
+
+public class QuandCestFiniCestFini : Exception
 {
-    public class QuandCestFiniCestFini : Exception
-    {
-    }
 }

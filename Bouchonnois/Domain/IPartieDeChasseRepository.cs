@@ -1,8 +1,7 @@
-namespace Bouchonnois.Domain
+namespace Bouchonnois.Domain;
+
+public interface IPartieDeChasseRepository
 {
-    public interface IPartieDeChasseRepository
-    {
-        void Save(PartieDeChasse partieDeChasse);
-        PartieDeChasse GetById(Guid partieDeChasseId);
-    }
+    void Save(PartieDeChasse partieDeChasse);
+    PartieDeChasse GetById(Guid partieDeChasseId);
 }
