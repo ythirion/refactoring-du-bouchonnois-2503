@@ -1,12 +1,12 @@
 using Bouchonnois.Tests.UseCases.Common;
 using Bouchonnois.Tests.Verifications;
-using Bouchonnois.UseCases;
+using Bouchonnois.UseCases.Commands;
 using Bouchonnois.UseCases.Exceptions;
 
 using static Bouchonnois.Tests.Builders.PartieDeChasseBuilder;
 using static Bouchonnois.Tests.Builders.ChasseurBuilder;
 
-namespace Bouchonnois.Tests.UseCases;
+namespace Bouchonnois.Tests.UseCases.Commands;
 
 public class Tirer : UseCaseTest
 {
@@ -31,7 +31,7 @@ public class Tirer : UseCaseTest
 
         Repository.SavedPartieDeChasse()
             .DevraitAvoirEmis(Now, "Bernard tire")
-            .ChasseurDevraitAvoirTiré(Bernard, ballesRestantes: 7);
+            .ChasseurDevraitAvoirTiré(Bernard, 7);
     }
 
     [Fact]

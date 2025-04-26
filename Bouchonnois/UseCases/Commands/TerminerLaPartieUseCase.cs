@@ -1,21 +1,14 @@
 ﻿using Bouchonnois.Domain;
 using Bouchonnois.UseCases.Exceptions;
 
-namespace Bouchonnois.UseCases;
+namespace Bouchonnois.UseCases.Commands;
 
-public class TerminerLaPartieUseCase
+public class TerminerLaPartieUseCase(IPartieDeChasseRepository repository, Func<DateTime> timeProvider)
 {
-    private readonly IPartieDeChasseRepository _repository;
-    private readonly Func<DateTime> _timeProvider;
 
-    public TerminerLaPartieUseCase(IPartieDeChasseRepository repository, Func<DateTime> timeProvider)
-    {
-        _repository = repository;
-        _timeProvider = timeProvider;
-    }
     public string TerminerLaPartie(Guid id)
     {
-        var partieDeChasse = _repository.GetById(id);
+        var partieDeChasse = repository.GetById(id);
 
         var classement = partieDeChasse
             .Chasseurs
@@ -36,7 +29,7 @@ public class TerminerLaPartieUseCase
         {
             result = "Brocouille";
             partieDeChasse.Events.Add(
-                new Event(_timeProvider(), "La partie de chasse est terminée, vainqueur : Brocouille")
+                new Event(timeProvider(), "La partie de chasse est terminée, vainqueur : Brocouille")
             );
         }
         else
@@ -44,14 +37,14 @@ public class TerminerLaPartieUseCase
             var vainqueurs = classement[0];
             result = string.Join(", ", vainqueurs.Select(c => c.Nom));
             partieDeChasse.Events.Add(
-                new Event(_timeProvider(),
+                new Event(timeProvider(),
                     $"La partie de chasse est terminée, vainqueur : {string.Join(", ", vainqueurs.Select(c => $"{c.Nom} - {c.NbGalinettes} galinettes"))}"
                 )
             );
         }
 
 
-        _repository.Save(partieDeChasse);
+        repository.Save(partieDeChasse);
 
         return result;
     }

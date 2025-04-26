@@ -4,7 +4,7 @@ using FsCheck.Fluent;
 using GroupDeChasseurs = (string nom, int nbBalles)[];
 using Terrain = (string nom, int nbGalinettes);
 
-namespace Bouchonnois.Tests.UseCases;
+namespace Bouchonnois.Tests.UseCases.Common;
 
 public static class ArbitraryExtensions
 {

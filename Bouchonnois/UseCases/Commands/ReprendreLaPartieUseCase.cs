@@ -1,21 +1,14 @@
 ﻿using Bouchonnois.Domain;
 using Bouchonnois.UseCases.Exceptions;
 
-namespace Bouchonnois.UseCases;
+namespace Bouchonnois.UseCases.Commands;
 
-public class ReprendreLaPartieUseCase
+public class ReprendreLaPartieUseCase(IPartieDeChasseRepository repository, Func<DateTime> timeProvider)
 {
-    private readonly IPartieDeChasseRepository _repository;
-    private readonly Func<DateTime> _timeProvider;
 
-    public ReprendreLaPartieUseCase(IPartieDeChasseRepository repository, Func<DateTime> timeProvider)
-    {
-        _repository = repository;
-        _timeProvider = timeProvider;
-    }
     public void ReprendreLaPartie(Guid id)
     {
-        var partieDeChasse = _repository.GetById(id);
+        var partieDeChasse = repository.GetById(id);
 
         if (partieDeChasse == null)
         {
@@ -33,7 +26,7 @@ public class ReprendreLaPartieUseCase
         }
 
         partieDeChasse.Status = PartieStatus.EnCours;
-        partieDeChasse.Events.Add(new Event(_timeProvider(), "Reprise de la chasse"));
-        _repository.Save(partieDeChasse);
+        partieDeChasse.Events.Add(new Event(timeProvider(), "Reprise de la chasse"));
+        repository.Save(partieDeChasse);
     }
 }

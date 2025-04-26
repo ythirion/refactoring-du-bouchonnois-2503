@@ -1,18 +1,13 @@
 ﻿using Bouchonnois.Domain;
 using Bouchonnois.UseCases.Exceptions;
 
-namespace Bouchonnois.UseCases;
+namespace Bouchonnois.UseCases.Queries;
 
-public class ConsulterStatusUseCase
+public class ConsulterStatusUseCase(IPartieDeChasseRepository repository)
 {
-    private readonly IPartieDeChasseRepository _repository;
-    public ConsulterStatusUseCase(IPartieDeChasseRepository repository)
-    {
-        _repository = repository;
-    }
     public string ConsulterStatus(Guid id)
     {
-        var partieDeChasse = _repository.GetById(id);
+        var partieDeChasse = repository.GetById(id);
 
         if (partieDeChasse == null)
         {

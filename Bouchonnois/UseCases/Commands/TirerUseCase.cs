@@ -1,21 +1,14 @@
 ﻿using Bouchonnois.Domain;
 using Bouchonnois.UseCases.Exceptions;
 
-namespace Bouchonnois.UseCases;
+namespace Bouchonnois.UseCases.Commands;
 
-public class TirerUseCase
+public class TirerUseCase(IPartieDeChasseRepository repository, Func<DateTime> timeProvider)
 {
-    private readonly IPartieDeChasseRepository _repository;
-    private readonly Func<DateTime> _timeProvider;
 
-    public TirerUseCase(IPartieDeChasseRepository repository, Func<DateTime> timeProvider)
-    {
-        _repository = repository;
-        _timeProvider = timeProvider;
-    }
     public void Tirer(Guid id, string chasseur)
     {
-        var partieDeChasse = _repository.GetById(id);
+        var partieDeChasse = repository.GetById(id);
 
         if (partieDeChasse == null)
         {
@@ -31,14 +24,14 @@ public class TirerUseCase
                 {
                     if (chasseurQuiTire.BallesRestantes == 0)
                     {
-                        partieDeChasse.Events.Add(new Event(_timeProvider(),
+                        partieDeChasse.Events.Add(new Event(timeProvider(),
                             $"{chasseur} tire -> T'as plus de balles mon vieux, chasse à la main"));
-                        _repository.Save(partieDeChasse);
+                        repository.Save(partieDeChasse);
 
                         throw new TasPlusDeBallesMonVieuxChasseALaMain();
                     }
 
-                    partieDeChasse.Events.Add(new Event(_timeProvider(), $"{chasseur} tire"));
+                    partieDeChasse.Events.Add(new Event(timeProvider(), $"{chasseur} tire"));
                     chasseurQuiTire.BallesRestantes--;
                 }
                 else
@@ -48,22 +41,22 @@ public class TirerUseCase
             }
             else
             {
-                partieDeChasse.Events.Add(new Event(_timeProvider(),
+                partieDeChasse.Events.Add(new Event(timeProvider(),
                     $"{chasseur} veut tirer -> On tire pas quand la partie est terminée"));
-                _repository.Save(partieDeChasse);
+                repository.Save(partieDeChasse);
 
                 throw new OnTirePasQuandLaPartieEstTerminée();
             }
         }
         else
         {
-            partieDeChasse.Events.Add(new Event(_timeProvider(),
+            partieDeChasse.Events.Add(new Event(timeProvider(),
                 $"{chasseur} veut tirer -> On tire pas pendant l'apéro, c'est sacré !!!"));
-            _repository.Save(partieDeChasse);
+            repository.Save(partieDeChasse);
 
             throw new OnTirePasPendantLapéroCestSacré();
         }
 
-        _repository.Save(partieDeChasse);
+        repository.Save(partieDeChasse);
     }
 }

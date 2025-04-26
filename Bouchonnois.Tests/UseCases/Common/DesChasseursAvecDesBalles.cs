@@ -4,7 +4,7 @@ using JetBrains.Annotations;
 
 using GroupDeChasseurs = (string nom, int nbBalles)[];
 
-namespace Bouchonnois.Tests.UseCases;
+namespace Bouchonnois.Tests.UseCases.Common;
 
 public static class DesChasseursAvecDesBalles
 {

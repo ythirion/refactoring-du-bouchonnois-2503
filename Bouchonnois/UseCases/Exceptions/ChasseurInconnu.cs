@@ -1,10 +1,3 @@
-namespace Bouchonnois.UseCases.Exceptions
-{
-    public class ChasseurInconnu : Exception
-    {
-        public ChasseurInconnu(string chasseur)
-            : base($"Chasseur inconnu {chasseur}")
-        {
-        }
-    }
-}
+namespace Bouchonnois.UseCases.Exceptions;
+
+public class ChasseurInconnu(string chasseur) : Exception($"Chasseur inconnu {chasseur}");

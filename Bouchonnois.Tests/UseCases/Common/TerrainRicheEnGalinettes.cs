@@ -4,7 +4,7 @@ using JetBrains.Annotations;
 
 using Terrain = (string nom, int nbGalinettes);
 
-namespace Bouchonnois.Tests.UseCases;
+namespace Bouchonnois.Tests.UseCases.Common;
 
 public static class TerrainRicheEnGalinettes
 {
