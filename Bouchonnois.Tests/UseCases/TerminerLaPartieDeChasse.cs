@@ -1,6 +1,8 @@
+using Bouchonnois.Service;
 using Bouchonnois.Service.Exceptions;
 using Bouchonnois.Tests.UseCases.Common;
 using Bouchonnois.Tests.Verifications;
+
 using static Bouchonnois.Tests.Builders.ChasseurBuilder;
 using static Bouchonnois.Tests.Builders.PartieDeChasseBuilder;
 
@@ -8,6 +10,12 @@ namespace Bouchonnois.Tests.UseCases;
 
 public class TerminerLaPartieDeChasse : UseCaseTest
 {
+    private readonly TerminerLaPartieUseCase _sut;
+    public TerminerLaPartieDeChasse()
+    {
+        _sut = new TerminerLaPartieUseCase(Repository, () => Now);
+    }
+
     [Fact]
     public void QuandLaPartieEstEnCoursEt1SeulChasseurGagne()
     {
@@ -19,7 +27,7 @@ public class TerminerLaPartieDeChasse : UseCaseTest
                     Bernard().Brocouille(),
                     Robert().AyantCapturéGalinettes(2)));
 
-        var meilleurChasseur = Service.TerminerLaPartie(id);
+        var meilleurChasseur = _sut.TerminerLaPartie(id);
 
         meilleurChasseur.Should().Be(Robert);
 
@@ -35,7 +43,7 @@ public class TerminerLaPartieDeChasse : UseCaseTest
                 .EnCours()
                 .Avec(Robert().AyantCapturéGalinettes(2)));
 
-        var meilleurChasseur = Service.TerminerLaPartie(id);
+        var meilleurChasseur = _sut.TerminerLaPartie(id);
 
         meilleurChasseur.Should().Be(Robert);
 
@@ -54,7 +62,7 @@ public class TerminerLaPartieDeChasse : UseCaseTest
                     Bernard().AyantCapturéGalinettes(2),
                     Robert().Brocouille()));
 
-        var meilleurChasseur = Service.TerminerLaPartie(id);
+        var meilleurChasseur = _sut.TerminerLaPartie(id);
 
         meilleurChasseur.Should().Be("Dédé, Bernard");
 
@@ -75,7 +83,7 @@ public class TerminerLaPartieDeChasse : UseCaseTest
                     Bernard().Brocouille(),
                     Robert().Brocouille()));
 
-        var meilleurChasseur = Service.TerminerLaPartie(id);
+        var meilleurChasseur = _sut.TerminerLaPartie(id);
 
         meilleurChasseur.Should().Be("Brocouille");
 
@@ -96,7 +104,7 @@ public class TerminerLaPartieDeChasse : UseCaseTest
                     Bernard().AyantCapturéGalinettes(3),
                     Robert().AyantCapturéGalinettes(3)));
 
-        var meilleurChasseur = Service.TerminerLaPartie(id);
+        var meilleurChasseur = _sut.TerminerLaPartie(id);
 
         meilleurChasseur.Should().Be("Dédé, Bernard, Robert");
 
@@ -113,7 +121,7 @@ public class TerminerLaPartieDeChasse : UseCaseTest
             UnePartieDeChasse()
                 .Terminée());
 
-        var prendreLapéroQuandTerminée = () => Service.TerminerLaPartie(id);
+        var prendreLapéroQuandTerminée = () => _sut.TerminerLaPartie(id);
 
         prendreLapéroQuandTerminée.Should().Throw<QuandCestFiniCestFini>();
 
