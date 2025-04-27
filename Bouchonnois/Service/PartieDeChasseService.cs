@@ -9,6 +9,7 @@ namespace Bouchonnois.Service
         private readonly Func<DateTime> _timeProvider;
         private readonly DemarrerUnePartieDeChasseUseCase _demarrerUnePartieDeChasseUseCase;
         private readonly TirerUseCase _tirerUseCase;
+        private readonly PrendreLapéroUseCase _prendreLapéroUseCase;
 
         public PartieDeChasseService(
             IPartieDeChasseRepository repository,
@@ -16,6 +17,7 @@ namespace Bouchonnois.Service
         {
             _repository = repository;
             _timeProvider = timeProvider;
+            _prendreLapéroUseCase = new PrendreLapéroUseCase(repository, timeProvider);
             _tirerUseCase = new TirerUseCase(repository, timeProvider);
             _demarrerUnePartieDeChasseUseCase = new DemarrerUnePartieDeChasseUseCase(repository, timeProvider);
         }
@@ -26,30 +28,7 @@ namespace Bouchonnois.Service
 
         public void Tirer(Guid id, string chasseur) => _tirerUseCase.Tirer(id, chasseur);
 
-        public void PrendreLapéro(Guid id)
-        {
-            var partieDeChasse = _repository.GetById(id);
-
-            if (partieDeChasse == null)
-            {
-                throw new LaPartieDeChasseNexistePas();
-            }
-
-            if (partieDeChasse.Status == PartieStatus.Apéro)
-            {
-                throw new OnEstDéjàEnTrainDePrendreLapéro();
-            }
-            else if (partieDeChasse.Status == PartieStatus.Terminée)
-            {
-                throw new OnPrendPasLapéroQuandLaPartieEstTerminée();
-            }
-            else
-            {
-                partieDeChasse.Status = PartieStatus.Apéro;
-                partieDeChasse.Events.Add(new Event(_timeProvider(), "Petit apéro"));
-                _repository.Save(partieDeChasse);
-            }
-        }
+        public void PrendreLapéro(Guid id) => _prendreLapéroUseCase.PrendreLapéro(id);
 
         public void ReprendreLaPartie(Guid id)
         {
@@ -118,7 +97,6 @@ namespace Bouchonnois.Service
                     )
                 );
             }
-
 
             _repository.Save(partieDeChasse);
 
