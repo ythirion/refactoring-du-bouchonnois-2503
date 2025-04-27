@@ -10,6 +10,7 @@ namespace Bouchonnois.Service
         private readonly DemarrerUnePartieDeChasseUseCase _demarrerUnePartieDeChasseUseCase;
         private readonly TirerUseCase _tirerUseCase;
         private readonly PrendreLapéroUseCase _prendreLapéroUseCase;
+        private readonly ReprendreLaPartieUseCase _reprendreLaPartieUseCase;
 
         public PartieDeChasseService(
             IPartieDeChasseRepository repository,
@@ -17,6 +18,7 @@ namespace Bouchonnois.Service
         {
             _repository = repository;
             _timeProvider = timeProvider;
+            _reprendreLaPartieUseCase = new ReprendreLaPartieUseCase(repository, timeProvider);
             _prendreLapéroUseCase = new PrendreLapéroUseCase(repository, timeProvider);
             _tirerUseCase = new TirerUseCase(repository, timeProvider);
             _demarrerUnePartieDeChasseUseCase = new DemarrerUnePartieDeChasseUseCase(repository, timeProvider);
@@ -30,32 +32,7 @@ namespace Bouchonnois.Service
 
         public void PrendreLapéro(Guid id) => _prendreLapéroUseCase.PrendreLapéro(id);
 
-        public void ReprendreLaPartie(Guid id)
-        {
-            var partieDeChasse = _repository.GetById(id);
-
-            if (partieDeChasse == null)
-            {
-                throw new LaPartieDeChasseNexistePas();
-            }
-
-            if (partieDeChasse.Status == PartieStatus.EnCours)
-            {
-                throw new LaChasseEstDéjàEnCours();
-            }
-
-            if (partieDeChasse.Status == PartieStatus.Terminée)
-            {
-                throw new QuandCestFiniCestFini();
-            }
-
-            partieDeChasse.Status = PartieStatus.EnCours;
-            partieDeChasse.Events.Add(new Event(
-                _timeProvider(),
-                "Reprise de la chasse"
-            ));
-            _repository.Save(partieDeChasse);
-        }
+        public void ReprendreLaPartie(Guid id) => _reprendreLaPartieUseCase.ReprendreLaPartie(id);
 
         public string TerminerLaPartie(Guid id)
         {
