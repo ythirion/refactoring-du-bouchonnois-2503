@@ -15,6 +15,7 @@ public class UseCaseTest
     protected readonly PartieDeChasseRepositoryForTests Repository;
     protected readonly PartieDeChasseService Service;
     protected readonly TirerSurGalinetteUseCase TirerSurGalinetteUseCase;
+    protected readonly DemarrerUnePartieDeChasseUseCase DemarrerUnePartieDeChasseUseCase;
 
     protected UseCaseTest()
     {
@@ -22,6 +23,7 @@ public class UseCaseTest
         Repository = new PartieDeChasseRepositoryForTests();
         Service = new PartieDeChasseService(Repository, () => Now);
         TirerSurGalinetteUseCase = new TirerSurGalinetteUseCase(Repository, () => Now);
+        DemarrerUnePartieDeChasseUseCase = new DemarrerUnePartieDeChasseUseCase(Repository, () => Now);
     }
 
     protected Guid UnePartieDeChasseExistante(PartieDeChasseBuilder partieDeChasseBuilder)

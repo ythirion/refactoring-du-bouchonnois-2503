@@ -68,7 +68,7 @@ public class DemarrerUnePartieDeChasse : UseCaseTest
 
         var terrainDeChasse = ("Pitibon sur Sauldre", 3);
 
-        var id = Service.Demarrer(terrainDeChasse, chasseurs);
+        var id = DemarrerUnePartieDeChasseUseCase.Demarrer(terrainDeChasse, chasseurs);
 
         Repository.SavedPartieDeChasse()
             .Should()
@@ -87,7 +87,7 @@ public class DemarrerUnePartieDeChasse : UseCaseTest
                             "La partie de chasse commence à Pitibon sur Sauldre avec Dédé (20 balles), Bernard (8 balles), Robert (12 balles)"))
                     .Build());
     }
-    
+
     [Property]
     public Property Sur1TerrainRicheEnGalinettesEtAvecDesChasseurAvecDesBalles()
         => Prop.ForAll(
@@ -102,7 +102,7 @@ public class DemarrerUnePartieDeChasse : UseCaseTest
         => DémarrerLaPartieAvecSuccès(terrainRicheEnGalinettes, chasseursAvecDesBalles);
 
     private Property DémarrerLaPartieAvecSuccès(Terrain terrainDeChasse, GroupDeChasseurs chasseurs)
-        => (Service.Demarrer(terrainDeChasse, chasseurs.ToList()) == Repository.SavedPartieDeChasse().Id)
+        => (DemarrerUnePartieDeChasseUseCase.Demarrer(terrainDeChasse, chasseurs.ToList()) == Repository.SavedPartieDeChasse().Id)
             .Label("Démarrer la partie avec succès");
 
     [Fact]
@@ -111,7 +111,7 @@ public class DemarrerUnePartieDeChasse : UseCaseTest
         var chasseurs = new List<(string, int)>();
         var terrainDeChasse = ("Pitibon sur Sauldre", 3);
 
-        var demarrerPartieSansChasseurs = () => Service.Demarrer(terrainDeChasse, chasseurs);
+        var demarrerPartieSansChasseurs = () => DemarrerUnePartieDeChasseUseCase.Demarrer(terrainDeChasse, chasseurs);
 
         demarrerPartieSansChasseurs.Should().Throw<ImpossibleDeDémarrerUnePartieSansChasseur>();
 
@@ -124,7 +124,7 @@ public class DemarrerUnePartieDeChasse : UseCaseTest
         var chasseurs = new List<(string, int)>();
         var terrainDeChasse = ("Pitibon sur Sauldre", 0);
 
-        var demarrerPartieSansChasseurs = () => Service.Demarrer(terrainDeChasse, chasseurs);
+        var demarrerPartieSansChasseurs = () => DemarrerUnePartieDeChasseUseCase.Demarrer(terrainDeChasse, chasseurs);
 
         demarrerPartieSansChasseurs.Should().Throw<ImpossibleDeDémarrerUnePartieSansGalinettes>();
 
@@ -142,7 +142,7 @@ public class DemarrerUnePartieDeChasse : UseCaseTest
 
         var terrainDeChasse = ("Pitibon sur Sauldre", 3);
 
-        var demarrerPartieAvecChasseurSansBalle = () => Service.Demarrer(terrainDeChasse, chasseurs);
+        var demarrerPartieAvecChasseurSansBalle = () => DemarrerUnePartieDeChasseUseCase.Demarrer(terrainDeChasse, chasseurs);
 
         demarrerPartieAvecChasseurSansBalle.Should().Throw<ImpossibleDeDémarrerUnePartieAvecUnChasseurSansBalle>();
 
