@@ -14,7 +14,7 @@ public class ReprendreLaPartieDeChasse : UseCaseTest
             UnePartieDeChasse()
                 .ALApéro());
 
-        Service.ReprendreLaPartie(id);
+        ReprendreLaPartieUseCase.ReprendreLaPartie(id);
 
         Repository.SavedPartieDeChasse()
             .DevraitEtreEnCours()
@@ -26,7 +26,7 @@ public class ReprendreLaPartieDeChasse : UseCaseTest
     {
         var id = UnePartieDeChasseInexistante();
 
-        var reprendrePartieQuandPartieExistePas = () => Service.ReprendreLaPartie(id);
+        var reprendrePartieQuandPartieExistePas = () => ReprendreLaPartieUseCase.ReprendreLaPartie(id);
 
         reprendrePartieQuandPartieExistePas.Should().Throw<LaPartieDeChasseNexistePas>();
 
@@ -38,7 +38,7 @@ public class ReprendreLaPartieDeChasse : UseCaseTest
     {
         var id = UnePartieDeChasseExistante(UnePartieDeChasse().EnCours());
 
-        var reprendreLaPartieQuandChasseEnCours = () => Service.ReprendreLaPartie(id);
+        var reprendreLaPartieQuandChasseEnCours = () => ReprendreLaPartieUseCase.ReprendreLaPartie(id);
 
         reprendreLaPartieQuandChasseEnCours.Should().Throw<LaChasseEstDéjàEnCours>();
 
@@ -50,7 +50,7 @@ public class ReprendreLaPartieDeChasse : UseCaseTest
     {
         var id = UnePartieDeChasseExistante(UnePartieDeChasse().Terminée());
 
-        var prendreLapéroQuandTerminée = () => Service.ReprendreLaPartie(id);
+        var prendreLapéroQuandTerminée = () => ReprendreLaPartieUseCase.ReprendreLaPartie(id);
 
         prendreLapéroQuandTerminée.Should().Throw<QuandCestFiniCestFini>();
 
