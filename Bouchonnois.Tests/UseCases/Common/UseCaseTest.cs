@@ -13,7 +13,6 @@ public class UseCaseTest
 
     protected readonly DateTime Now;
     protected readonly PartieDeChasseRepositoryForTests Repository;
-    protected readonly PartieDeChasseService Service;
     protected readonly TirerSurGalinetteUseCase TirerSurGalinetteUseCase;
     protected readonly DemarrerUnePartieDeChasseUseCase DemarrerUnePartieDeChasseUseCase;
     protected readonly TirerUseCase TirerUseCase;
@@ -26,7 +25,6 @@ public class UseCaseTest
     {
         Now = DateTime.Now;
         Repository = new PartieDeChasseRepositoryForTests();
-        Service = new PartieDeChasseService(Repository, () => Now);
         TirerSurGalinetteUseCase = new TirerSurGalinetteUseCase(Repository, () => Now);
         DemarrerUnePartieDeChasseUseCase = new DemarrerUnePartieDeChasseUseCase(Repository, () => Now);
         TirerUseCase = new TirerUseCase(Repository, () => Now);
