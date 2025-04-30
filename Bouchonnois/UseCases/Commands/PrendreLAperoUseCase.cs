@@ -30,4 +30,9 @@ public class PrendreLAperoUseCase(IPartieDeChasseRepository repository, Func<Dat
             repository.Save(partieDeChasse);
         }
     }
+
+    public LaPartieDeChasseNexistePas HandleWithoutException(Guid id)
+    {
+        return new LaPartieDeChasseNexistePas();
+    }
 }

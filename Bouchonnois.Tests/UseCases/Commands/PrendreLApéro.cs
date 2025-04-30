@@ -36,9 +36,9 @@ public class PrendreLApéro : UseCaseTest
     {
         var id = UnePartieDeChasseInexistante();
 
-        var apéroQuandPartieExistePas = () => _prendereLAperoUseCase.Handle(id);
+        var apéroQuandPartieExistePas = _prendereLAperoUseCase.HandleWithoutException(id);
 
-        apéroQuandPartieExistePas.Should().Throw<LaPartieDeChasseNexistePas>();
+        apéroQuandPartieExistePas.Should().BeOfType<LaPartieDeChasseNexistePas>();
 
         Repository.SavedPartieDeChasse().Should().BeNull();
     }
