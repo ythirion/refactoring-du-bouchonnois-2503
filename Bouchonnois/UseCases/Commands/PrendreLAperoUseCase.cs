@@ -1,5 +1,6 @@
 ﻿using Bouchonnois.Domain;
 using Bouchonnois.UseCases.Exceptions;
+using CSharpFunctionalExtensions;
 
 namespace Bouchonnois.UseCases.Commands;
 
@@ -31,8 +32,17 @@ public class PrendreLAperoUseCase(IPartieDeChasseRepository repository, Func<Dat
         }
     }
 
-    public LaPartieDeChasseNexistePas HandleWithoutException(Guid id)
+    public Result HandleWithoutException(Guid id)
     {
-        return new LaPartieDeChasseNexistePas();
+        try
+        {
+            Handle(id);
+        }
+        catch (LaPartieDeChasseNexistePas)
+        {
+            return Result.Failure("La partie de chasse n'existe pas");
+        }
+        
+        return Result.Success();
     }
 }

@@ -12,6 +12,7 @@
 
     <ItemGroup>
         <PackageReference Include="CSharpFunctionalExtensions" Version="3.6.0" />
+        <PackageReference Include="CSharpFunctionalExtensions.FluentAssertions" Version="3.0.0" />
         <PackageReference Include="FluentAssertions" Version="7.2.0" />
         <PackageReference Include="FsCheck.Xunit" Version="3.2.0"/>
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.13.0"/>
