@@ -2,25 +2,18 @@ using Bouchonnois.Domain;
 using Bouchonnois.Tests.UseCases.Common;
 using Bouchonnois.Tests.Verifications;
 using Bouchonnois.UseCases.Commands;
-using Bouchonnois.UseCases.Exceptions;
-
-using CSharpFunctionalExtensions;
-
 using static Bouchonnois.Tests.Builders.PartieDeChasseBuilder;
 
 namespace Bouchonnois.Tests.UseCases.Commands;
 
 public class PrendreLApéro : UseCaseTest
 {
-    private readonly PrendreLAperoUseCase _prendereLAperoUseCase;
+    private readonly PrendreLAperoUseCase _useCase;
 
     public PrendreLApéro()
-    {
-        _prendereLAperoUseCase = new PrendreLAperoUseCase(
+        => _useCase = new PrendreLAperoUseCase(
             Repository,
-            () => Now
-        );
-    }
+            () => Now);
 
     [Fact]
     public void QuandLaPartieEstEnCours()
@@ -29,7 +22,7 @@ public class PrendreLApéro : UseCaseTest
             UnePartieDeChasse()
                 .EnCours());
 
-        _prendereLAperoUseCase.Handle(new PrendreLAperoCommand(id));
+        _useCase.Handle(new PrendreLAperoCommand(id));
 
         Repository.SavedPartieDeChasse()
             .DevraitEtreALApéro()
@@ -41,7 +34,7 @@ public class PrendreLApéro : UseCaseTest
     {
         var id = UnePartieDeChasseInexistante();
 
-        _prendereLAperoUseCase.Handle(new PrendreLAperoCommand(id))
+        _useCase.Handle(new PrendreLAperoCommand(id))
             .Should()
             .FailWith(new Error("La partie de chasse n'existe pas"));
 
@@ -53,7 +46,7 @@ public class PrendreLApéro : UseCaseTest
     {
         var id = UnePartieDeChasseExistante(UnePartieDeChasse().ALApéro());
 
-        _prendereLAperoUseCase.Handle(new PrendreLAperoCommand(id))
+        _useCase.Handle(new PrendreLAperoCommand(id))
             .Should()
             .FailWith(new Error("On est déjà en train de prendre l'apéro"));
 
@@ -65,9 +58,9 @@ public class PrendreLApéro : UseCaseTest
     {
         var id = UnePartieDeChasseExistante(UnePartieDeChasse().Terminée());
 
-        var prendreLapéroQuandTerminée = _prendereLAperoUseCase.Handle(new PrendreLAperoCommand(id));
-
-        prendreLapéroQuandTerminée.Should().FailWith(new Error("On ne prend pas l'apéro quand la partie est terminée"));
+        _useCase.Handle(new PrendreLAperoCommand(id))
+            .Should()
+            .FailWith(new Error("On ne prend pas l'apéro quand la partie est terminée"));
 
         Repository.SavedPartieDeChasse().Should().BeNull();
     }
