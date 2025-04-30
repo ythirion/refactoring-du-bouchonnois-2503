@@ -24,7 +24,7 @@ public class PartieDeChasse
 
     public List<Event> Events { get; }
 
-    public UnitResult<Error> PrendreLApero(Func<DateTime> timeProvider)
+    public Result<PartieDeChasse, Error> PrendreLApero(Func<DateTime> timeProvider)
     {
         if (Status == PartieStatus.Apéro)
         {
@@ -38,7 +38,7 @@ public class PartieDeChasse
 
         Status = PartieStatus.Apéro;
         Events.Add(new Event(timeProvider(), "Petit apéro"));
-        
-        return UnitResult.Success<Error>();
+
+        return this;
     }
 }

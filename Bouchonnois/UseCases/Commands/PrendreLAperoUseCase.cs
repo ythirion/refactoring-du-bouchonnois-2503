@@ -6,23 +6,8 @@ namespace Bouchonnois.UseCases.Commands;
 public class PrendreLAperoUseCase(IPartieDeChasseRepository repository, Func<DateTime> timeProvider)
 {
     public UnitResult<Error> Handle(Guid id)
-    {
-        var potentialPartieDeChasse = repository.GetByIdMaybe(id);
-        if (potentialPartieDeChasse.IsFailure)
-        {
-            return potentialPartieDeChasse.Error;
-        }
-        
-        var partieDeChasse = potentialPartieDeChasse.Value;
-
-        var result = partieDeChasse.PrendreLApero(timeProvider);
-        if (result.IsFailure)
-        {
-            return result.Error;
-        }
-        
-        repository.Save(partieDeChasse);
-
-        return UnitResult.Success<Error>();
-    }
+        => repository.GetByIdMaybe(id)
+            .Map(partieDeChasse => partieDeChasse.PrendreLApero(timeProvider))
+            .Ensure(result => result.IsSuccess, result => result.Error)
+            .Tap(result => result.Tap(repository.Save));
 }
