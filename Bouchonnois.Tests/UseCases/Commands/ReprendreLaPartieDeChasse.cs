@@ -1,12 +1,19 @@
-using Bouchonnois.Service.Exceptions;
 using Bouchonnois.Tests.UseCases.Common;
 using Bouchonnois.Tests.Verifications;
+using Bouchonnois.UseCases.Commands;
+using Bouchonnois.UseCases.Exceptions;
+
 using static Bouchonnois.Tests.Builders.PartieDeChasseBuilder;
 
-namespace Bouchonnois.Tests.UseCases;
+namespace Bouchonnois.Tests.UseCases.Commands;
 
 public class ReprendreLaPartieDeChasse : UseCaseTest
 {
+    private readonly ReprendreLaPartieUseCase _reprendreLaPartieUseCase;
+    public ReprendreLaPartieDeChasse()
+    {
+        _reprendreLaPartieUseCase = new ReprendreLaPartieUseCase(Repository, () => Now);
+    }
     [Fact]
     public void QuandLapéroEstEnCours()
     {
@@ -14,7 +21,7 @@ public class ReprendreLaPartieDeChasse : UseCaseTest
             UnePartieDeChasse()
                 .ALApéro());
 
-        Service.ReprendreLaPartie(id);
+        _reprendreLaPartieUseCase.Handle(id);
 
         Repository.SavedPartieDeChasse()
             .DevraitEtreEnCours()
@@ -26,7 +33,7 @@ public class ReprendreLaPartieDeChasse : UseCaseTest
     {
         var id = UnePartieDeChasseInexistante();
 
-        var reprendrePartieQuandPartieExistePas = () => Service.ReprendreLaPartie(id);
+        var reprendrePartieQuandPartieExistePas = () => _reprendreLaPartieUseCase.Handle(id);
 
         reprendrePartieQuandPartieExistePas.Should().Throw<LaPartieDeChasseNexistePas>();
 
@@ -38,7 +45,7 @@ public class ReprendreLaPartieDeChasse : UseCaseTest
     {
         var id = UnePartieDeChasseExistante(UnePartieDeChasse().EnCours());
 
-        var reprendreLaPartieQuandChasseEnCours = () => Service.ReprendreLaPartie(id);
+        var reprendreLaPartieQuandChasseEnCours = () => _reprendreLaPartieUseCase.Handle(id);
 
         reprendreLaPartieQuandChasseEnCours.Should().Throw<LaChasseEstDéjàEnCours>();
 
@@ -50,7 +57,7 @@ public class ReprendreLaPartieDeChasse : UseCaseTest
     {
         var id = UnePartieDeChasseExistante(UnePartieDeChasse().Terminée());
 
-        var prendreLapéroQuandTerminée = () => Service.ReprendreLaPartie(id);
+        var prendreLapéroQuandTerminée = () => _reprendreLaPartieUseCase.Handle(id);
 
         prendreLapéroQuandTerminée.Should().Throw<QuandCestFiniCestFini>();
 

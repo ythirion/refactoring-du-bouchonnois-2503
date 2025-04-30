@@ -1,13 +1,24 @@
-using Bouchonnois.Service.Exceptions;
 using Bouchonnois.Tests.UseCases.Common;
 using Bouchonnois.Tests.Verifications;
+using Bouchonnois.UseCases.Commands;
+using Bouchonnois.UseCases.Exceptions;
+
 using static Bouchonnois.Tests.Builders.PartieDeChasseBuilder;
 using static Bouchonnois.Tests.Builders.ChasseurBuilder;
 
-namespace Bouchonnois.Tests.UseCases;
+namespace Bouchonnois.Tests.UseCases.Commands;
 
 public class Tirer : UseCaseTest
 {
+    private readonly TirerUseCase _tirerUseCase;
+    public Tirer()
+    {
+        _tirerUseCase = new TirerUseCase(
+            Repository,
+            () => Now
+        );
+    }
+
     [Fact]
     public void AvecUnChasseurAyantDesBalles()
     {
@@ -16,11 +27,11 @@ public class Tirer : UseCaseTest
                 .EnCours()
                 .Avec(Bernard().AyantDesBalles(8)));
 
-        Service.Tirer(id, Bernard);
+        _tirerUseCase.Handle(id, Bernard);
 
         Repository.SavedPartieDeChasse()
             .DevraitAvoirEmis(Now, "Bernard tire")
-            .ChasseurDevraitAvoirTiré(Bernard, ballesRestantes: 7);
+            .ChasseurDevraitAvoirTiré(Bernard, 7);
     }
 
     [Fact]
@@ -28,7 +39,7 @@ public class Tirer : UseCaseTest
     {
         var id = UnePartieDeChasseInexistante();
 
-        var tirerQuandPartieExistePas = () => Service.Tirer(id, Bernard);
+        var tirerQuandPartieExistePas = () => _tirerUseCase.Handle(id, Bernard);
 
         tirerQuandPartieExistePas.Should().Throw<LaPartieDeChasseNexistePas>();
 
@@ -43,7 +54,7 @@ public class Tirer : UseCaseTest
                 .EnCours()
                 .Avec(Bernard().SansBalles()));
 
-        var tirerSansBalle = () => Service.Tirer(id, Bernard);
+        var tirerSansBalle = () => _tirerUseCase.Handle(id, Bernard);
 
         tirerSansBalle.Should().Throw<TasPlusDeBallesMonVieuxChasseALaMain>();
 
@@ -56,7 +67,7 @@ public class Tirer : UseCaseTest
     {
         var id = UnePartieDeChasseExistante(UnePartieDeChasse().EnCours());
 
-        var chasseurInconnuVeutTirer = () => Service.Tirer(id, ChasseurInconnu);
+        var chasseurInconnuVeutTirer = () => _tirerUseCase.Handle(id, ChasseurInconnu);
 
         chasseurInconnuVeutTirer.Should().Throw<ChasseurInconnu>().WithMessage("Chasseur inconnu Chasseur inconnu");
 
@@ -68,7 +79,7 @@ public class Tirer : UseCaseTest
     {
         var id = UnePartieDeChasseExistante(UnePartieDeChasse().ALApéro());
 
-        var tirerEnPleinApéro = () => Service.Tirer(id, ChasseurInconnu);
+        var tirerEnPleinApéro = () => _tirerUseCase.Handle(id, ChasseurInconnu);
 
         tirerEnPleinApéro.Should().Throw<OnTirePasPendantLapéroCestSacré>();
 
@@ -81,7 +92,7 @@ public class Tirer : UseCaseTest
     {
         var id = UnePartieDeChasseExistante(UnePartieDeChasse().Terminée());
 
-        var tirerQuandTerminée = () => Service.Tirer(id, ChasseurInconnu);
+        var tirerQuandTerminée = () => _tirerUseCase.Handle(id, ChasseurInconnu);
 
         tirerQuandTerminée.Should().Throw<OnTirePasQuandLaPartieEstTerminée>();
 

@@ -1,4 +1,3 @@
-using Bouchonnois.Service;
 using Bouchonnois.Tests.Builders;
 using Bouchonnois.Tests.Doubles;
 
@@ -13,15 +12,11 @@ public class UseCaseTest
 
     protected readonly DateTime Now;
     protected readonly PartieDeChasseRepositoryForTests Repository;
-    protected readonly PartieDeChasseService Service;
-    protected readonly TirerSurGalinetteUseCase TirerSurGalinetteUseCase;
 
     protected UseCaseTest()
     {
         Now = DateTime.Now;
         Repository = new PartieDeChasseRepositoryForTests();
-        Service = new PartieDeChasseService(Repository, () => Now);
-        TirerSurGalinetteUseCase = new TirerSurGalinetteUseCase(Repository, () => Now);
     }
 
     protected Guid UnePartieDeChasseExistante(PartieDeChasseBuilder partieDeChasseBuilder)

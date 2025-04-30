@@ -16,7 +16,7 @@ public class LinguisticAntiPatterns
     [Fact]
     public void NoGetMethodShouldReturnVoid()
         => Methods()
-            .HaveName("[Gg]et.*", useRegularExpressions:true)
+            .HaveName("[Gg]et.*", true)
             .Should()
             .NotHaveReturnType(typeof(void))
             .Check();
@@ -24,8 +24,9 @@ public class LinguisticAntiPatterns
     [Fact]
     public void IserAndHaserShouldReturnBooleans()
         => Methods()
-            .HaveName("Is[A-Z].*|Has[A-Z].*", useRegularExpressions: true)
+            .HaveName("Is[A-Z].*|Has[A-Z].*", true)
             .Should()
             .HaveReturnType(typeof(bool))
             .Check();
+
 }

@@ -1,12 +1,22 @@
-using Bouchonnois.Service.Exceptions;
 using Bouchonnois.Tests.UseCases.Common;
 using Bouchonnois.Tests.Verifications;
+using Bouchonnois.UseCases.Commands;
+using Bouchonnois.UseCases.Exceptions;
+
 using static Bouchonnois.Tests.Builders.PartieDeChasseBuilder;
 
-namespace Bouchonnois.Tests.UseCases;
+namespace Bouchonnois.Tests.UseCases.Commands;
 
 public class PrendreLApéro : UseCaseTest
 {
+    private readonly PrendreLAperoUseCase _prendereLAperoUseCase;
+    public PrendreLApéro()
+    {
+        _prendereLAperoUseCase = new PrendreLAperoUseCase(
+            Repository,
+            () => Now
+        );
+    }
     [Fact]
     public void QuandLaPartieEstEnCours()
     {
@@ -14,7 +24,7 @@ public class PrendreLApéro : UseCaseTest
             UnePartieDeChasse()
                 .EnCours());
 
-        Service.PrendreLapéro(id);
+        _prendereLAperoUseCase.Handle(id);
 
         Repository.SavedPartieDeChasse()
             .DevraitEtreALApéro()
@@ -26,7 +36,7 @@ public class PrendreLApéro : UseCaseTest
     {
         var id = UnePartieDeChasseInexistante();
 
-        var apéroQuandPartieExistePas = () => Service.PrendreLapéro(id);
+        var apéroQuandPartieExistePas = () => _prendereLAperoUseCase.Handle(id);
 
         apéroQuandPartieExistePas.Should().Throw<LaPartieDeChasseNexistePas>();
 
@@ -38,7 +48,7 @@ public class PrendreLApéro : UseCaseTest
     {
         var id = UnePartieDeChasseExistante(UnePartieDeChasse().ALApéro());
 
-        var prendreLApéroQuandOnPrendDéjàLapéro = () => Service.PrendreLapéro(id);
+        var prendreLApéroQuandOnPrendDéjàLapéro = () => _prendereLAperoUseCase.Handle(id);
 
         prendreLApéroQuandOnPrendDéjàLapéro.Should().Throw<OnEstDéjàEnTrainDePrendreLapéro>();
 
@@ -50,7 +60,7 @@ public class PrendreLApéro : UseCaseTest
     {
         var id = UnePartieDeChasseExistante(UnePartieDeChasse().Terminée());
 
-        var prendreLapéroQuandTerminée = () => Service.PrendreLapéro(id);
+        var prendreLapéroQuandTerminée = () => _prendereLAperoUseCase.Handle(id);
 
         prendreLapéroQuandTerminée.Should().Throw<OnPrendPasLapéroQuandLaPartieEstTerminée>();
 

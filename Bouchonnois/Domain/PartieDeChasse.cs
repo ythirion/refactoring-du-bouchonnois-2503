@@ -1,27 +1,23 @@
-﻿using Bouchonnois.Service;
+﻿namespace Bouchonnois.Domain;
 
-namespace Bouchonnois.Domain
+public class PartieDeChasse
 {
-    public class PartieDeChasse
+    public PartieDeChasse(Guid id, PartieStatus status, List<Chasseur> chasseurs, Terrain terrain, List<Event> events)
     {
-        public PartieDeChasse(Guid id, PartieStatus status, List<Chasseur> chasseurs, Terrain terrain, List<Event> events)
-        {
-            Id = id;
-            Status = status;
-            Chasseurs = chasseurs;
-            Terrain = terrain;
-            Events = events;
-        }
-
-        public PartieDeChasse(Guid id, List<Chasseur> chasseurs, Terrain terrain, PartieStatus status)
-            : this(id, status, chasseurs, terrain, [])
-        {
-        }
-
-        public Guid Id { get; }
-        public List<Chasseur> Chasseurs { get; }
-        public Terrain Terrain { get; }
-        public PartieStatus Status { get; set; }
-        public List<Event> Events { get; }
+        Id = id;
+        Status = status;
+        Chasseurs = chasseurs;
+        Terrain = terrain;
+        Events = events;
     }
+
+    public Guid Id { get; }
+
+    public List<Chasseur> Chasseurs { get; }
+
+    public Terrain Terrain { get; }
+
+    public PartieStatus Status { get; set; }
+
+    public List<Event> Events { get; }
 }
