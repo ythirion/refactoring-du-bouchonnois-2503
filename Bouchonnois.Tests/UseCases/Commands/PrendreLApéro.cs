@@ -28,7 +28,7 @@ public class PrendreLApéro : UseCaseTest
             UnePartieDeChasse()
                 .EnCours());
 
-        _prendereLAperoUseCase.Handle(id);
+        _prendereLAperoUseCase.HandleWithoutException(id);
 
         Repository.SavedPartieDeChasse()
             .DevraitEtreALApéro()
