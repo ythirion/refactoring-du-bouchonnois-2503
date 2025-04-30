@@ -7,11 +7,13 @@ public class PrendreLAperoUseCase(IPartieDeChasseRepository repository, Func<Dat
 {
     public UnitResult<Error> Handle(Guid id)
     {
-        var partieDeChasse = repository.GetById(id);
-        if (partieDeChasse == null)
+        var potentialPartieDeChasse = repository.GetByIdMaybe(id);
+        if (potentialPartieDeChasse.IsFailure)
         {
-            return new Error("La partie de chasse n'existe pas");
+            return potentialPartieDeChasse.Error;
         }
+        
+        var partieDeChasse = potentialPartieDeChasse.Value;
 
         var result = partieDeChasse.PrendreLApero(timeProvider);
         if (result.IsFailure)
