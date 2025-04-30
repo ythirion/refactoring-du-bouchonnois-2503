@@ -1,5 +1,4 @@
 ﻿using System.Runtime.InteropServices.JavaScript;
-
 using Bouchonnois.Domain;
 using CSharpFunctionalExtensions;
 
@@ -15,6 +14,19 @@ public class PrendreLAperoUseCase(IPartieDeChasseRepository repository, Func<Dat
             return new Error("La partie de chasse n'existe pas");
         }
 
+        var result = PrendreLApero(partieDeChasse, timeProvider);
+        if (result.IsFailure)
+        {
+            return result.Error;
+        }
+        
+        repository.Save(partieDeChasse);
+
+        return UnitResult.Success<Error>();
+    }
+
+    private static UnitResult<Error> PrendreLApero(PartieDeChasse partieDeChasse, Func<DateTime> timeProvider)
+    {
         if (partieDeChasse.Status == PartieStatus.Apéro)
         {
             return new Error("On est déjà en train de prendre l'apéro");
@@ -27,7 +39,6 @@ public class PrendreLAperoUseCase(IPartieDeChasseRepository repository, Func<Dat
 
         partieDeChasse.Status = PartieStatus.Apéro;
         partieDeChasse.Events.Add(new Event(timeProvider(), "Petit apéro"));
-        repository.Save(partieDeChasse);
         
         return UnitResult.Success<Error>();
     }
