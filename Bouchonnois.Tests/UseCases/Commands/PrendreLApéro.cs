@@ -64,9 +64,9 @@ public class PrendreLApéro : UseCaseTest
     {
         var id = UnePartieDeChasseExistante(UnePartieDeChasse().Terminée());
 
-        var prendreLapéroQuandTerminée = () => _prendereLAperoUseCase.Handle(id);
+        var prendreLapéroQuandTerminée = _prendereLAperoUseCase.HandleWithoutException(id);
 
-        prendreLapéroQuandTerminée.Should().Throw<OnPrendPasLapéroQuandLaPartieEstTerminée>();
+        prendreLapéroQuandTerminée.Should().FailWith(new Error("On ne prend pas l'apéro quand la partie est terminée"));
 
         Repository.SavedPartieDeChasse().Should().BeNull();
     }

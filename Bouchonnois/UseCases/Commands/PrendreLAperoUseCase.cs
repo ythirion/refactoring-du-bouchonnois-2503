@@ -48,7 +48,7 @@ public class PrendreLAperoUseCase(IPartieDeChasseRepository repository, Func<Dat
         }
         else if (partieDeChasse.Status == PartieStatus.Terminée)
         {
-            throw new OnPrendPasLapéroQuandLaPartieEstTerminée();
+            return UnitResult.Failure(new Error("On ne prend pas l'apéro quand la partie est terminée"));
         }
         else
         {
