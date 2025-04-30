@@ -52,9 +52,9 @@ public class PrendreLApéro : UseCaseTest
     {
         var id = UnePartieDeChasseExistante(UnePartieDeChasse().ALApéro());
 
-        var prendreLApéroQuandOnPrendDéjàLapéro = () => _prendereLAperoUseCase.Handle(id);
-
-        prendreLApéroQuandOnPrendDéjàLapéro.Should().Throw<OnEstDéjàEnTrainDePrendreLapéro>();
+        _prendereLAperoUseCase.HandleWithoutException(id)
+            .Should()
+            .FailWith(new Error("On est déjà en train de prendre l'apéro"));
 
         Repository.SavedPartieDeChasse().Should().BeNull();
     }
