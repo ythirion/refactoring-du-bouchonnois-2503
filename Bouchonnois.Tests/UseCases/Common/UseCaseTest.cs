@@ -21,6 +21,7 @@ public class UseCaseTest
     protected readonly ReprendreLaPartieDeChasseUseCase ReprendreLaPartieDeChasseUseCase;
     protected readonly TerminerLaPartieUseCase TerminerLaPartieUseCase;
     protected readonly ConsulterStatusUseCase ConsulterStatusUseCase;
+    protected readonly DemarrerPartieUseCase DemarrerPartieUseCase;
 
 
     protected UseCaseTest()
@@ -34,6 +35,7 @@ public class UseCaseTest
         ReprendreLaPartieDeChasseUseCase = new ReprendreLaPartieDeChasseUseCase(Repository, () => Now);
         TerminerLaPartieUseCase = new TerminerLaPartieUseCase(Repository, () => Now);
         ConsulterStatusUseCase = new ConsulterStatusUseCase(Repository);
+        DemarrerPartieUseCase = new DemarrerPartieUseCase(Repository, () => Now);
     }
 
     protected Guid UnePartieDeChasseExistante(PartieDeChasseBuilder partieDeChasseBuilder)
