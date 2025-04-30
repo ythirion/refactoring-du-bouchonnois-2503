@@ -1,3 +1,4 @@
+using Bouchonnois.Domain;
 using Bouchonnois.Tests.UseCases.Common;
 using Bouchonnois.Tests.Verifications;
 using Bouchonnois.UseCases.Commands;

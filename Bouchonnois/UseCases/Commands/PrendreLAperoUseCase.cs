@@ -1,5 +1,4 @@
-﻿using System.Runtime.InteropServices.JavaScript;
-using Bouchonnois.Domain;
+﻿using Bouchonnois.Domain;
 using CSharpFunctionalExtensions;
 
 namespace Bouchonnois.UseCases.Commands;
@@ -25,5 +24,3 @@ public class PrendreLAperoUseCase(IPartieDeChasseRepository repository, Func<Dat
         return UnitResult.Success<Error>();
     }
 }
-
-public record Error(string Message);
