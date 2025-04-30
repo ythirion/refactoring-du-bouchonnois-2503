@@ -1,12 +1,14 @@
-﻿using Bouchonnois.Domain;
+﻿using System.Runtime.InteropServices.JavaScript;
+
+using Bouchonnois.Domain;
 using Bouchonnois.UseCases.Exceptions;
+
 using CSharpFunctionalExtensions;
 
 namespace Bouchonnois.UseCases.Commands;
 
 public class PrendreLAperoUseCase(IPartieDeChasseRepository repository, Func<DateTime> timeProvider)
 {
-
     public void Handle(Guid id)
     {
         var partieDeChasse = repository.GetById(id);
@@ -32,7 +34,7 @@ public class PrendreLAperoUseCase(IPartieDeChasseRepository repository, Func<Dat
         }
     }
 
-    public Result HandleWithoutException(Guid id)
+    public UnitResult<Error> HandleWithoutException(Guid id)
     {
         try
         {
@@ -40,9 +42,11 @@ public class PrendreLAperoUseCase(IPartieDeChasseRepository repository, Func<Dat
         }
         catch (LaPartieDeChasseNexistePas)
         {
-            return Result.Failure("La partie de chasse n'existe pas");
+            return UnitResult.Failure(new Error("La partie de chasse n'existe pas"));
         }
-        
-        return Result.Success();
+
+        return UnitResult.Success<Error>();
     }
 }
+
+public record Error(string Message);

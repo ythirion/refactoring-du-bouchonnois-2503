@@ -2,6 +2,7 @@ using Bouchonnois.Tests.UseCases.Common;
 using Bouchonnois.Tests.Verifications;
 using Bouchonnois.UseCases.Commands;
 using Bouchonnois.UseCases.Exceptions;
+
 using CSharpFunctionalExtensions;
 
 using static Bouchonnois.Tests.Builders.PartieDeChasseBuilder;
@@ -11,6 +12,7 @@ namespace Bouchonnois.Tests.UseCases.Commands;
 public class PrendreLApéro : UseCaseTest
 {
     private readonly PrendreLAperoUseCase _prendereLAperoUseCase;
+
     public PrendreLApéro()
     {
         _prendereLAperoUseCase = new PrendreLAperoUseCase(
@@ -18,6 +20,7 @@ public class PrendreLApéro : UseCaseTest
             () => Now
         );
     }
+
     [Fact]
     public void QuandLaPartieEstEnCours()
     {
@@ -37,9 +40,9 @@ public class PrendreLApéro : UseCaseTest
     {
         var id = UnePartieDeChasseInexistante();
 
-        var apéroQuandPartieExistePas = _prendereLAperoUseCase.HandleWithoutException(id);
-
-        apéroQuandPartieExistePas.Should().FailWith("La partie de chasse n'existe pas");
+        _prendereLAperoUseCase.HandleWithoutException(id)
+            .Should()
+            .FailWith(new Error("La partie de chasse n'existe pas"));
 
         Repository.SavedPartieDeChasse().Should().BeNull();
     }
