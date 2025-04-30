@@ -12,6 +12,7 @@ public class ScenarioTests
     private readonly TirerUseCase _tirerUseCase;
     private readonly PrendreLapéroUseCase _prendreLapéroUseCase;
     private readonly ReprendreLaPartieDeChasseUseCase _reprendreLaPartieDeChasseUse;
+    private readonly TerminerLaPartieUseCase _terminerLaPartieUseCase;
     private DateTime _time = new(2024, 4, 25, 9, 0, 0);
 
     public ScenarioTests()
@@ -21,6 +22,7 @@ public class ScenarioTests
         _tirerUseCase = new TirerUseCase(_repository, () => _time);
         _prendreLapéroUseCase = new PrendreLapéroUseCase(_repository, () => _time);
         _reprendreLaPartieDeChasseUse = new ReprendreLaPartieDeChasseUseCase(_repository, () => _time);
+        _terminerLaPartieUseCase = new TerminerLaPartieUseCase(_repository, () => _time);
     }
 
 
@@ -55,7 +57,7 @@ public class ScenarioTests
         After(1.SecondsLater(), () => _tirerUseCase.Tirer(id, "Bernard"));
         After(1.SecondsLater(), () => _tirerUseCase.Tirer(id, "Bernard"));
         After(19.MinutesLater(), () => _tirerSurGalinetteUseCase.TirerSurUneGalinette(id, "Robert"));
-        After(30.MinutesLater(), () => _.TerminerLaPartie(id));
+        After(30.MinutesLater(), () => _terminerLaPartieUseCase.TerminerLaPartie(id));
         // @formatter:on
 
         await Verify(_.ConsulterStatus(id));
