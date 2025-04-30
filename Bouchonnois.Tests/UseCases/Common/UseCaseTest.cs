@@ -1,6 +1,7 @@
 using Bouchonnois.Service;
 using Bouchonnois.Tests.Builders;
 using Bouchonnois.Tests.Doubles;
+using Bouchonnois.UseCases;
 
 namespace Bouchonnois.Tests.UseCases.Common;
 
@@ -15,6 +16,8 @@ public class UseCaseTest
     protected readonly PartieDeChasseRepositoryForTests Repository;
     protected readonly PartieDeChasseService Service;
     protected readonly TirerSurGalinetteUseCase TirerSurGalinetteUseCase;
+    protected readonly TirerUseCase TirerUseCase;
+
 
     protected UseCaseTest()
     {
@@ -22,6 +25,7 @@ public class UseCaseTest
         Repository = new PartieDeChasseRepositoryForTests();
         Service = new PartieDeChasseService(Repository, () => Now);
         TirerSurGalinetteUseCase = new TirerSurGalinetteUseCase(Repository, () => Now);
+        TirerUseCase = new TirerUseCase(Repository, () => Now);
     }
 
     protected Guid UnePartieDeChasseExistante(PartieDeChasseBuilder partieDeChasseBuilder)

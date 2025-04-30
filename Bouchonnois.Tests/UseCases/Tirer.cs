@@ -16,7 +16,7 @@ public class Tirer : UseCaseTest
                 .EnCours()
                 .Avec(Bernard().AyantDesBalles(8)));
 
-        Service.Tirer(id, Bernard);
+        TirerUseCase.Tirer(id, Bernard);
 
         Repository.SavedPartieDeChasse()
             .DevraitAvoirEmis(Now, "Bernard tire")
@@ -28,7 +28,7 @@ public class Tirer : UseCaseTest
     {
         var id = UnePartieDeChasseInexistante();
 
-        var tirerQuandPartieExistePas = () => Service.Tirer(id, Bernard);
+        var tirerQuandPartieExistePas = () => TirerUseCase.Tirer(id, Bernard);
 
         tirerQuandPartieExistePas.Should().Throw<LaPartieDeChasseNexistePas>();
 
@@ -43,7 +43,7 @@ public class Tirer : UseCaseTest
                 .EnCours()
                 .Avec(Bernard().SansBalles()));
 
-        var tirerSansBalle = () => Service.Tirer(id, Bernard);
+        var tirerSansBalle = () => TirerUseCase.Tirer(id, Bernard);
 
         tirerSansBalle.Should().Throw<TasPlusDeBallesMonVieuxChasseALaMain>();
 
@@ -56,7 +56,7 @@ public class Tirer : UseCaseTest
     {
         var id = UnePartieDeChasseExistante(UnePartieDeChasse().EnCours());
 
-        var chasseurInconnuVeutTirer = () => Service.Tirer(id, ChasseurInconnu);
+        var chasseurInconnuVeutTirer = () => TirerUseCase.Tirer(id, ChasseurInconnu);
 
         chasseurInconnuVeutTirer.Should().Throw<ChasseurInconnu>().WithMessage("Chasseur inconnu Chasseur inconnu");
 
@@ -68,7 +68,7 @@ public class Tirer : UseCaseTest
     {
         var id = UnePartieDeChasseExistante(UnePartieDeChasse().ALApéro());
 
-        var tirerEnPleinApéro = () => Service.Tirer(id, ChasseurInconnu);
+        var tirerEnPleinApéro = () => TirerUseCase.Tirer(id, ChasseurInconnu);
 
         tirerEnPleinApéro.Should().Throw<OnTirePasPendantLapéroCestSacré>();
 
@@ -81,7 +81,7 @@ public class Tirer : UseCaseTest
     {
         var id = UnePartieDeChasseExistante(UnePartieDeChasse().Terminée());
 
-        var tirerQuandTerminée = () => Service.Tirer(id, ChasseurInconnu);
+        var tirerQuandTerminée = () => TirerUseCase.Tirer(id, ChasseurInconnu);
 
         tirerQuandTerminée.Should().Throw<OnTirePasQuandLaPartieEstTerminée>();
 
