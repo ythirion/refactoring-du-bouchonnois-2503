@@ -19,18 +19,16 @@ public class PrendreLAperoUseCase(IPartieDeChasseRepository repository, Func<Dat
         {
             return new Error("On est déjà en train de prendre l'apéro");
         }
-        else if (partieDeChasse.Status == PartieStatus.Terminée)
+
+        if (partieDeChasse.Status == PartieStatus.Terminée)
         {
             return new Error("On ne prend pas l'apéro quand la partie est terminée");
         }
-        else
-        {
-            partieDeChasse.Status = PartieStatus.Apéro;
-            partieDeChasse.Events.Add(new Event(timeProvider(), "Petit apéro"));
-            repository.Save(partieDeChasse);
-        }
 
-
+        partieDeChasse.Status = PartieStatus.Apéro;
+        partieDeChasse.Events.Add(new Event(timeProvider(), "Petit apéro"));
+        repository.Save(partieDeChasse);
+        
         return UnitResult.Success<Error>();
     }
 }
