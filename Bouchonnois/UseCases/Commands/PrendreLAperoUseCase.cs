@@ -1,4 +1,5 @@
 ﻿using Bouchonnois.Domain;
+using Bouchonnois.UseCases.Exceptions;
 
 using CSharpFunctionalExtensions;
 
@@ -8,13 +9,18 @@ public class PrendreLAperoUseCase(IPartieDeChasseRepository repository, Func<Dat
 {
     public UnitResult<Error> Handle(Guid id)
     {
-        var partieDeChasse = repository.GetById(id);
+        return repository
+            .GetSafeById(id)
+            .ToResult(new Error(UseCasesErrorMessages.LaPartieDeChasseNExistePas))
+            .Bind(p =>
+            {
+                var result = p.PasserAlApéro(timeProvider());
+                if (result.IsSuccess)
+                {
+                    repository.Save(p);
+                }
 
-        if (partieDeChasse == null)
-            return UnitResult.Failure(new Error("La partie de chasse n'existe pas"));
-
-        return partieDeChasse
-            .PasserAlApéro(timeProvider())
-            .Tap(() => repository.Save(partieDeChasse));
+                return result;
+            });
     }
 }

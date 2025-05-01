@@ -1,6 +1,4 @@
-﻿using Bouchonnois.UseCases.Commands;
-
-using CSharpFunctionalExtensions;
+﻿using CSharpFunctionalExtensions;
 
 namespace Bouchonnois.Domain;
 
