@@ -100,7 +100,7 @@ public class TirerUseCase(IPartieDeChasseRepository repository, Func<DateTime> t
                     $"{chasseur} tire -> T'as plus de balles mon vieux, chasse à la main"));
                 repository.Save(partieDeChasse);
 
-                throw new TasPlusDeBallesMonVieuxChasseALaMain();
+                return UnitResult.Failure(new Error(DomainErrorMessages.TasPlusDeBallesMonVieuxChasseALaMain));
             }
 
             partieDeChasse.Events.Add(new Event(timeProvider(), $"{chasseur} tire"));

@@ -4,7 +4,6 @@ using Bouchonnois.Tests.UseCases.Common;
 using Bouchonnois.Tests.Verifications;
 using Bouchonnois.UseCases.Commands;
 using Bouchonnois.UseCases.Errors;
-using Bouchonnois.UseCases.Exceptions;
 
 using static Bouchonnois.Tests.Builders.PartieDeChasseBuilder;
 using static Bouchonnois.Tests.Builders.ChasseurBuilder;
@@ -72,9 +71,10 @@ public class Tirer : UseCaseTest
                     .EnCours()
                     .Avec(Bernard().SansBalles()));
 
-            var tirerSansBalle = () => _tirerUseCase.Handle(id, Bernard);
-
-            tirerSansBalle.Should().Throw<TasPlusDeBallesMonVieuxChasseALaMain>();
+            _tirerUseCase
+                .HandleWithoutException(id, Bernard)
+                .Should()
+                .FailWith(new Error(DomainErrorMessages.TasPlusDeBallesMonVieuxChasseALaMain));
 
             Repository.SavedPartieDeChasse()
                 .DevraitAvoirEmis(Now, "Bernard tire -> T'as plus de balles mon vieux, chasse à la main");

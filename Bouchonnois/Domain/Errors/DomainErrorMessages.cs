@@ -8,4 +8,5 @@ public static class DomainErrorMessages
     public const string QuandCestFiniCestFini = "Quand c'est fini c'est fini";
     public const string OnTirePasPendantLapéroCestSacré = "On tire pas pendant l'apéro, c'est sacré !!!";
     public const string OnTirePasQuandLaPartieEstTerminée = "On tire pas quand la partie est terminée";
+    public const string TasPlusDeBallesMonVieuxChasseALaMain = "T'as plus de balles mon vieux, chasse à la main";
 }
