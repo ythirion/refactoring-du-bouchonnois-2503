@@ -32,21 +32,21 @@ public class PrendreLApéro : UseCaseTest
     [Fact]
     public void EchoueCarPartieNexistePas()
         => UnePartieDeChasseInexistante()
-            .Run(id => _prendreLAperoUseCase.Handle(id))
+            .Run(id => _prendreLAperoUseCase.HandleCommand(new PrendreLapéro(id)))
             .FailWith("La partie de chasse n'existe pas")
             .And(_ => Repository.NothingHasBeenSaved());
 
     [Fact]
     public void EchoueSiLesChasseursSontDéjaEnApero()
         => UnePartieDeChasseExistante(UnePartieDeChasse().ALApéro())
-            .Run(id => _prendreLAperoUseCase.Handle(id))
+            .Run(id => _prendreLAperoUseCase.HandleCommand(new PrendreLapéro(id)))
             .FailWith("On est déjà en train de prendre l'apéro")
             .And(_ => Repository.NothingHasBeenSaved());
 
     [Fact]
     public void EchoueSiLaPartieDeChasseEstTerminée()
         => UnePartieDeChasseExistante(UnePartieDeChasse().Terminée())
-            .Run(id => _prendreLAperoUseCase.Handle(id))
+            .Run(id => _prendreLAperoUseCase.HandleCommand(new PrendreLapéro(id)))
             .FailWith("On ne prend pas l'apéro quand la partie est terminée")
             .And(_ => Repository.NothingHasBeenSaved());
 }
