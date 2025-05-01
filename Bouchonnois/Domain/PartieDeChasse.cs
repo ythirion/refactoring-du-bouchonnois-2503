@@ -31,7 +31,7 @@ public class PartieDeChasse
         if (Terminée()) return new Error("On ne prend pas l'apéro quand la partie est terminée");
 
         Status = PartieStatus.Apéro;
-        Events.Add(new Event(timeProvider(), "Petit apéro"));
+        Events.Add(new ApéroADémarré(Id, timeProvider()));
 
         return UnitResult.Success<Error>();
     }

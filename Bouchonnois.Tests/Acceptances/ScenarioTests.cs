@@ -1,5 +1,4 @@
 using Bouchonnois.Tests.Doubles;
-using Bouchonnois.UseCases;
 using Bouchonnois.UseCases.Commands;
 using Bouchonnois.UseCases.Queries;
 
@@ -31,7 +30,7 @@ public class ScenarioTests
 
 
     [Fact]
-    public async Task DéroulerUnePartie()
+    public Task DéroulerUnePartie()
     {
         var chasseurs = new List<(string, int)>
         {
@@ -64,7 +63,7 @@ public class ScenarioTests
         After(30.MinutesLater(), () => _terminerLaPartie.Handle(id));
         // @formatter:on
 
-        await Verify(_consulterStatus.Handle(id));
+        return Verify(_consulterStatus.Handle(id));
     }
 
     private void After(TimeSpan time, Action scenarioAction)

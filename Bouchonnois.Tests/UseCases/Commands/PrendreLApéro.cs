@@ -1,3 +1,4 @@
+using Bouchonnois.Domain;
 using Bouchonnois.Tests.UseCases.Common;
 using Bouchonnois.Tests.Verifications;
 using Bouchonnois.UseCases.Commands;
@@ -48,9 +49,4 @@ public class PrendreLApéro : UseCaseTest
             .Run(id => _prendreLAperoUseCase.HandleWithoutException(id))
             .FailWith("On ne prend pas l'apéro quand la partie est terminée")
             .And(_ => Repository.NothingHasBeenSaved());
-}
-
-public sealed record ApéroADémarré(Guid Id, DateTime Date)
-{
-    public override string ToString() => "Petit apéro";
 }
