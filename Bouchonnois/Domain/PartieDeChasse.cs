@@ -34,10 +34,10 @@ public class PartieDeChasse
             _ => AlApero(now)
         };
 
-        UnitResult<Error> AlApero(DateTime now)
+        UnitResult<Error> AlApero(DateTime eventTime)
         {
             Status = PartieStatus.Apéro;
-            Events.Add(new Event(now, "Petit apéro"));
+            Events.Add(new Event(eventTime, "Petit apéro"));
 
             return UnitResult.Success<Error>();
         }
