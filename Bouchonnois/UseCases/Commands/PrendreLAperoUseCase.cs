@@ -8,9 +8,7 @@ namespace Bouchonnois.UseCases.Commands;
 
 public class PrendreLAperoUseCase(IPartieDeChasseRepository repository, TimeProvider timeProvider)
 {
-    public UnitResult<Error> Handle(Guid id) => HandleCommand(new PrendreLapéro(id));
-
-    public UnitResult<Error> HandleCommand(PrendreLapéro prendreLapéro)
+    public UnitResult<Error> Handle(PrendreLapéro prendreLapéro)
     {
         var partieDeChasse = repository.GetById(prendreLapéro.Id);
         if (partieDeChasse == null)
