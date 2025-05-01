@@ -13,14 +13,8 @@ public class PrendreLAperoUseCase(IPartieDeChasseRepository repository, Func<Dat
             .GetSafeById(id)
             .ToResult(new Error(UseCasesErrorMessages.LaPartieDeChasseNExistePas))
             .Bind(p =>
-            {
-                var result = p.PasserAlApéro(timeProvider());
-                if (result.IsSuccess)
-                {
-                    repository.Save(p);
-                }
-
-                return result;
-            });
+                p.PasserAlApéro(timeProvider())
+                    .Tap(() => repository.Save(p))
+            );
     }
 }
