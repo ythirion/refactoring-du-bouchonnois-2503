@@ -27,15 +27,12 @@ public class DemarrerUseCase(IPartieDeChasseRepository repository, Func<DateTime
             partieDeChasse.AddChasseur(new Chasseur(chasseur.nom, chasseur.nbBalles));
         }
 
-        if (partieDeChasse.GetChasseurs().Count == 0)
+        if (partieDeChasse.EstSansChasseur())
         {
             throw new ImpossibleDeDémarrerUnePartieSansChasseur();
         }
 
-        var chasseursToString = string.Join(
-            ", ",
-            partieDeChasse.GetChasseurs().Select(c => c.Nom + $" ({c.BallesRestantes} balles)")
-        );
+        var chasseursToString = partieDeChasse.ChasseursToString();
 
         partieDeChasse.Events.Add(new Event(timeProvider(),
             $"La partie de chasse commence à {partieDeChasse.Terrain.Nom} avec {chasseursToString}")

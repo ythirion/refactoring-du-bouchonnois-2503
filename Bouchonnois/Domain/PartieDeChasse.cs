@@ -1,6 +1,4 @@
-﻿using System.Runtime.CompilerServices;
-
-using Bouchonnois.Domain.Errors;
+﻿using Bouchonnois.Domain.Errors;
 
 using CSharpFunctionalExtensions;
 
@@ -20,7 +18,6 @@ public class PartieDeChasse
 
     public Guid Id { get; }
 
-    public IReadOnlyCollection<Chasseur> GetChasseurs() => _groupeDeChasseurs.Get();
     public void AddChasseur(Chasseur chasseur) => _groupeDeChasseurs.Add(chasseur);
 
     public Terrain Terrain { get; }
@@ -80,4 +77,20 @@ public class PartieDeChasse
                 ? Result.Success<string, Error>(result.Value.VainqueursNames())
                 : Result.Success<string, Error>(result.Error.ToString()));
     }
+    public Result<Chasseur, Error> GetTireur(string chasseur)
+    {
+        var tireur = _groupeDeChasseurs.GetChasseurWithName(chasseur);
+        return tireur is null
+            ? Result.Failure<Chasseur, Error>(new Error(DomainErrorMessages.LeChasseurNestPasDansLaPartie))
+            : Result.Success<Chasseur, Error>(tireur);
+    }
+
+    public bool EstSansChasseur() => _groupeDeChasseurs.Empty();
+    public string ChasseursToString()
+        => string.Join(
+            ", ",
+            _groupeDeChasseurs
+                .Get()
+                .Select(c => c.Nom + $" ({c.BallesRestantes} balles)")
+        );
 }

@@ -1,7 +1,6 @@
 ﻿using Bouchonnois.Domain;
 using Bouchonnois.Domain.Errors;
 using Bouchonnois.UseCases.Errors;
-using Bouchonnois.UseCases.Exceptions;
 
 using CSharpFunctionalExtensions;
 
@@ -34,11 +33,13 @@ public class TirerUseCase(IPartieDeChasseRepository repository, Func<DateTime> t
                 return UnitResult.Failure(new Error(DomainErrorMessages.OnTirePasQuandLaPartieEstTerminée));
             }
 
-            var chasseurQuiTire = partieDeChasse.GetChasseurs().FirstOrDefault(c => c.Nom == chasseur);
-            if (chasseurQuiTire is null)
+            var result = partieDeChasse.GetTireur(chasseur);
+            if (result.IsFailure)
             {
-                return UnitResult.Failure(new Error(UseCasesErrorMessages.LeChasseurNestPasDansLaPartie));
+                return UnitResult.Failure(result.Error);
             }
+
+            var chasseurQuiTire = result.Value;
 
             if (chasseurQuiTire.BallesRestantes == 0)
             {

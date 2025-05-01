@@ -21,29 +21,29 @@ public class TirerSurGalinetteUseCase(IPartieDeChasseRepository repository, Func
             {
                 if (partieDeChasse.Status != PartieStatus.Terminée)
                 {
-                    var chasseurQuiTire = partieDeChasse.GetChasseurs().FirstOrDefault(c => c.Nom == chasseur);
-                    if (chasseurQuiTire is not null)
-                    {
-                        if (chasseurQuiTire.BallesRestantes == 0)
-                        {
-                            partieDeChasse.Events.Add(
-                                new Event(
-                                    timeProvider(),
-                                    $"{chasseur} veut tirer sur une galinette -> T'as plus de balles mon vieux, chasse à la main"));
-                            repository.Save(partieDeChasse);
-
-                            throw new TasPlusDeBallesMonVieuxChasseALaMain();
-                        }
-
-                        chasseurQuiTire.BallesRestantes--;
-                        chasseurQuiTire.NbGalinettes++;
-                        partieDeChasse.Terrain.NbGalinettes--;
-                        partieDeChasse.Events.Add(new Event(timeProvider(), $"{chasseur} tire sur une galinette"));
-                    }
-                    else
+                    var result = partieDeChasse.GetTireur(chasseur);
+                    if (result.IsFailure)
                     {
                         throw new ChasseurInconnu(chasseur);
                     }
+
+                    var chasseurQuiTire = result.Value;
+
+                    if (chasseurQuiTire.BallesRestantes == 0)
+                    {
+                        partieDeChasse.Events.Add(
+                            new Event(
+                                timeProvider(),
+                                $"{chasseur} veut tirer sur une galinette -> T'as plus de balles mon vieux, chasse à la main"));
+                        repository.Save(partieDeChasse);
+
+                        throw new TasPlusDeBallesMonVieuxChasseALaMain();
+                    }
+
+                    chasseurQuiTire.BallesRestantes--;
+                    chasseurQuiTire.NbGalinettes++;
+                    partieDeChasse.Terrain.NbGalinettes--;
+                    partieDeChasse.Events.Add(new Event(timeProvider(), $"{chasseur} tire sur une galinette"));
                 }
                 else
                 {

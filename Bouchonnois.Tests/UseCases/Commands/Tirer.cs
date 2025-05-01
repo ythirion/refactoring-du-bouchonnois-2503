@@ -88,7 +88,7 @@ public class Tirer : UseCaseTest
             _tirerUseCase
                 .Handle(id, ChasseurInconnu)
                 .Should()
-                .FailWith(new Error(UseCasesErrorMessages.LeChasseurNestPasDansLaPartie));
+                .FailWith(new Error(DomainErrorMessages.LeChasseurNestPasDansLaPartie));
 
             Repository.SavedPartieDeChasse().Should().BeNull();
         }

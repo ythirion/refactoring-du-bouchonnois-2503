@@ -3,6 +3,4 @@
 public static class UseCasesErrorMessages
 {
     public const string LaPartieDeChasseNExistePas = "La partie de chasse n'existe pas";
-    public const string LeChasseurNestPasDansLaPartie = "Chasseur inconnu";
-
 }
