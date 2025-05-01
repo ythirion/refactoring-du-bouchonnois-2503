@@ -1,5 +1,4 @@
 using Bouchonnois.Tests.Doubles;
-using Bouchonnois.UseCases;
 using Bouchonnois.UseCases.Commands;
 using Bouchonnois.UseCases.Queries;
 
@@ -39,6 +38,7 @@ public class ScenarioTests
             ("Bernard", 8),
             ("Robert", 12)
         };
+
         var terrainDeChasse = ("Pitibon sur Sauldre", 4);
 
         var id = _demarrer.Handle(terrainDeChasse, chasseurs);

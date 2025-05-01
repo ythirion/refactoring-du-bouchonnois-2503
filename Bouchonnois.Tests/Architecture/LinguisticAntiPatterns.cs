@@ -1,5 +1,4 @@
 using ArchUnitNET.Fluent.Syntax.Elements.Members.MethodMembers;
-using ArchUnitNET.xUnit;
 
 using static ArchUnitNET.Fluent.ArchRuleDefinition;
 
@@ -28,5 +27,4 @@ public class LinguisticAntiPatterns
             .Should()
             .HaveReturnType(typeof(bool))
             .Check();
-
 }
