@@ -121,8 +121,14 @@ public class TerminerLaPartieDeChasse : UseCaseTest
             .DevraitEtreTerminé();
     }
 
-    public class Failure : TerminerLaPartieDeChasse
+    public class Failure : UseCaseTest
     {
+        private readonly TerminerLaPartieUseCase _sut;
+        public Failure()
+        {
+            _sut = new TerminerLaPartieUseCase(Repository, () => Now);
+        }
+
         [Fact]
         public void EchoueSiLaPartieDeChasseEstDéjàTerminée()
         {
