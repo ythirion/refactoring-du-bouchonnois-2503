@@ -8,9 +8,11 @@ namespace Bouchonnois.UseCases.Commands;
 
 public class PrendreLAperoUseCase(IPartieDeChasseRepository repository, TimeProvider timeProvider)
 {
-    public UnitResult<Error> Handle(Guid id)
+    public UnitResult<Error> Handle(Guid id) => HandleCommand(new PrendreLapéro(id));
+
+    public UnitResult<Error> HandleCommand(PrendreLapéro prendreLapéro)
     {
-        var partieDeChasse = repository.GetById(id);
+        var partieDeChasse = repository.GetById(prendreLapéro.Id);
         if (partieDeChasse == null)
         {
             return new Error("La partie de chasse n'existe pas");
@@ -19,11 +21,4 @@ public class PrendreLAperoUseCase(IPartieDeChasseRepository repository, TimeProv
         return partieDeChasse.PrendreLapéro(timeProvider)
             .Tap(() => repository.Save(partieDeChasse));
     }
-
-    public UnitResult<Error> HandleCommand(PrendreLapéro id)
-    {
-        throw new NotImplementedException();
-    }
 }
-
-public record PrendreLapéro(Guid Id);
