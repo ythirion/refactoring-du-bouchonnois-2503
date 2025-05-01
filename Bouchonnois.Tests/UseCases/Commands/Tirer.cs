@@ -1,6 +1,9 @@
+using Bouchonnois.Domain;
+using Bouchonnois.Domain.Errors;
 using Bouchonnois.Tests.UseCases.Common;
 using Bouchonnois.Tests.Verifications;
 using Bouchonnois.UseCases.Commands;
+using Bouchonnois.UseCases.Errors;
 using Bouchonnois.UseCases.Exceptions;
 
 using static Bouchonnois.Tests.Builders.PartieDeChasseBuilder;
@@ -27,76 +30,93 @@ public class Tirer : UseCaseTest
                 .EnCours()
                 .Avec(Bernard().AyantDesBalles(8)));
 
-        _tirerUseCase.Handle(id, Bernard);
+        _tirerUseCase
+            .HandleWithoutException(id, Bernard)
+            .Should()
+            .Succeed();
 
         Repository.SavedPartieDeChasse()
             .DevraitAvoirEmis(Now, "Bernard tire")
             .ChasseurDevraitAvoirTiré(Bernard, 7);
     }
 
-    [Fact]
-    public void EchoueCarPartieNexistePas()
+    public class Failure : UseCaseTest
     {
-        var id = UnePartieDeChasseInexistante();
+        private readonly TirerUseCase _tirerUseCase;
+        public Failure()
+        {
+            _tirerUseCase = new TirerUseCase(
+                Repository,
+                () => Now
+            );
+        }
 
-        var tirerQuandPartieExistePas = () => _tirerUseCase.Handle(id, Bernard);
+        [Fact]
+        public void EchoueCarPartieNexistePas()
+        {
+            var id = UnePartieDeChasseInexistante();
 
-        tirerQuandPartieExistePas.Should().Throw<LaPartieDeChasseNexistePas>();
+            _tirerUseCase
+                .HandleWithoutException(id, Bernard)
+                .Should()
+                .FailWith(new Error(UseCasesErrorMessages.LaPartieDeChasseNExistePas));
 
-        Repository.SavedPartieDeChasse().Should().BeNull();
-    }
+            Repository.SavedPartieDeChasse().Should().BeNull();
+        }
 
-    [Fact]
-    public void EchoueAvecUnChasseurNayantPlusDeBalles()
-    {
-        var id = UnePartieDeChasseExistante(
-            UnePartieDeChasse()
-                .EnCours()
-                .Avec(Bernard().SansBalles()));
+        [Fact]
+        public void EchoueAvecUnChasseurNayantPlusDeBalles()
+        {
+            var id = UnePartieDeChasseExistante(
+                UnePartieDeChasse()
+                    .EnCours()
+                    .Avec(Bernard().SansBalles()));
 
-        var tirerSansBalle = () => _tirerUseCase.Handle(id, Bernard);
+            var tirerSansBalle = () => _tirerUseCase.Handle(id, Bernard);
 
-        tirerSansBalle.Should().Throw<TasPlusDeBallesMonVieuxChasseALaMain>();
+            tirerSansBalle.Should().Throw<TasPlusDeBallesMonVieuxChasseALaMain>();
 
-        Repository.SavedPartieDeChasse()
-            .DevraitAvoirEmis(Now, "Bernard tire -> T'as plus de balles mon vieux, chasse à la main");
-    }
+            Repository.SavedPartieDeChasse()
+                .DevraitAvoirEmis(Now, "Bernard tire -> T'as plus de balles mon vieux, chasse à la main");
+        }
 
-    [Fact]
-    public void EchoueCarLeChasseurNestPasDansLaPartie()
-    {
-        var id = UnePartieDeChasseExistante(UnePartieDeChasse().EnCours());
+        [Fact]
+        public void EchoueCarLeChasseurNestPasDansLaPartie()
+        {
+            var id = UnePartieDeChasseExistante(UnePartieDeChasse().EnCours());
 
-        var chasseurInconnuVeutTirer = () => _tirerUseCase.Handle(id, ChasseurInconnu);
+            var chasseurInconnuVeutTirer = () => _tirerUseCase.Handle(id, ChasseurInconnu);
 
-        chasseurInconnuVeutTirer.Should().Throw<ChasseurInconnu>().WithMessage("Chasseur inconnu Chasseur inconnu");
+            chasseurInconnuVeutTirer.Should().Throw<ChasseurInconnu>().WithMessage("Chasseur inconnu Chasseur inconnu");
 
-        Repository.SavedPartieDeChasse().Should().BeNull();
-    }
+            Repository.SavedPartieDeChasse().Should().BeNull();
+        }
 
-    [Fact]
-    public void EchoueSiLesChasseursSontEnApero()
-    {
-        var id = UnePartieDeChasseExistante(UnePartieDeChasse().ALApéro());
+        [Fact]
+        public void EchoueSiLesChasseursSontEnApero()
+        {
+            var id = UnePartieDeChasseExistante(UnePartieDeChasse().ALApéro());
 
-        var tirerEnPleinApéro = () => _tirerUseCase.Handle(id, ChasseurInconnu);
+            _tirerUseCase
+                .HandleWithoutException(id, ChasseurInconnu)
+                .Should()
+                .FailWith(new Error(DomainErrorMessages.OnTirePasPendantLapéroCestSacré));
 
-        tirerEnPleinApéro.Should().Throw<OnTirePasPendantLapéroCestSacré>();
+            Repository.SavedPartieDeChasse()
+                .DevraitAvoirEmis(Now, "Chasseur inconnu veut tirer -> On tire pas pendant l'apéro, c'est sacré !!!");
+        }
 
-        Repository.SavedPartieDeChasse()
-            .DevraitAvoirEmis(Now, "Chasseur inconnu veut tirer -> On tire pas pendant l'apéro, c'est sacré !!!");
-    }
+        [Fact]
+        public void EchoueSiLaPartieDeChasseEstTerminée()
+        {
+            var id = UnePartieDeChasseExistante(UnePartieDeChasse().Terminée());
 
-    [Fact]
-    public void EchoueSiLaPartieDeChasseEstTerminée()
-    {
-        var id = UnePartieDeChasseExistante(UnePartieDeChasse().Terminée());
+            var tirerQuandTerminée = () => _tirerUseCase.Handle(id, ChasseurInconnu);
 
-        var tirerQuandTerminée = () => _tirerUseCase.Handle(id, ChasseurInconnu);
+            tirerQuandTerminée.Should().Throw<OnTirePasQuandLaPartieEstTerminée>();
 
-        tirerQuandTerminée.Should().Throw<OnTirePasQuandLaPartieEstTerminée>();
-
-        Repository.SavedPartieDeChasse()
-            .DevraitAvoirEmis(Now, "Chasseur inconnu veut tirer -> On tire pas quand la partie est terminée");
+            Repository.SavedPartieDeChasse()
+                .DevraitAvoirEmis(Now, "Chasseur inconnu veut tirer -> On tire pas quand la partie est terminée");
+        }
     }
 }
