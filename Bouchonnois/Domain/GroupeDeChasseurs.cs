@@ -4,19 +4,15 @@ using CSharpFunctionalExtensions;
 
 namespace Bouchonnois.Domain;
 
-internal class GroupeDeChasseurs
+internal class GroupeDeChasseurs(List<Chasseur>? chasseurs)
 {
-    private readonly List<Chasseur> _chasseurs;
-    public GroupeDeChasseurs(List<Chasseur>? chasseurs)
-    {
-        _chasseurs = chasseurs ?? [];
-    }
+    private readonly List<Chasseur> _chasseurs = chasseurs ?? [];
     public void Add(Chasseur chasseur) => _chasseurs.Add(chasseur);
 
     public IReadOnlyCollection<Chasseur> Get()
         => new ReadOnlyCollection<Chasseur>(_chasseurs.ToArray());
 
-    public Result<List<Chasseur>, Brocouille> GetVainqueurs()
+    public Result<GroupeDeVainqueurs, Brocouille> GetVainqueurs()
     {
         var classement = _chasseurs
             .GroupBy(c => c.NbGalinettes)
@@ -25,11 +21,10 @@ internal class GroupeDeChasseurs
 
         if (classement.All(group => group.Key == 0))
         {
-            return Result.Failure<List<Chasseur>, Brocouille>(new Brocouille());
+            return Result.Failure<GroupeDeVainqueurs, Brocouille>(new Brocouille());
         }
 
-        return Result.Success<List<Chasseur>, Brocouille>(classement
-            .First()
-            .ToList());
+        return Result.Success<GroupeDeVainqueurs, Brocouille>(
+            new GroupeDeVainqueurs(classement.First().ToList()));
     }
 }

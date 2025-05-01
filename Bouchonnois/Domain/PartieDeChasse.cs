@@ -25,7 +25,7 @@ public class PartieDeChasse
 
     public Terrain Terrain { get; }
 
-    public PartieStatus Status { get; set; }
+    public PartieStatus Status { get; private set; }
 
     public List<Event> Events { get; }
 
@@ -74,13 +74,10 @@ public class PartieDeChasse
 
         return _groupeDeChasseurs
             .GetVainqueurs()
-            .TapError(_ => Events.Add(new Event(eventTime, "La partie de chasse est terminée, vainqueur : Brocouille")))
-            .Tap(vainqueurs => Events.Add(
-                new Event(eventTime,
-                    $"La partie de chasse est terminée, vainqueur : {string.Join(", ", vainqueurs
-                        .Select(c => $"{c.Nom} - {c.NbGalinettes} galinettes"))}")))
+            .TapError(brocouille => Events.Add(new Event(eventTime, brocouille.GetEventMessage())))
+            .Tap(vainqueurs => Events.Add(new Event(eventTime, vainqueurs.GetVictoryEventMessage())))
             .Finally(result => result.IsSuccess
-                ? Result.Success<string, Error>(string.Join(", ", result.Value.Select(c => c.Nom)))
+                ? Result.Success<string, Error>(result.Value.VainqueursNames())
                 : Result.Success<string, Error>(result.Error.ToString()));
     }
 }
