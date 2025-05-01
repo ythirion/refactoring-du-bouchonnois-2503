@@ -26,28 +26,8 @@ public class PrendreLAperoUseCase(IPartieDeChasseRepository repository, TimeProv
             return new Error("La partie de chasse n'existe pas");
         }
 
-        return PrendreLapéro(partieDeChasse, timeProvider)
+        return partieDeChasse.PrendreLapéro(timeProvider)
             .Tap(() => repository.Save(partieDeChasse));
-    }
-
-    private static UnitResult<Error> PrendreLapéro(PartieDeChasse partieDeChasse,
-        TimeProvider timeProvider)
-    {
-        if (partieDeChasse.Status == PartieStatus.Apéro)
-        {
-            return new Error("On est déjà en train de prendre l'apéro");
-        }
-        else if (partieDeChasse.Status == PartieStatus.Terminée)
-        {
-            return new Error("On ne prend pas l'apéro quand la partie est terminée");
-        }
-        else
-        {
-            partieDeChasse.Status = PartieStatus.Apéro;
-            partieDeChasse.Events.Add(new Event(timeProvider(), "Petit apéro"));
-        }
-
-        return UnitResult.Success<Error>();
     }
 }
 
