@@ -18,8 +18,8 @@ public class PrendreLApéro : UseCaseTest
                 UnePartieDeChasse()
                     .EnCours()
             )
-            // TODO : quoi retourner ici
             .Run(id => _prendreLAperoUseCase.HandleWithoutException(id))
+            .Succeed()
             .And(_ => Repository.SavedPartieDeChasse()
                 .DevraitEtreALApéro()
                 .DevraitAvoirEmis(Now, "Petit apéro")
