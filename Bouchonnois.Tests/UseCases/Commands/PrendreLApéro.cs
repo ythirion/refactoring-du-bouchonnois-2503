@@ -21,7 +21,7 @@ public class PrendreLApéro : UseCaseTest
                 .EnCours()
         );
 
-        partieId.Run(id => _prendreLAperoUseCase.HandleWithoutException(id))
+        partieId.Run(id => _prendreLAperoUseCase.Handle(id))
             .Succeed()
             .And(_ => Repository.SavedPartieDeChasse()
                 .DevraitEtreALApéro()
@@ -32,21 +32,21 @@ public class PrendreLApéro : UseCaseTest
     [Fact]
     public void EchoueCarPartieNexistePas()
         => UnePartieDeChasseInexistante()
-            .Run(id => _prendreLAperoUseCase.HandleWithoutException(id))
+            .Run(id => _prendreLAperoUseCase.Handle(id))
             .FailWith("La partie de chasse n'existe pas")
             .And(_ => Repository.NothingHasBeenSaved());
 
     [Fact]
     public void EchoueSiLesChasseursSontDéjaEnApero()
         => UnePartieDeChasseExistante(UnePartieDeChasse().ALApéro())
-            .Run(id => _prendreLAperoUseCase.HandleWithoutException(id))
+            .Run(id => _prendreLAperoUseCase.Handle(id))
             .FailWith("On est déjà en train de prendre l'apéro")
             .And(_ => Repository.NothingHasBeenSaved());
 
     [Fact]
     public void EchoueSiLaPartieDeChasseEstTerminée()
         => UnePartieDeChasseExistante(UnePartieDeChasse().Terminée())
-            .Run(id => _prendreLAperoUseCase.HandleWithoutException(id))
+            .Run(id => _prendreLAperoUseCase.Handle(id))
             .FailWith("On ne prend pas l'apéro quand la partie est terminée")
             .And(_ => Repository.NothingHasBeenSaved());
 }
