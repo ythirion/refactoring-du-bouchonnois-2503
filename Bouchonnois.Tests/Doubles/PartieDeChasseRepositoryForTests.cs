@@ -20,4 +20,6 @@ public class PartieDeChasseRepositoryForTests : IPartieDeChasseRepository
 
     public void Add(PartieDeChasse partieDeChasse) => _partiesDeChasse[partieDeChasse.Id] = partieDeChasse;
     public PartieDeChasse SavedPartieDeChasse() => _savedPartieDeChasse!;
+
+    public void NothingHasBeenSaved() => SavedPartieDeChasse().Should().BeNull();
 }
