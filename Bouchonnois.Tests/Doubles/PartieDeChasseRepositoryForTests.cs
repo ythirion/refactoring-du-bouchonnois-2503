@@ -1,5 +1,7 @@
 using Bouchonnois.Domain;
 
+using CSharpFunctionalExtensions;
+
 namespace Bouchonnois.Tests.Doubles;
 
 public class PartieDeChasseRepositoryForTests : IPartieDeChasseRepository
@@ -17,6 +19,11 @@ public class PartieDeChasseRepositoryForTests : IPartieDeChasseRepository
         => (_partiesDeChasse.ContainsKey(partieDeChasseId)
             ? _partiesDeChasse[partieDeChasseId]
             : null)!;
+
+    public Maybe<PartieDeChasse> RetrieveById(Guid partieDeChasseId)
+        => _partiesDeChasse.ContainsKey(partieDeChasseId)
+            ? Maybe.From(_partiesDeChasse[partieDeChasseId])
+            : Maybe<PartieDeChasse>.None;
 
     public void Add(PartieDeChasse partieDeChasse) => _partiesDeChasse[partieDeChasse.Id] = partieDeChasse;
     public PartieDeChasse SavedPartieDeChasse() => _savedPartieDeChasse!;

@@ -10,13 +10,11 @@ public class PrendreLAperoUseCase(IPartieDeChasseRepository repository, TimeProv
 {
     public UnitResult<Error> Handle(PrendreLapéro prendreLapéro)
     {
-        var partieDeChasse = repository.GetById(prendreLapéro.Id);
-        if (partieDeChasse == null)
-        {
-            return new Error("La partie de chasse n'existe pas");
-        }
+        var partieDeChasse = repository.RetrieveById(prendreLapéro.Id)
+            .ToResult(new Error("La partie de chasse n'existe pas"));
 
-        return partieDeChasse.PrendreLapéro(timeProvider)
-            .Tap(() => repository.Save(partieDeChasse));
+        return partieDeChasse
+            .Bind(p => p.PrendreLapéro(timeProvider))
+            .Tap(() => repository.Save(partieDeChasse.Value));
     }
 }
