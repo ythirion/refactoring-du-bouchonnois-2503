@@ -30,7 +30,7 @@ public class Tirer : UseCaseTest
                 .Avec(Bernard().AyantDesBalles(8)));
 
         _tirerUseCase
-            .HandleWithoutException(id, Bernard)
+            .Handle(id, Bernard)
             .Should()
             .Succeed();
 
@@ -56,7 +56,7 @@ public class Tirer : UseCaseTest
             var id = UnePartieDeChasseInexistante();
 
             _tirerUseCase
-                .HandleWithoutException(id, Bernard)
+                .Handle(id, Bernard)
                 .Should()
                 .FailWith(new Error(UseCasesErrorMessages.LaPartieDeChasseNExistePas));
 
@@ -72,7 +72,7 @@ public class Tirer : UseCaseTest
                     .Avec(Bernard().SansBalles()));
 
             _tirerUseCase
-                .HandleWithoutException(id, Bernard)
+                .Handle(id, Bernard)
                 .Should()
                 .FailWith(new Error(DomainErrorMessages.TasPlusDeBallesMonVieuxChasseALaMain));
 
@@ -86,7 +86,7 @@ public class Tirer : UseCaseTest
             var id = UnePartieDeChasseExistante(UnePartieDeChasse().EnCours());
 
             _tirerUseCase
-                .HandleWithoutException(id, ChasseurInconnu)
+                .Handle(id, ChasseurInconnu)
                 .Should()
                 .FailWith(new Error(UseCasesErrorMessages.LeChasseurNestPasDansLaPartie));
 
@@ -99,7 +99,7 @@ public class Tirer : UseCaseTest
             var id = UnePartieDeChasseExistante(UnePartieDeChasse().ALApéro());
 
             _tirerUseCase
-                .HandleWithoutException(id, ChasseurInconnu)
+                .Handle(id, ChasseurInconnu)
                 .Should()
                 .FailWith(new Error(DomainErrorMessages.OnTirePasPendantLapéroCestSacré));
 
@@ -112,7 +112,7 @@ public class Tirer : UseCaseTest
         {
             var id = UnePartieDeChasseExistante(UnePartieDeChasse().Terminée());
 
-            _tirerUseCase.HandleWithoutException(id, ChasseurInconnu)
+            _tirerUseCase.Handle(id, ChasseurInconnu)
                 .Should()
                 .FailWith(new Error(DomainErrorMessages.OnTirePasQuandLaPartieEstTerminée));
 
