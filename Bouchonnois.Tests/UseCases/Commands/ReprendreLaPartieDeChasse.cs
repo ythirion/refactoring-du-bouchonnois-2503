@@ -1,7 +1,9 @@
+using Bouchonnois.Domain;
+using Bouchonnois.Domain.Errors;
 using Bouchonnois.Tests.UseCases.Common;
 using Bouchonnois.Tests.Verifications;
 using Bouchonnois.UseCases.Commands;
-using Bouchonnois.UseCases.Exceptions;
+using Bouchonnois.UseCases.Errors;
 
 using static Bouchonnois.Tests.Builders.PartieDeChasseBuilder;
 
@@ -28,39 +30,42 @@ public class ReprendreLaPartieDeChasse : UseCaseTest
             .DevraitAvoirEmis(Now, "Reprise de la chasse");
     }
 
-    [Fact]
-    public void EchoueCarPartieNexistePas()
+    public class Failure : ReprendreLaPartieDeChasse
     {
-        var id = UnePartieDeChasseInexistante();
+        [Fact]
+        public void EchoueCarPartieNexistePas()
+        {
+            var id = UnePartieDeChasseInexistante();
 
-        var reprendrePartieQuandPartieExistePas = () => _reprendreLaPartieUseCase.Handle(id);
+            var result = _reprendreLaPartieUseCase.Handle(id);
 
-        reprendrePartieQuandPartieExistePas.Should().Throw<LaPartieDeChasseNexistePas>();
+            result.Should().FailWith(new Error(UseCasesErrorMessages.LaPartieDeChasseNExistePas));
 
-        Repository.SavedPartieDeChasse().Should().BeNull();
-    }
+            Repository.SavedPartieDeChasse().Should().BeNull();
+        }
 
-    [Fact]
-    public void EchoueSiLaChasseEstEnCours()
-    {
-        var id = UnePartieDeChasseExistante(UnePartieDeChasse().EnCours());
+        [Fact]
+        public void EchoueSiLaChasseEstEnCours()
+        {
+            var id = UnePartieDeChasseExistante(UnePartieDeChasse().EnCours());
 
-        var reprendreLaPartieQuandChasseEnCours = () => _reprendreLaPartieUseCase.Handle(id);
+            var result = _reprendreLaPartieUseCase.Handle(id);
 
-        reprendreLaPartieQuandChasseEnCours.Should().Throw<LaChasseEstDéjàEnCours>();
+            result.Should().FailWith(new Error(DomainErrorMessages.LaPartieDeChasseEstDejaEnCours));
 
-        Repository.SavedPartieDeChasse().Should().BeNull();
-    }
+            Repository.SavedPartieDeChasse().Should().BeNull();
+        }
 
-    [Fact]
-    public void EchoueSiLaPartieDeChasseEstTerminée()
-    {
-        var id = UnePartieDeChasseExistante(UnePartieDeChasse().Terminée());
+        [Fact]
+        public void EchoueSiLaPartieDeChasseEstTerminée()
+        {
+            var id = UnePartieDeChasseExistante(UnePartieDeChasse().Terminée());
 
-        var prendreLapéroQuandTerminée = () => _reprendreLaPartieUseCase.Handle(id);
+            var result = _reprendreLaPartieUseCase.Handle(id);
 
-        prendreLapéroQuandTerminée.Should().Throw<QuandCestFiniCestFini>();
+            result.Should().FailWith(new Error(DomainErrorMessages.QuandCestFiniCestFini));
 
-        Repository.SavedPartieDeChasse().Should().BeNull();
+            Repository.SavedPartieDeChasse().Should().BeNull();
+        }
     }
 }

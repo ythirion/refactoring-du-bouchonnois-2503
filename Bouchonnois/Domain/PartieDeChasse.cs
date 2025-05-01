@@ -25,19 +25,36 @@ public class PartieDeChasse
 
     public List<Event> Events { get; }
 
-    public UnitResult<Error> PasserAlApéro(DateTime now)
+    public UnitResult<Error> PasserAlApéro(DateTime eventTime)
     {
         return Status switch
         {
             PartieStatus.Apéro => UnitResult.Failure(new Error(DomainErrorMessages.OnEstDéjàEnTrainDePrendreLApéro)),
             PartieStatus.Terminée => UnitResult.Failure(new Error(DomainErrorMessages.OnNePrendPasLApéroQuandLaPartieEstTerminée)),
-            _ => AlApero(now)
+            _ => AlApero(eventTime)
         };
 
-        UnitResult<Error> AlApero(DateTime eventTime)
+        UnitResult<Error> AlApero(DateTime now)
         {
             Status = PartieStatus.Apéro;
-            Events.Add(new Event(eventTime, "Petit apéro"));
+            Events.Add(new Event(now, "Petit apéro"));
+
+            return UnitResult.Success<Error>();
+        }
+    }
+    public UnitResult<Error> ReprendreLaPartie(DateTime eventTime)
+    {
+        return Status switch
+        {
+            PartieStatus.EnCours => UnitResult.Failure(new Error(DomainErrorMessages.LaPartieDeChasseEstDejaEnCours)),
+            PartieStatus.Terminée => UnitResult.Failure(new Error(DomainErrorMessages.QuandCestFiniCestFini)),
+            _ => Reprend(eventTime)
+        };
+
+        UnitResult<Error> Reprend(DateTime now)
+        {
+            Status = PartieStatus.EnCours;
+            Events.Add(new Event(now, "Reprise de la chasse"));
 
             return UnitResult.Success<Error>();
         }

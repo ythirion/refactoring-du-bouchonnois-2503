@@ -4,7 +4,6 @@ using Bouchonnois.Tests.UseCases.Common;
 using Bouchonnois.Tests.Verifications;
 using Bouchonnois.UseCases.Commands;
 using Bouchonnois.UseCases.Errors;
-using Bouchonnois.UseCases.Exceptions;
 
 using static Bouchonnois.Tests.Builders.PartieDeChasseBuilder;
 

@@ -1,6 +1,5 @@
 ﻿using Bouchonnois.Domain;
 using Bouchonnois.UseCases.Errors;
-using Bouchonnois.UseCases.Exceptions;
 
 using CSharpFunctionalExtensions;
 
