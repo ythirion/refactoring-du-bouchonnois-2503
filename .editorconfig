@@ -16,10 +16,12 @@ dotnet_separate_import_directive_groups = true
 
 # Naming conventions
 dotnet_naming_rule_cs = use_camel_case_for_local_variables:suggestion
-dotnet_naming_symbols_cs = private_fields.local_variables
+dotnet_naming_symbols_cs =
+private_fields.local_variables
 dotnet_naming_style_cs = camel_case_style
 dotnet_naming_rule_cs.use_camel_case_for_local_variables.severity = suggestion
-dotnet_naming_rule_cs.use_camel_case_for_local_variables.symbols = private_fields.local_variables
+dotnet_naming_rule_cs.use_camel_case_for_local_variables.symbols =
+private_fields.local_variables
 dotnet_naming_rule_cs.use_camel_case_for_local_variables.style = camel_case_style
 
 # Format rules

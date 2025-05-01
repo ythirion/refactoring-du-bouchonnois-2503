@@ -18,14 +18,13 @@ public class PartieDeChasse
 
     public Guid Id { get; }
 
-    public void AddChasseur(Chasseur chasseur) => _groupeDeChasseurs.Add(chasseur);
-
     public Terrain Terrain { get; }
 
     public PartieStatus Status { get; private set; }
 
     public List<Event> Events { get; }
 
+    public void AddChasseur(Chasseur chasseur) => _groupeDeChasseurs.Add(chasseur);
     public UnitResult<Error> PasserAlApéro(DateTime eventTime)
     {
         return Status switch
