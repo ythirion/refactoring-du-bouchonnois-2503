@@ -96,4 +96,22 @@ public class PartieDeChasse
                 : Result.Success<string, Error>(result.Error.ToString()));
     }
 
+    public UnitResult<Error> PeutTirer(string chasseur, DateTime eventTime)
+    {
+        if (Status == PartieStatus.Apéro)
+        {
+            Events.Add(new Event(eventTime,
+                $"{chasseur} veut tirer -> On tire pas pendant l'apéro, c'est sacré !!!"));
+            return UnitResult.Failure(new Error(DomainErrorMessages.OnTirePasPendantLapéroCestSacré));
+        }
+
+        if (Status == PartieStatus.Terminée)
+        {
+            Events.Add(new Event(eventTime,
+                $"{chasseur} veut tirer -> On tire pas quand la partie est terminée"));
+            return UnitResult.Failure(new Error(DomainErrorMessages.OnTirePasQuandLaPartieEstTerminée));
+        }
+
+        return UnitResult.Success<Error>();
+    }
 }

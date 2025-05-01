@@ -10,55 +10,32 @@ public class TirerUseCase(IPartieDeChasseRepository repository, Func<DateTime> t
 {
 
     public UnitResult<Error> Handle(Guid id, string chasseur)
-    {
-        try
-        {
-            var partieDeChasse = repository.GetById(id);
-
-            if (partieDeChasse.Status == PartieStatus.Apéro)
+        => repository
+            .GetSafeById(id)
+            .ToResult(new Error(UseCasesErrorMessages.LaPartieDeChasseNExistePas))
+            .Bind(p => p.PeutTirer(chasseur, timeProvider())
+                .TapError(() => repository.Save(p))
+                .Map(() => p))
+            .Bind(p => p
+                .GetChasseur(chasseur)
+                .Map(c => (PartieDeChasse: p, Chasseur: c)))
+            .Bind(result =>
             {
-                partieDeChasse.Events.Add(new Event(timeProvider(),
-                    $"{chasseur} veut tirer -> On tire pas pendant l'apéro, c'est sacré !!!"));
-                repository.Save(partieDeChasse);
+                if (result.Chasseur.BallesRestantes != 0)
+                {
+                    result.PartieDeChasse.Events.Add(new Event(timeProvider(), $"{chasseur} tire"));
+                    result.Chasseur.BallesRestantes--;
 
-                return UnitResult.Failure(new Error(DomainErrorMessages.OnTirePasPendantLapéroCestSacré));
-            }
+                    repository.Save(result.PartieDeChasse);
+                    return UnitResult.Success<Error>();
+                }
 
-            if (partieDeChasse.Status == PartieStatus.Terminée)
-            {
-                partieDeChasse.Events.Add(new Event(timeProvider(),
-                    $"{chasseur} veut tirer -> On tire pas quand la partie est terminée"));
-                repository.Save(partieDeChasse);
-
-                return UnitResult.Failure(new Error(DomainErrorMessages.OnTirePasQuandLaPartieEstTerminée));
-            }
-
-            var result = partieDeChasse.GetChasseur(chasseur);
-            if (result.IsFailure)
-            {
-                return UnitResult.Failure(result.Error);
-            }
-
-            var chasseurQuiTire = result.Value;
-
-            if (chasseurQuiTire.BallesRestantes == 0)
-            {
-                partieDeChasse.Events.Add(new Event(timeProvider(),
+                result.PartieDeChasse.Events.Add(new Event(timeProvider(),
                     $"{chasseur} tire -> T'as plus de balles mon vieux, chasse à la main"));
-                repository.Save(partieDeChasse);
 
-                return UnitResult.Failure(new Error(DomainErrorMessages.TasPlusDeBallesMonVieuxChasseALaMain));
-            }
+                repository.Save(result.PartieDeChasse);
 
-            partieDeChasse.Events.Add(new Event(timeProvider(), $"{chasseur} tire"));
-            chasseurQuiTire.BallesRestantes--;
-
-            repository.Save(partieDeChasse);
-            return UnitResult.Success<Error>();
-        }
-        catch
-        {
-            return UnitResult.Failure(new Error(UseCasesErrorMessages.LaPartieDeChasseNExistePas));
-        }
-    }
+                return UnitResult
+                    .Failure(new Error(DomainErrorMessages.TasPlusDeBallesMonVieuxChasseALaMain));
+            });
 }
