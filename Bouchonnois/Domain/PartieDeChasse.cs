@@ -27,20 +27,15 @@ public class PartieDeChasse
 
     public UnitResult<Error> PrendreLapéro(Func<DateTime> timeProvider)
     {
-        if (Status == PartieStatus.Apéro)
-        {
-            return new Error("On est déjà en train de prendre l'apéro");
-        }
-        else if (Status == PartieStatus.Terminée)
-        {
-            return new Error("On ne prend pas l'apéro quand la partie est terminée");
-        }
-        else
-        {
-            Status = PartieStatus.Apéro;
-            Events.Add(new Event(timeProvider(), "Petit apéro"));
-        }
+        if (LapéroEstEnCours()) return new Error("On est déjà en train de prendre l'apéro");
+        if (Terminée()) return new Error("On ne prend pas l'apéro quand la partie est terminée");
+
+        Status = PartieStatus.Apéro;
+        Events.Add(new Event(timeProvider(), "Petit apéro"));
 
         return UnitResult.Success<Error>();
     }
+
+    private bool Terminée() => Status == PartieStatus.Terminée;
+    private bool LapéroEstEnCours() => Status == PartieStatus.Apéro;
 }
