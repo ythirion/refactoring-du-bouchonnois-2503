@@ -111,9 +111,9 @@ public class Tirer : UseCaseTest
         {
             var id = UnePartieDeChasseExistante(UnePartieDeChasse().Terminée());
 
-            var tirerQuandTerminée = () => _tirerUseCase.Handle(id, ChasseurInconnu);
-
-            tirerQuandTerminée.Should().Throw<OnTirePasQuandLaPartieEstTerminée>();
+            _tirerUseCase.HandleWithoutException(id, ChasseurInconnu)
+                .Should()
+                .FailWith(new Error(DomainErrorMessages.OnTirePasQuandLaPartieEstTerminée));
 
             Repository.SavedPartieDeChasse()
                 .DevraitAvoirEmis(Now, "Chasseur inconnu veut tirer -> On tire pas quand la partie est terminée");

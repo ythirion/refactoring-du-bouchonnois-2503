@@ -7,4 +7,5 @@ public static class DomainErrorMessages
     public const string LaPartieDeChasseEstDejaEnCours = "La partie de chasse est déjà en cours";
     public const string QuandCestFiniCestFini = "Quand c'est fini c'est fini";
     public const string OnTirePasPendantLapéroCestSacré = "On tire pas pendant l'apéro, c'est sacré !!!";
+    public const string OnTirePasQuandLaPartieEstTerminée = "On tire pas quand la partie est terminée";
 }

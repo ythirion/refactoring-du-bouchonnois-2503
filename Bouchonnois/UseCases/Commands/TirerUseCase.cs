@@ -79,35 +79,33 @@ public class TirerUseCase(IPartieDeChasseRepository repository, Func<DateTime> t
                 return UnitResult.Failure(new Error(DomainErrorMessages.OnTirePasPendantLapéroCestSacré));
             }
 
-            if (partieDeChasse.Status != PartieStatus.Terminée)
-            {
-                var chasseurQuiTire = partieDeChasse.GetChasseurs().FirstOrDefault(c => c.Nom == chasseur);
-                if (chasseurQuiTire is not null)
-                {
-                    if (chasseurQuiTire.BallesRestantes == 0)
-                    {
-                        partieDeChasse.Events.Add(new Event(timeProvider(),
-                            $"{chasseur} tire -> T'as plus de balles mon vieux, chasse à la main"));
-                        repository.Save(partieDeChasse);
-
-                        throw new TasPlusDeBallesMonVieuxChasseALaMain();
-                    }
-
-                    partieDeChasse.Events.Add(new Event(timeProvider(), $"{chasseur} tire"));
-                    chasseurQuiTire.BallesRestantes--;
-                }
-                else
-                {
-                    throw new ChasseurInconnu(chasseur);
-                }
-            }
-            else
+            if (partieDeChasse.Status == PartieStatus.Terminée)
             {
                 partieDeChasse.Events.Add(new Event(timeProvider(),
                     $"{chasseur} veut tirer -> On tire pas quand la partie est terminée"));
                 repository.Save(partieDeChasse);
 
-                throw new OnTirePasQuandLaPartieEstTerminée();
+                return UnitResult.Failure(new Error(DomainErrorMessages.OnTirePasQuandLaPartieEstTerminée));
+            }
+
+            var chasseurQuiTire = partieDeChasse.GetChasseurs().FirstOrDefault(c => c.Nom == chasseur);
+            if (chasseurQuiTire is not null)
+            {
+                if (chasseurQuiTire.BallesRestantes == 0)
+                {
+                    partieDeChasse.Events.Add(new Event(timeProvider(),
+                        $"{chasseur} tire -> T'as plus de balles mon vieux, chasse à la main"));
+                    repository.Save(partieDeChasse);
+
+                    throw new TasPlusDeBallesMonVieuxChasseALaMain();
+                }
+
+                partieDeChasse.Events.Add(new Event(timeProvider(), $"{chasseur} tire"));
+                chasseurQuiTire.BallesRestantes--;
+            }
+            else
+            {
+                throw new ChasseurInconnu(chasseur);
             }
 
             repository.Save(partieDeChasse);
