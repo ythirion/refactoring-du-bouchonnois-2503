@@ -8,29 +8,13 @@ namespace Bouchonnois.UseCases.Commands;
 public class PrendreLAperoUseCase(IPartieDeChasseRepository repository, Func<DateTime> timeProvider)
 {
     public void Handle(Guid id)
-    {
-        var partieDeChasse = repository.GetById(id);
-
-        if (partieDeChasse == null)
-        {
-            throw new LaPartieDeChasseNexistePas();
-        }
-
-        if (partieDeChasse.Status == PartieStatus.Apéro)
-        {
-            throw new OnEstDéjàEnTrainDePrendreLapéro();
-        }
-        else if (partieDeChasse.Status == PartieStatus.Terminée)
-        {
-            throw new OnPrendPasLapéroQuandLaPartieEstTerminée();
-        }
-        else
-        {
-            partieDeChasse.Status = PartieStatus.Apéro;
-            partieDeChasse.Events.Add(new Event(timeProvider(), "Petit apéro"));
-            repository.Save(partieDeChasse);
-        }
-    }
+        => HandleWithoutException(id)
+            .TapErrorIf(error => error.Message == "La partie de chasse n'existe pas",
+                _ => throw new LaPartieDeChasseNexistePas())
+            .TapErrorIf(error => error.Message == "On est déjà en train de prendre l'apéro",
+                _ => throw new OnEstDéjàEnTrainDePrendreLapéro())
+            .TapErrorIf(error => error.Message == "On ne prend pas l'apéro quand la partie est terminée",
+                _ => throw new OnPrendPasLapéroQuandLaPartieEstTerminée());
 
     public UnitResult<Error> HandleWithoutException(Guid id)
     {
