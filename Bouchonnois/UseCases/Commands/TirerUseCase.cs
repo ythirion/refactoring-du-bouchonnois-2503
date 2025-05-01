@@ -89,24 +89,22 @@ public class TirerUseCase(IPartieDeChasseRepository repository, Func<DateTime> t
             }
 
             var chasseurQuiTire = partieDeChasse.GetChasseurs().FirstOrDefault(c => c.Nom == chasseur);
-            if (chasseurQuiTire is not null)
+            if (chasseurQuiTire is null)
             {
-                if (chasseurQuiTire.BallesRestantes == 0)
-                {
-                    partieDeChasse.Events.Add(new Event(timeProvider(),
-                        $"{chasseur} tire -> T'as plus de balles mon vieux, chasse à la main"));
-                    repository.Save(partieDeChasse);
-
-                    throw new TasPlusDeBallesMonVieuxChasseALaMain();
-                }
-
-                partieDeChasse.Events.Add(new Event(timeProvider(), $"{chasseur} tire"));
-                chasseurQuiTire.BallesRestantes--;
+                return UnitResult.Failure(new Error(UseCasesErrorMessages.LeChasseurNestPasDansLaPartie));
             }
-            else
+
+            if (chasseurQuiTire.BallesRestantes == 0)
             {
-                throw new ChasseurInconnu(chasseur);
+                partieDeChasse.Events.Add(new Event(timeProvider(),
+                    $"{chasseur} tire -> T'as plus de balles mon vieux, chasse à la main"));
+                repository.Save(partieDeChasse);
+
+                throw new TasPlusDeBallesMonVieuxChasseALaMain();
             }
+
+            partieDeChasse.Events.Add(new Event(timeProvider(), $"{chasseur} tire"));
+            chasseurQuiTire.BallesRestantes--;
 
             repository.Save(partieDeChasse);
             return UnitResult.Success<Error>();

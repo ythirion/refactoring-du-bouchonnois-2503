@@ -85,9 +85,10 @@ public class Tirer : UseCaseTest
         {
             var id = UnePartieDeChasseExistante(UnePartieDeChasse().EnCours());
 
-            var chasseurInconnuVeutTirer = () => _tirerUseCase.Handle(id, ChasseurInconnu);
-
-            chasseurInconnuVeutTirer.Should().Throw<ChasseurInconnu>().WithMessage("Chasseur inconnu Chasseur inconnu");
+            _tirerUseCase
+                .HandleWithoutException(id, ChasseurInconnu)
+                .Should()
+                .FailWith(new Error(UseCasesErrorMessages.LeChasseurNestPasDansLaPartie));
 
             Repository.SavedPartieDeChasse().Should().BeNull();
         }
