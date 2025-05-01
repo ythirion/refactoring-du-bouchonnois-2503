@@ -77,7 +77,6 @@ public class PartieDeChasse
 
         if (classement.All(group => group.Key == 0))
         {
-            meilleurChasseurs = "Brocouille";
             Events.Add(
                 new Event(eventTime, "La partie de chasse est terminée, vainqueur : Brocouille")
             );
@@ -85,13 +84,24 @@ public class PartieDeChasse
         else
         {
             var vainqueurs = classement[0];
-            meilleurChasseurs = string.Join(", ", vainqueurs.Select(c => c.Nom));
             Events.Add(
                 new Event(eventTime,
                     $"La partie de chasse est terminée, vainqueur : {string.Join(", ", vainqueurs.Select(c => $"{c.Nom} - {c.NbGalinettes} galinettes"))}"
                 )
             );
         }
+
+        if (classement.All(group => group.Key == 0))
+        {
+            meilleurChasseurs = "Brocouille";
+        }
+        else
+        {
+            var vainqueurs = classement[0];
+            meilleurChasseurs = string.Join(", ", vainqueurs.Select(c => c.Nom));
+        }
+
+
         return meilleurChasseurs;
     }
 }

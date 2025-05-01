@@ -34,7 +34,8 @@ public class TerminerLaPartieDeChasse : UseCaseTest
             .SucceedWith(Robert);
 
         Repository.SavedPartieDeChasse()
-            .DevraitAvoirEmis(Now, "La partie de chasse est terminée, vainqueur : Robert - 2 galinettes");
+            .DevraitAvoirEmis(Now, "La partie de chasse est terminée, vainqueur : Robert - 2 galinettes")
+            .DevraitEtreTerminé();
     }
 
     [Fact]
@@ -50,7 +51,8 @@ public class TerminerLaPartieDeChasse : UseCaseTest
             .SucceedWith(Robert);
 
         Repository.SavedPartieDeChasse()
-            .DevraitAvoirEmis(Now, "La partie de chasse est terminée, vainqueur : Robert - 2 galinettes");
+            .DevraitAvoirEmis(Now, "La partie de chasse est terminée, vainqueur : Robert - 2 galinettes")
+            .DevraitEtreTerminé();
     }
 
     [Fact]
@@ -71,7 +73,8 @@ public class TerminerLaPartieDeChasse : UseCaseTest
         Repository.SavedPartieDeChasse()
             .DevraitAvoirEmis(
                 Now,
-                "La partie de chasse est terminée, vainqueur : Dédé - 2 galinettes, Bernard - 2 galinettes");
+                "La partie de chasse est terminée, vainqueur : Dédé - 2 galinettes, Bernard - 2 galinettes")
+            .DevraitEtreTerminé();
     }
 
     [Fact]
@@ -92,7 +95,8 @@ public class TerminerLaPartieDeChasse : UseCaseTest
         Repository.SavedPartieDeChasse()
             .DevraitAvoirEmis(
                 Now,
-                "La partie de chasse est terminée, vainqueur : Brocouille");
+                "La partie de chasse est terminée, vainqueur : Brocouille")
+            .DevraitEtreTerminé();
     }
 
     [Fact]
@@ -113,7 +117,8 @@ public class TerminerLaPartieDeChasse : UseCaseTest
         Repository.SavedPartieDeChasse()
             .DevraitAvoirEmis(
                 Now,
-                "La partie de chasse est terminée, vainqueur : Dédé - 3 galinettes, Bernard - 3 galinettes, Robert - 3 galinettes");
+                "La partie de chasse est terminée, vainqueur : Dédé - 3 galinettes, Bernard - 3 galinettes, Robert - 3 galinettes")
+            .DevraitEtreTerminé();
     }
 
     public class Failure : TerminerLaPartieDeChasse
