@@ -21,6 +21,21 @@ public static class PartieDeChasseVerificationExtensions
                         ],
                         $"Les events devraient contenir {message}."));
 
+    public static PartieDeChasse DevraitAvoirEmis<TEvent>(
+        this PartieDeChasse partieDeChasse,
+        DateTime date,
+        TEvent @event)
+        => Assert(
+            partieDeChasse,
+            p =>
+                p.Events
+                    .Should()
+                    .HaveCount(1)
+                    .And
+                    .BeEquivalentTo(
+                        [@event],
+                        $"Les events devraient contenir {@event}."));
+
 
     private static Chasseur Chasseur(this PartieDeChasse partieDeChasse, string nom)
         => partieDeChasse

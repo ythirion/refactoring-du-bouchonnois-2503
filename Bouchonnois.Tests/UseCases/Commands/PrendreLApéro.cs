@@ -14,16 +14,19 @@ public class PrendreLApéro : UseCaseTest
 
     [Fact]
     public void QuandLaPartieEstEnCours()
-        => UnePartieDeChasseExistante(
-                UnePartieDeChasse()
-                    .EnCours()
-            )
-            .Run(id => _prendreLAperoUseCase.HandleWithoutException(id))
+    {
+        var partieId = UnePartieDeChasseExistante(
+            UnePartieDeChasse()
+                .EnCours()
+        );
+
+        partieId.Run(id => _prendreLAperoUseCase.HandleWithoutException(id))
             .Succeed()
             .And(_ => Repository.SavedPartieDeChasse()
                 .DevraitEtreALApéro()
-                .DevraitAvoirEmis(Now, "Petit apéro")
+                .DevraitAvoirEmis(Now, new ApéroADémarré(partieId, Now))
             );
+    }
 
     [Fact]
     public void EchoueCarPartieNexistePas()
@@ -45,4 +48,9 @@ public class PrendreLApéro : UseCaseTest
             .Run(id => _prendreLAperoUseCase.HandleWithoutException(id))
             .FailWith("On ne prend pas l'apéro quand la partie est terminée")
             .And(_ => Repository.NothingHasBeenSaved());
+}
+
+public sealed record ApéroADémarré(Guid Id, DateTime Date)
+{
+    public override string ToString() => "Petit apéro";
 }
