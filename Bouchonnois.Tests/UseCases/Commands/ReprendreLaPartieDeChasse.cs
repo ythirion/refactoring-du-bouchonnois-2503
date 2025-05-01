@@ -23,7 +23,9 @@ public class ReprendreLaPartieDeChasse : UseCaseTest
             UnePartieDeChasse()
                 .ALApéro());
 
-        _reprendreLaPartieUseCase.Handle(id);
+        _reprendreLaPartieUseCase.Handle(id)
+            .Should()
+            .Succeed();
 
         Repository.SavedPartieDeChasse()
             .DevraitEtreEnCours()

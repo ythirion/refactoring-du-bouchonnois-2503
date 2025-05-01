@@ -1,7 +1,9 @@
+using Bouchonnois.Domain;
+using Bouchonnois.Domain.Errors;
 using Bouchonnois.Tests.UseCases.Common;
 using Bouchonnois.Tests.Verifications;
 using Bouchonnois.UseCases.Commands;
-using Bouchonnois.UseCases.Exceptions;
+using Bouchonnois.UseCases.Errors;
 
 using static Bouchonnois.Tests.Builders.ChasseurBuilder;
 using static Bouchonnois.Tests.Builders.PartieDeChasseBuilder;
@@ -27,9 +29,9 @@ public class TerminerLaPartieDeChasse : UseCaseTest
                     Bernard().Brocouille(),
                     Robert().AyantCapturéGalinettes(2)));
 
-        var meilleurChasseur = _sut.Handle(id);
-
-        meilleurChasseur.Should().Be(Robert);
+        _sut.Handle(id)
+            .Should()
+            .SucceedWith(Robert);
 
         Repository.SavedPartieDeChasse()
             .DevraitAvoirEmis(Now, "La partie de chasse est terminée, vainqueur : Robert - 2 galinettes");
@@ -43,9 +45,9 @@ public class TerminerLaPartieDeChasse : UseCaseTest
                 .EnCours()
                 .Avec(Robert().AyantCapturéGalinettes(2)));
 
-        var meilleurChasseur = _sut.Handle(id);
-
-        meilleurChasseur.Should().Be(Robert);
+        _sut.Handle(id)
+            .Should()
+            .SucceedWith(Robert);
 
         Repository.SavedPartieDeChasse()
             .DevraitAvoirEmis(Now, "La partie de chasse est terminée, vainqueur : Robert - 2 galinettes");
@@ -62,9 +64,9 @@ public class TerminerLaPartieDeChasse : UseCaseTest
                     Bernard().AyantCapturéGalinettes(2),
                     Robert().Brocouille()));
 
-        var meilleurChasseur = _sut.Handle(id);
-
-        meilleurChasseur.Should().Be("Dédé, Bernard");
+        _sut.Handle(id)
+            .Should()
+            .SucceedWith("Dédé, Bernard");
 
         Repository.SavedPartieDeChasse()
             .DevraitAvoirEmis(
@@ -83,9 +85,9 @@ public class TerminerLaPartieDeChasse : UseCaseTest
                     Bernard().Brocouille(),
                     Robert().Brocouille()));
 
-        var meilleurChasseur = _sut.Handle(id);
-
-        meilleurChasseur.Should().Be("Brocouille");
+        _sut.Handle(id)
+            .Should()
+            .SucceedWith("Brocouille");
 
         Repository.SavedPartieDeChasse()
             .DevraitAvoirEmis(
@@ -104,9 +106,9 @@ public class TerminerLaPartieDeChasse : UseCaseTest
                     Bernard().AyantCapturéGalinettes(3),
                     Robert().AyantCapturéGalinettes(3)));
 
-        var meilleurChasseur = _sut.Handle(id);
-
-        meilleurChasseur.Should().Be("Dédé, Bernard, Robert");
+        _sut.Handle(id)
+            .Should()
+            .SucceedWith("Dédé, Bernard, Robert");
 
         Repository.SavedPartieDeChasse()
             .DevraitAvoirEmis(
@@ -114,17 +116,32 @@ public class TerminerLaPartieDeChasse : UseCaseTest
                 "La partie de chasse est terminée, vainqueur : Dédé - 3 galinettes, Bernard - 3 galinettes, Robert - 3 galinettes");
     }
 
-    [Fact]
-    public void EchoueSiLaPartieDeChasseEstDéjàTerminée()
+    public class Failure : TerminerLaPartieDeChasse
     {
-        var id = UnePartieDeChasseExistante(
-            UnePartieDeChasse()
-                .Terminée());
+        [Fact]
+        public void EchoueSiLaPartieDeChasseEstDéjàTerminée()
+        {
+            var id = UnePartieDeChasseExistante(
+                UnePartieDeChasse()
+                    .Terminée());
 
-        var prendreLapéroQuandTerminée = () => _sut.Handle(id);
+            var result = _sut.Handle(id);
 
-        prendreLapéroQuandTerminée.Should().Throw<QuandCestFiniCestFini>();
+            result.Should().FailWith(new Error(DomainErrorMessages.QuandCestFiniCestFini));
 
-        Repository.SavedPartieDeChasse().Should().BeNull();
+            Repository.SavedPartieDeChasse().Should().BeNull();
+        }
+
+        [Fact]
+        public void EchoueSiLaPartieDeChasseNExsitePas()
+        {
+            var id = UnePartieDeChasseInexistante();
+
+            var result = _sut.Handle(id);
+
+            result.Should().FailWith(new Error(UseCasesErrorMessages.LaPartieDeChasseNExistePas));
+
+            Repository.SavedPartieDeChasse().Should().BeNull();
+        }
     }
 }

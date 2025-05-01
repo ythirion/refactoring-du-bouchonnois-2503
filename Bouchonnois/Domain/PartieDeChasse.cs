@@ -59,4 +59,39 @@ public class PartieDeChasse
             return UnitResult.Success<Error>();
         }
     }
+    public Result<string, Error> TerminerLaPartie(DateTime eventTime)
+    {
+        if (Status == PartieStatus.Terminée)
+        {
+            return Result.Failure<string, Error>(new Error(DomainErrorMessages.QuandCestFiniCestFini));
+        }
+
+        Status = PartieStatus.Terminée;
+
+        string meilleurChasseurs;
+
+        var classement = Chasseurs
+            .GroupBy(c => c.NbGalinettes)
+            .OrderByDescending(g => g.Key)
+            .ToList();
+
+        if (classement.All(group => group.Key == 0))
+        {
+            meilleurChasseurs = "Brocouille";
+            Events.Add(
+                new Event(eventTime, "La partie de chasse est terminée, vainqueur : Brocouille")
+            );
+        }
+        else
+        {
+            var vainqueurs = classement[0];
+            meilleurChasseurs = string.Join(", ", vainqueurs.Select(c => c.Nom));
+            Events.Add(
+                new Event(eventTime,
+                    $"La partie de chasse est terminée, vainqueur : {string.Join(", ", vainqueurs.Select(c => $"{c.Nom} - {c.NbGalinettes} galinettes"))}"
+                )
+            );
+        }
+        return meilleurChasseurs;
+    }
 }
