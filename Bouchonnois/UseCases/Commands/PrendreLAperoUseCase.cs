@@ -19,6 +19,11 @@ public class PrendreLAperoUseCase(IPartieDeChasseRepository repository, TimeProv
         return partieDeChasse.PrendreLapéro(timeProvider)
             .Tap(() => repository.Save(partieDeChasse));
     }
+
+    public UnitResult<Error> HandleCommand(PrendreLapéro id)
+    {
+        throw new NotImplementedException();
+    }
 }
 
-public record Error(string Message);
+public record PrendreLapéro(Guid Id);

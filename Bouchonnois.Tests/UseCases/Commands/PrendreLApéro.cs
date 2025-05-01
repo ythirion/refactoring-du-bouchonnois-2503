@@ -21,7 +21,7 @@ public class PrendreLApéro : UseCaseTest
                 .EnCours()
         );
 
-        partieId.Run(id => _prendreLAperoUseCase.Handle(id))
+        partieId.Run(id => _prendreLAperoUseCase.HandleCommand(new PrendreLapéro(id)))
             .Succeed()
             .And(_ => Repository.SavedPartieDeChasse()
                 .DevraitEtreALApéro()
