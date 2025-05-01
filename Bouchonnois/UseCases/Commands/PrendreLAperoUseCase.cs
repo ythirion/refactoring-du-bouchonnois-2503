@@ -1,6 +1,4 @@
-﻿using System.Runtime.InteropServices.JavaScript;
-
-using Bouchonnois.Domain;
+﻿using Bouchonnois.Domain;
 using Bouchonnois.UseCases.Exceptions;
 
 using CSharpFunctionalExtensions;
@@ -39,16 +37,16 @@ public class PrendreLAperoUseCase(IPartieDeChasseRepository repository, Func<Dat
         var partieDeChasse = repository.GetById(id);
         if (partieDeChasse == null)
         {
-            return UnitResult.Failure(new Error("La partie de chasse n'existe pas"));
+            return new Error("La partie de chasse n'existe pas");
         }
 
         if (partieDeChasse.Status == PartieStatus.Apéro)
         {
-            return UnitResult.Failure(new Error("On est déjà en train de prendre l'apéro"));
+            return new Error("On est déjà en train de prendre l'apéro");
         }
         else if (partieDeChasse.Status == PartieStatus.Terminée)
         {
-            return UnitResult.Failure(new Error("On ne prend pas l'apéro quand la partie est terminée"));
+            return new Error("On ne prend pas l'apéro quand la partie est terminée");
         }
         else
         {
@@ -56,7 +54,6 @@ public class PrendreLAperoUseCase(IPartieDeChasseRepository repository, Func<Dat
             partieDeChasse.Events.Add(new Event(timeProvider(), "Petit apéro"));
             repository.Save(partieDeChasse);
         }
-
 
         return UnitResult.Success<Error>();
     }
