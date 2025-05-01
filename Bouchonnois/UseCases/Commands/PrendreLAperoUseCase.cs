@@ -3,9 +3,11 @@ using Bouchonnois.UseCases.Exceptions;
 
 using CSharpFunctionalExtensions;
 
+using TimeProvider = System.Func<System.DateTime>;
+
 namespace Bouchonnois.UseCases.Commands;
 
-public class PrendreLAperoUseCase(IPartieDeChasseRepository repository, Func<DateTime> timeProvider)
+public class PrendreLAperoUseCase(IPartieDeChasseRepository repository, TimeProvider timeProvider)
 {
     public void Handle(Guid id)
         => HandleWithoutException(id)
@@ -24,10 +26,12 @@ public class PrendreLAperoUseCase(IPartieDeChasseRepository repository, Func<Dat
             return new Error("La partie de chasse n'existe pas");
         }
 
-        return PrendreLapéro(partieDeChasse);
+        return PrendreLapéro(partieDeChasse, timeProvider)
+            .Tap(() => repository.Save(partieDeChasse));
     }
 
-    private UnitResult<Error> PrendreLapéro(PartieDeChasse partieDeChasse)
+    private static UnitResult<Error> PrendreLapéro(PartieDeChasse partieDeChasse,
+        TimeProvider timeProvider)
     {
         if (partieDeChasse.Status == PartieStatus.Apéro)
         {
@@ -41,7 +45,6 @@ public class PrendreLAperoUseCase(IPartieDeChasseRepository repository, Func<Dat
         {
             partieDeChasse.Status = PartieStatus.Apéro;
             partieDeChasse.Events.Add(new Event(timeProvider(), "Petit apéro"));
-            repository.Save(partieDeChasse);
         }
 
         return UnitResult.Success<Error>();
