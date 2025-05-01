@@ -24,6 +24,11 @@ public class PrendreLAperoUseCase(IPartieDeChasseRepository repository, Func<Dat
             return new Error("La partie de chasse n'existe pas");
         }
 
+        return PrendreLapéro(partieDeChasse);
+    }
+
+    private UnitResult<Error> PrendreLapéro(PartieDeChasse partieDeChasse)
+    {
         if (partieDeChasse.Status == PartieStatus.Apéro)
         {
             return new Error("On est déjà en train de prendre l'apéro");
