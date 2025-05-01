@@ -1,4 +1,6 @@
-﻿using Bouchonnois.Domain.Errors;
+﻿using System.Runtime.CompilerServices;
+
+using Bouchonnois.Domain.Errors;
 
 using CSharpFunctionalExtensions;
 
@@ -6,18 +8,20 @@ namespace Bouchonnois.Domain;
 
 public class PartieDeChasse
 {
-    public PartieDeChasse(Guid id, PartieStatus status, List<Chasseur> chasseurs, Terrain terrain, List<Event> events)
+    private readonly GroupeDeChasseurs _groupeDeChasseurs;
+    public PartieDeChasse(Guid id, PartieStatus status, List<Chasseur>? getChasseurs, Terrain terrain, List<Event> events)
     {
         Id = id;
         Status = status;
-        Chasseurs = chasseurs;
+        _groupeDeChasseurs = new GroupeDeChasseurs(getChasseurs);
         Terrain = terrain;
         Events = events;
     }
 
     public Guid Id { get; }
 
-    public List<Chasseur> Chasseurs { get; }
+    public IReadOnlyCollection<Chasseur> GetChasseurs() => _groupeDeChasseurs.Get();
+    public void AddChasseur(Chasseur chasseur) => _groupeDeChasseurs.Add(chasseur);
 
     public Terrain Terrain { get; }
 
@@ -68,40 +72,15 @@ public class PartieDeChasse
 
         Status = PartieStatus.Terminée;
 
-        string meilleurChasseurs;
-
-        var classement = Chasseurs
-            .GroupBy(c => c.NbGalinettes)
-            .OrderByDescending(g => g.Key)
-            .ToList();
-
-        if (classement.All(group => group.Key == 0))
-        {
-            Events.Add(
-                new Event(eventTime, "La partie de chasse est terminée, vainqueur : Brocouille")
-            );
-        }
-        else
-        {
-            var vainqueurs = classement[0];
-            Events.Add(
+        return _groupeDeChasseurs
+            .GetVainqueurs()
+            .TapError(_ => Events.Add(new Event(eventTime, "La partie de chasse est terminée, vainqueur : Brocouille")))
+            .Tap(vainqueurs => Events.Add(
                 new Event(eventTime,
-                    $"La partie de chasse est terminée, vainqueur : {string.Join(", ", vainqueurs.Select(c => $"{c.Nom} - {c.NbGalinettes} galinettes"))}"
-                )
-            );
-        }
-
-        if (classement.All(group => group.Key == 0))
-        {
-            meilleurChasseurs = "Brocouille";
-        }
-        else
-        {
-            var vainqueurs = classement[0];
-            meilleurChasseurs = string.Join(", ", vainqueurs.Select(c => c.Nom));
-        }
-
-
-        return meilleurChasseurs;
+                    $"La partie de chasse est terminée, vainqueur : {string.Join(", ", vainqueurs
+                        .Select(c => $"{c.Nom} - {c.NbGalinettes} galinettes"))}")))
+            .Finally(result => result.IsSuccess
+                ? Result.Success<string, Error>(string.Join(", ", result.Value.Select(c => c.Nom)))
+                : Result.Success<string, Error>(result.Error.ToString()));
     }
 }

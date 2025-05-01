@@ -24,17 +24,17 @@ public class DemarrerUseCase(IPartieDeChasseRepository repository, Func<DateTime
                 throw new ImpossibleDeDémarrerUnePartieAvecUnChasseurSansBalle();
             }
 
-            partieDeChasse.Chasseurs.Add(new Chasseur(chasseur.nom, chasseur.nbBalles));
+            partieDeChasse.AddChasseur(new Chasseur(chasseur.nom, chasseur.nbBalles));
         }
 
-        if (partieDeChasse.Chasseurs.Count == 0)
+        if (partieDeChasse.GetChasseurs().Count == 0)
         {
             throw new ImpossibleDeDémarrerUnePartieSansChasseur();
         }
 
         var chasseursToString = string.Join(
             ", ",
-            partieDeChasse.Chasseurs.Select(c => c.Nom + $" ({c.BallesRestantes} balles)")
+            partieDeChasse.GetChasseurs().Select(c => c.Nom + $" ({c.BallesRestantes} balles)")
         );
 
         partieDeChasse.Events.Add(new Event(timeProvider(),
