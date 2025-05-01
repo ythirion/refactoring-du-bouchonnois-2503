@@ -21,7 +21,7 @@ public class TirerSurGalinetteUseCase(IPartieDeChasseRepository repository, Func
             {
                 if (partieDeChasse.Status != PartieStatus.Terminée)
                 {
-                    var result = partieDeChasse.GetTireur(chasseur);
+                    var result = partieDeChasse.GetChasseur(chasseur);
                     if (result.IsFailure)
                     {
                         throw new ChasseurInconnu(chasseur);

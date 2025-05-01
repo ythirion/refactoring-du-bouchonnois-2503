@@ -33,7 +33,7 @@ public class TirerUseCase(IPartieDeChasseRepository repository, Func<DateTime> t
                 return UnitResult.Failure(new Error(DomainErrorMessages.OnTirePasQuandLaPartieEstTerminée));
             }
 
-            var result = partieDeChasse.GetTireur(chasseur);
+            var result = partieDeChasse.GetChasseur(chasseur);
             if (result.IsFailure)
             {
                 return UnitResult.Failure(result.Error);

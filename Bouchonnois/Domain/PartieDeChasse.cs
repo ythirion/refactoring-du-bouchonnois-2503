@@ -25,6 +25,25 @@ public class PartieDeChasse
     public List<Event> Events { get; }
 
     public void AddChasseur(Chasseur chasseur) => _groupeDeChasseurs.Add(chasseur);
+    public Result<Chasseur, Error> GetChasseur(string chasseur)
+    {
+        var tireur = _groupeDeChasseurs.GetChasseurWithName(chasseur);
+
+        return tireur is null
+            ? Result.Failure<Chasseur, Error>(new Error(DomainErrorMessages.LeChasseurNestPasDansLaPartie))
+            : Result.Success<Chasseur, Error>(tireur);
+    }
+
+    public bool EstSansChasseur() => _groupeDeChasseurs.Empty();
+
+    public string ChasseursToString()
+        => string.Join(
+            ", ",
+            _groupeDeChasseurs
+                .Get()
+                .Select(c => c.Nom + $" ({c.BallesRestantes} balles)")
+        );
+
     public UnitResult<Error> PasserAlApéro(DateTime eventTime)
     {
         return Status switch
@@ -76,20 +95,5 @@ public class PartieDeChasse
                 ? Result.Success<string, Error>(result.Value.VainqueursNames())
                 : Result.Success<string, Error>(result.Error.ToString()));
     }
-    public Result<Chasseur, Error> GetTireur(string chasseur)
-    {
-        var tireur = _groupeDeChasseurs.GetChasseurWithName(chasseur);
-        return tireur is null
-            ? Result.Failure<Chasseur, Error>(new Error(DomainErrorMessages.LeChasseurNestPasDansLaPartie))
-            : Result.Success<Chasseur, Error>(tireur);
-    }
 
-    public bool EstSansChasseur() => _groupeDeChasseurs.Empty();
-    public string ChasseursToString()
-        => string.Join(
-            ", ",
-            _groupeDeChasseurs
-                .Get()
-                .Select(c => c.Nom + $" ({c.BallesRestantes} balles)")
-        );
 }

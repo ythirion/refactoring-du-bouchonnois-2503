@@ -24,7 +24,7 @@ public static class PartieDeChasseVerificationExtensions
 
     private static Chasseur Chasseur(this PartieDeChasse partieDeChasse, string nom)
         => partieDeChasse
-            .GetTireur(nom)
+            .GetChasseur(nom)
             .Should()
             .Succeed("Chasseur non présent dans la partie de chasse")
             .Subject;
