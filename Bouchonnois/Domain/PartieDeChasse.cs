@@ -1,4 +1,6 @@
-﻿using CSharpFunctionalExtensions;
+﻿using Bouchonnois.Domain.Errors;
+
+using CSharpFunctionalExtensions;
 
 namespace Bouchonnois.Domain;
 
@@ -25,20 +27,19 @@ public class PartieDeChasse
 
     public UnitResult<Error> PasserAlApéro(DateTime now)
     {
-        if (Status == PartieStatus.Apéro)
+        return Status switch
         {
-            return UnitResult.Failure(new Error("On est déjà en train de prendre l'apéro"));
-        }
+            PartieStatus.Apéro => UnitResult.Failure(new Error(DomainErrorMessages.OnEstDéjàEnTrainDePrendreLApéro)),
+            PartieStatus.Terminée => UnitResult.Failure(new Error(DomainErrorMessages.OnNePrendPasLApéroQuandLaPartieEstTerminée)),
+            _ => AlApero(now)
+        };
 
-        if (Status == PartieStatus.Terminée)
+        UnitResult<Error> AlApero(DateTime now)
         {
-            return UnitResult.Failure(new Error("On ne prend pas l'apéro quand la partie est terminée"));
+            Status = PartieStatus.Apéro;
+            Events.Add(new Event(now, "Petit apéro"));
+
+            return UnitResult.Success<Error>();
         }
-
-        Status = PartieStatus.Apéro;
-
-        Events.Add(new Event(now, "Petit apéro"));
-
-        return UnitResult.Success<Error>();
     }
 }

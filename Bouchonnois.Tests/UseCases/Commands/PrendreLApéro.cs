@@ -1,7 +1,9 @@
 using Bouchonnois.Domain;
+using Bouchonnois.Domain.Errors;
 using Bouchonnois.Tests.UseCases.Common;
 using Bouchonnois.Tests.Verifications;
 using Bouchonnois.UseCases.Commands;
+using Bouchonnois.UseCases.Errors;
 using Bouchonnois.UseCases.Exceptions;
 
 using static Bouchonnois.Tests.Builders.PartieDeChasseBuilder;
@@ -60,7 +62,7 @@ public class PrendreLApéro : UseCaseTest
             _prendereLAperoUseCase
                 .Handle(id)
                 .Should()
-                .FailWith(new Error("On est déjà en train de prendre l'apéro"));
+                .FailWith(new Error(DomainErrorMessages.OnEstDéjàEnTrainDePrendreLApéro));
 
             Repository.SavedPartieDeChasse().Should().BeNull();
         }
@@ -73,7 +75,7 @@ public class PrendreLApéro : UseCaseTest
             _prendereLAperoUseCase
                 .Handle(id)
                 .Should()
-                .FailWith(new Error("On ne prend pas l'apéro quand la partie est terminée"));
+                .FailWith(new Error(DomainErrorMessages.OnNePrendPasLApéroQuandLaPartieEstTerminée));
 
             Repository.SavedPartieDeChasse().Should().BeNull();
         }

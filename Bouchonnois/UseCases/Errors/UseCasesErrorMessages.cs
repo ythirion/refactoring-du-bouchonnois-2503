@@ -1,4 +1,4 @@
-﻿namespace Bouchonnois.UseCases.Exceptions;
+﻿namespace Bouchonnois.UseCases.Errors;
 
 public static class UseCasesErrorMessages
 {
