@@ -1,6 +1,4 @@
-﻿using System.Runtime.InteropServices.JavaScript;
-
-using Bouchonnois.Domain;
+﻿using Bouchonnois.Domain;
 using Bouchonnois.UseCases.Exceptions;
 
 using CSharpFunctionalExtensions;
