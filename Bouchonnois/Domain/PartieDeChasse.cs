@@ -111,42 +111,34 @@ public class PartieDeChasse
         return UnitResult.Success<Error>();
     }
     public UnitResult<Error> ChasseurTireSurUneGalinette(string chasseur, DateTime timeProvider, Action<PartieDeChasse> action)
-    {
-        var assezDeGalinettes = AAssezDeGalinettes();
-        if (assezDeGalinettes.IsFailure)
-        {
-            return assezDeGalinettes;
-        }
-        var laPartieEstEncours = PartieEnCours(chasseur, timeProvider, action);
-        if (laPartieEstEncours.IsFailure)
-        {
-            return laPartieEstEncours;
-        }
+        => AssezDeGalinettes()
+            .Bind(() => EstEnCours(chasseur, timeProvider, action))
+            .Bind(() =>
+                GetChasseur(chasseur)
+                    .Bind(chasseurQuiTire =>
+                        chasseurQuiTire
+                            .TireSurUneGalinette()
+                            .Tap(() =>
+                            {
+                                Terrain.NbGalinettes--;
+                                Events.Add(new Event(timeProvider, $"{chasseur} tire sur une galinette"));
+                            })
+                            .TapError(_ =>
+                            {
+                                Events.Add(new Event(timeProvider,
+                                    $"{chasseur} veut tirer sur une galinette -> T'as plus de balles mon vieux, chasse à la main"));
+                                action(this);
+                            })
+                    )
+            );
 
-        var chasseurQuiVeutTirer = GetChasseur(chasseur);
-        if (chasseurQuiVeutTirer.IsFailure)
-        {
-            return chasseurQuiVeutTirer;
-        }
 
-        var chasseurQuiTire = chasseurQuiVeutTirer.Value;
+    private UnitResult<Error> AssezDeGalinettes()
+        => Terrain.NbGalinettes == 0
+            ? new Error(DomainErrorMessages.TasTropPicoléMonVieuxTasRienTouché)
+            : UnitResult.Success<Error>();
 
-        return chasseurQuiTire
-            .TireSurUneGalinette()
-            .Tap(() =>
-            {
-                Terrain.NbGalinettes--;
-                Events.Add(new Event(timeProvider, $"{chasseur} tire sur une galinette"));
-            })
-            .TapError(error =>
-            {
-                Events.Add(new Event(timeProvider,
-                    $"{chasseur} veut tirer sur une galinette -> T'as plus de balles mon vieux, chasse à la main"));
-                action(this);
-            });
-    }
-
-    private UnitResult<Error> PartieEnCours(
+    private UnitResult<Error> EstEnCours(
         string chasseur,
         DateTime timeProvider,
         Action<PartieDeChasse> action)
@@ -175,8 +167,5 @@ public class PartieDeChasse
         return UnitResult.Success<Error>();
     }
 
-    private UnitResult<Error> AAssezDeGalinettes()
-        => Terrain.NbGalinettes == 0
-            ? new Error(DomainErrorMessages.TasTropPicoléMonVieuxTasRienTouché)
-            : UnitResult.Success<Error>();
+
 }
