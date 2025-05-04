@@ -1,5 +1,4 @@
 using Bouchonnois.Domain;
-using Bouchonnois.Domain.Errors;
 using Bouchonnois.UseCases.Errors;
 
 using CSharpFunctionalExtensions;
@@ -10,7 +9,7 @@ public class TirerSurGalinetteUseCase(IPartieDeChasseRepository repository, Func
 {
     public UnitResult<Error> Handle(Guid id, string chasseur)
         => repository
-            .GetSafeById(id)
+            .GetById(id)
             .ToResult(new Error(UseCasesErrorMessages.LaPartieDeChasseNExistePas))
             .Bind(p => p
                 .ChasseurTireSurUneGalinette(chasseur,

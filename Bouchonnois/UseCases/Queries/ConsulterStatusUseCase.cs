@@ -9,7 +9,7 @@ public class ConsulterStatusUseCase(IPartieDeChasseRepository repository)
 {
     public Result<string, Error> Handle(Guid id)
     {
-        var partieDeChasse = repository.GetSafeById(id);
+        var partieDeChasse = repository.GetById(id);
 
         if (partieDeChasse.HasNoValue)
         {

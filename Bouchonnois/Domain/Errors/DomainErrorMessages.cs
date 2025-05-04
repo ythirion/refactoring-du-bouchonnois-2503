@@ -14,4 +14,5 @@ public static class DomainErrorMessages
     public const string ImpossibleDeDémarrerUnePartieSansGalinettes = "Impossible de démarrer une partie sans galinettes";
     public const string ImpossibleDeDémarrerUnePartieSansChasseur = "Impossible de démarrer une partie sans chasseur";
     public const string ImpossibleDeDémarrerUnePartieAvecUnChasseurSansBalle = "Impossible de démarrer une partie avec un chasseur sans balle";
+    public const string IlNyAPlusDeGalinettesSurCeTerrain = "Il n'y a plus de galinettes sur ce terrain";
 }

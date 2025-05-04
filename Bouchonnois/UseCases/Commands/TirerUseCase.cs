@@ -9,25 +9,22 @@ public class TirerUseCase(IPartieDeChasseRepository repository, Func<DateTime> t
 {
     public UnitResult<Error> Handle(Guid id, string chasseur)
         => repository
-            .GetSafeById(id)
+            .GetById(id)
             .ToResult(new Error(UseCasesErrorMessages.LaPartieDeChasseNExistePas))
             .Bind(partie => LaPartiePermetDeTirer(chasseur, partie))
             .Bind(partie => PourLeTireur(chasseur, partie))
             .Bind(context => Tire(context));
 
     private Result<PartieDeChasse, Error> LaPartiePermetDeTirer(string chasseur, PartieDeChasse p)
-        => p.PeutTirer(chasseur, timeProvider())
-            .TapError(() => repository.Save(p))
+        => p.EstEnCours(chasseur, timeProvider(), p => repository.Save(p))
             .Map(() => p);
 
     private static Result<(PartieDeChasse partie, Chasseur tireur), Error> PourLeTireur(string nom, PartieDeChasse p)
-        => p
-            .GetChasseur(nom)
+        => p.GetChasseur(nom)
             .Map(c => (p, c));
 
     private UnitResult<Error> Tire((PartieDeChasse partie, Chasseur tireur) context)
-        => context.tireur
-            .TireDansLeVide()
+        => context.tireur.TireDansLeVide()
             .Tap(() =>
             {
                 context.partie.Events.Add(

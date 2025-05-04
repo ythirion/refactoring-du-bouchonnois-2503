@@ -1,5 +1,4 @@
 ﻿using Bouchonnois.Domain.Errors;
-using Bouchonnois.UseCases.Commands;
 
 using CSharpFunctionalExtensions;
 
@@ -29,20 +28,14 @@ public class PartieDeChasse
 
     public List<Event> Events { get; }
 
+    internal string Chasseurs() => _groupeDeChasseurs.ChasseursToString();
+
     public void AddChasseur(Chasseur chasseur) => _groupeDeChasseurs.Add(chasseur);
     public Result<Chasseur, Error> GetChasseur(string chasseur)
         => _groupeDeChasseurs.GetChasseurWithName(chasseur)
             .ToResult(new Error(DomainErrorMessages.LeChasseurNestPasDansLaPartie));
 
     public bool EstSansChasseur() => _groupeDeChasseurs.Empty();
-
-    public string ChasseursToString()
-        => string.Join(
-            ", ",
-            _groupeDeChasseurs
-                .Get()
-                .Select(c => c.Nom + $" ({c.BallesRestantes} balles)")
-        );
 
     public UnitResult<Error> PasserAlApéro(DateTime eventTime)
     {
@@ -96,25 +89,8 @@ public class PartieDeChasse
                 : result.Error.ToString());
     }
 
-    public UnitResult<Error> PeutTirer(string chasseur, DateTime eventTime)
-    {
-        switch (Status)
-        {
-            case PartieStatus.Apéro:
-                Events.Add(new Event(eventTime,
-                    $"{chasseur} veut tirer -> On tire pas pendant l'apéro, c'est sacré !!!"));
-                return new Error(DomainErrorMessages.OnTirePasPendantLapéroCestSacré);
-            case PartieStatus.Terminée:
-                Events.Add(new Event(eventTime,
-                    $"{chasseur} veut tirer -> On tire pas quand la partie est terminée"));
-                return new Error(DomainErrorMessages.OnTirePasQuandLaPartieEstTerminée);
-            default:
-                return UnitResult.Success<Error>();
-        }
-    }
-
     public UnitResult<Error> ChasseurTireSurUneGalinette(string chasseur, DateTime timeProvider, Action<PartieDeChasse> action)
-        => AssezDeGalinettes()
+        => AvecDeGalinettes()
             .Ensure(() => EstEnCours(chasseur, timeProvider, action))
             .Bind(() =>
                 GetChasseur(chasseur)
@@ -123,8 +99,9 @@ public class PartieDeChasse
                             .TireSurUneGalinette()
                             .Tap(() =>
                             {
-                                Terrain.NbGalinettes--;
-                                Events.Add(new Event(timeProvider, $"{chasseur} tire sur une galinette"));
+                                Terrain
+                                    .UneGalinetteEnMoins()
+                                    .Tap(() => Events.Add(new Event(timeProvider, $"{chasseur} tire sur une galinette")));
                             })
                             .TapError(_ =>
                             {
@@ -136,13 +113,7 @@ public class PartieDeChasse
             );
 
 
-    private UnitResult<Error> AssezDeGalinettes()
-        => Terrain.NbGalinettes == 0
-            ? new Error(DomainErrorMessages.TasTropPicoléMonVieuxTasRienTouché)
-            : UnitResult.Success<Error>();
-
-    private UnitResult<Error> EstEnCours(
-        string chasseur,
+    public UnitResult<Error> EstEnCours(string chasseur,
         DateTime timeProvider,
         Action<PartieDeChasse> action)
     {
@@ -168,10 +139,15 @@ public class PartieDeChasse
                 return UnitResult.Success<Error>();
         }
     }
+
+    private UnitResult<Error> AvecDeGalinettes()
+        => Terrain.NbGalinettes == 0
+            ? new Error(DomainErrorMessages.TasTropPicoléMonVieuxTasRienTouché)
+            : UnitResult.Success<Error>();
 }
 
 public static class PartieDeChasseExtensions
 {
     public static string EventMessage(this PartieDeChasse partieDeChasse)
-        => $"La partie de chasse commence à {partieDeChasse.Terrain.Nom} avec {partieDeChasse.ChasseursToString()}";
+        => $"La partie de chasse commence à {partieDeChasse.Terrain.Nom} avec {partieDeChasse.Chasseurs()}";
 }

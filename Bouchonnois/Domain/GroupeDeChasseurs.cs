@@ -4,7 +4,7 @@ using CSharpFunctionalExtensions;
 
 namespace Bouchonnois.Domain;
 
-internal class GroupeDeChasseurs(List<Chasseur>? chasseurs)
+public class GroupeDeChasseurs(List<Chasseur>? chasseurs)
 {
     private readonly List<Chasseur> _chasseurs = chasseurs ?? [];
     public void Add(Chasseur chasseur) => _chasseurs.Add(chasseur);
@@ -31,4 +31,16 @@ internal class GroupeDeChasseurs(List<Chasseur>? chasseurs)
         .FirstOrDefault(c => c.Nom == name);
 
     public bool Empty() => !_chasseurs.Any();
+
+}
+
+public static class GroupeDeChasseursExtensions
+{
+    public static string ChasseursToString(this GroupeDeChasseurs chasseurs)
+        => string.Join(
+            ", ",
+            chasseurs
+                .Get()
+                .Select(c => c.Nom + $" ({c.BallesRestantes} balles)")
+        );
 }

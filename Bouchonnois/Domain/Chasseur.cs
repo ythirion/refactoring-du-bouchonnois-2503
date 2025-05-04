@@ -20,18 +20,18 @@ public class Chasseur
     public int NbGalinettes { get; private set; }
 
     public UnitResult<Error> TireDansLeVide()
-        => AToujoursDesBalles()
+        => ADesBalles()
             .Tap(() => BallesRestantes--);
 
     public UnitResult<Error> TireSurUneGalinette()
-        => AToujoursDesBalles()
+        => ADesBalles()
             .Tap(() =>
             {
                 BallesRestantes--;
                 NbGalinettes++;
             });
 
-    private UnitResult<Error> AToujoursDesBalles()
+    private UnitResult<Error> ADesBalles()
         => BallesRestantes == 0
             ? new Error(DomainErrorMessages.TasPlusDeBallesMonVieuxChasseALaMain)
             : UnitResult.Success<Error>();

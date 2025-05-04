@@ -9,7 +9,7 @@ public class ReprendreLaPartieUseCase(IPartieDeChasseRepository repository, Func
 {
     public UnitResult<Error> Handle(Guid id)
         => repository
-            .GetSafeById(id)
+            .GetById(id)
             .ToResult(new Error(UseCasesErrorMessages.LaPartieDeChasseNExistePas))
             .Bind(p => p.ReprendreLaPartie(timeProvider()).Map(() => p))
             .Tap(p => repository.Save(p));
