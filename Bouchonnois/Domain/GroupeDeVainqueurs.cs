@@ -2,10 +2,15 @@
 
 namespace Bouchonnois.Domain;
 
-internal class GroupeDeVainqueurs(List<Chasseur> vainqueurs) : Collection<Chasseur>(vainqueurs)
+public class GroupeDeVainqueurs(List<Chasseur> vainqueurs) : Collection<Chasseur>(vainqueurs)
 {
-    public string GetVictoryEventMessage()
+}
+
+public static class GroupeDeVainqueursExtensions
+{
+    public static string EventMessage(this GroupeDeVainqueurs vainqueurs)
         => $"La partie de chasse est terminée, vainqueur : {string.Join(", ", vainqueurs.Select(c => $"{c.Nom} - {c.NbGalinettes} galinettes"))}";
 
-    public string VainqueursNames() => string.Join(", ", vainqueurs.Select(c => c.Nom));
+    public static string VainqueursNames(this GroupeDeVainqueurs vainqueurs)
+        => string.Join(", ", vainqueurs.Select(c => c.Nom));
 }

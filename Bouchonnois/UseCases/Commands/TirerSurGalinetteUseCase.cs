@@ -10,8 +10,7 @@ namespace Bouchonnois.UseCases.Commands;
 public class TirerSurGalinetteUseCase(IPartieDeChasseRepository repository, Func<DateTime> timeProvider)
 {
     public UnitResult<Error> Handle(Guid id, string chasseur)
-    {
-        return repository
+        => repository
             .GetSafeById(id)
             .ToResult(new Error(UseCasesErrorMessages.LaPartieDeChasseNExistePas))
             .Bind(p => p
@@ -19,5 +18,4 @@ public class TirerSurGalinetteUseCase(IPartieDeChasseRepository repository, Func
                     timeProvider(),
                     p => repository.Save(p))
                 .Tap(() => repository.Save(p)));
-    }
 }
