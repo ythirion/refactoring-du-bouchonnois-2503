@@ -15,18 +15,25 @@ public class Chasseur
 
     public string Nom { get; }
 
-    public int BallesRestantes { get; set; }
+    public int BallesRestantes { get; private set; }
 
-    public int NbGalinettes { get; set; }
+    public int NbGalinettes { get; private set; }
 
-    public UnitResult<Error> TireSansCible()
-    {
-        if (BallesRestantes == 0)
-        {
-            return UnitResult.Failure(new Error(DomainErrorMessages.TasPlusDeBallesMonVieuxChasseALaMain));
-        }
+    public UnitResult<Error> TireDansLeVide()
+        => AToujoursDesBalles()
+            .Tap(() => BallesRestantes--);
 
-        BallesRestantes--;
-        return UnitResult.Success<Error>();
-    }
+    public UnitResult<Error> TireSurUneGalinette()
+        => AToujoursDesBalles()
+            .Tap(() =>
+            {
+                BallesRestantes--;
+                NbGalinettes++;
+            });
+
+    private UnitResult<Error> AToujoursDesBalles()
+        => BallesRestantes == 0
+            ? new Error(DomainErrorMessages.TasPlusDeBallesMonVieuxChasseALaMain)
+            : UnitResult.Success<Error>();
+
 }

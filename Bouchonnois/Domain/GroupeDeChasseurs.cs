@@ -27,7 +27,7 @@ internal class GroupeDeChasseurs(List<Chasseur>? chasseurs)
         return Result.Success<GroupeDeVainqueurs, Brocouille>(
             new GroupeDeVainqueurs(classement.First().ToList()));
     }
-    public Chasseur? GetChasseurWithName(string name) => _chasseurs
+    public Maybe<Chasseur> GetChasseurWithName(string name) => _chasseurs
         .FirstOrDefault(c => c.Nom == name);
 
     public bool Empty() => !_chasseurs.Any();

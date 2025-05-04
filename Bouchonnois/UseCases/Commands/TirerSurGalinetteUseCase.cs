@@ -1,70 +1,23 @@
 using Bouchonnois.Domain;
+using Bouchonnois.Domain.Errors;
+using Bouchonnois.UseCases.Errors;
 using Bouchonnois.UseCases.Exceptions;
+
+using CSharpFunctionalExtensions;
 
 namespace Bouchonnois.UseCases.Commands;
 
 public class TirerSurGalinetteUseCase(IPartieDeChasseRepository repository, Func<DateTime> timeProvider)
 {
-
-    public void Handle(Guid id, string chasseur)
+    public UnitResult<Error> Handle(Guid id, string chasseur)
     {
-        var partieDeChasse = repository.GetById(id);
-
-        if (partieDeChasse == null)
-        {
-            throw new LaPartieDeChasseNexistePas();
-        }
-
-        if (partieDeChasse.Terrain.NbGalinettes == 0)
-        {
-            throw new TasTropPicoléMonVieuxTasRienTouché();
-        }
-
-        if (partieDeChasse.Status == PartieStatus.Apéro)
-        {
-            partieDeChasse.Events.Add(
-                new Event(
+        return repository
+            .GetSafeById(id)
+            .ToResult(new Error(UseCasesErrorMessages.LaPartieDeChasseNExistePas))
+            .Bind(p => p
+                .ChasseurTireSurUneGalinette(chasseur,
                     timeProvider(),
-                    $"{chasseur} veut tirer -> On tire pas pendant l'apéro, c'est sacré !!!"));
-            repository.Save(partieDeChasse);
-            throw new OnTirePasPendantLapéroCestSacré();
-        }
-
-        if (partieDeChasse.Status == PartieStatus.Terminée)
-        {
-            partieDeChasse.Events.Add(
-                new Event(
-                    timeProvider(),
-                    $"{chasseur} veut tirer -> On tire pas quand la partie est terminée"));
-            repository.Save(partieDeChasse);
-
-            throw new OnTirePasQuandLaPartieEstTerminée();
-        }
-
-        var result = partieDeChasse.GetChasseur(chasseur);
-        if (result.IsFailure)
-        {
-            throw new ChasseurInconnu(chasseur);
-        }
-
-        var chasseurQuiTire = result.Value;
-
-        if (chasseurQuiTire.BallesRestantes == 0)
-        {
-            partieDeChasse.Events.Add(
-                new Event(
-                    timeProvider(),
-                    $"{chasseur} veut tirer sur une galinette -> T'as plus de balles mon vieux, chasse à la main"));
-            repository.Save(partieDeChasse);
-
-            throw new TasPlusDeBallesMonVieuxChasseALaMain();
-        }
-
-        chasseurQuiTire.BallesRestantes--;
-        chasseurQuiTire.NbGalinettes++;
-        partieDeChasse.Terrain.NbGalinettes--;
-        partieDeChasse.Events.Add(new Event(timeProvider(), $"{chasseur} tire sur une galinette"));
-
-        repository.Save(partieDeChasse);
+                    p => repository.Save(p))
+                .Tap(() => repository.Save(p)));
     }
 }

@@ -10,4 +10,5 @@ public static class DomainErrorMessages
     public const string OnTirePasQuandLaPartieEstTerminée = "On tire pas quand la partie est terminée";
     public const string TasPlusDeBallesMonVieuxChasseALaMain = "T'as plus de balles mon vieux, chasse à la main";
     public const string LeChasseurNestPasDansLaPartie = "Chasseur inconnu";
+    public const string TasTropPicoléMonVieuxTasRienTouché = "T'as trop puicolé mon vieux t'as rien touché";
 }

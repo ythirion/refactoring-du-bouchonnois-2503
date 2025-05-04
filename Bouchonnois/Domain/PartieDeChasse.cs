@@ -1,4 +1,5 @@
 ﻿using Bouchonnois.Domain.Errors;
+using Bouchonnois.UseCases.Commands;
 
 using CSharpFunctionalExtensions;
 
@@ -26,13 +27,8 @@ public class PartieDeChasse
 
     public void AddChasseur(Chasseur chasseur) => _groupeDeChasseurs.Add(chasseur);
     public Result<Chasseur, Error> GetChasseur(string chasseur)
-    {
-        var tireur = _groupeDeChasseurs.GetChasseurWithName(chasseur);
-
-        return tireur is null
-            ? Result.Failure<Chasseur, Error>(new Error(DomainErrorMessages.LeChasseurNestPasDansLaPartie))
-            : Result.Success<Chasseur, Error>(tireur);
-    }
+        => _groupeDeChasseurs.GetChasseurWithName(chasseur)
+            .ToResult(new Error(DomainErrorMessages.LeChasseurNestPasDansLaPartie));
 
     public bool EstSansChasseur() => _groupeDeChasseurs.Empty();
 
@@ -48,8 +44,8 @@ public class PartieDeChasse
     {
         return Status switch
         {
-            PartieStatus.Apéro => UnitResult.Failure(new Error(DomainErrorMessages.OnEstDéjàEnTrainDePrendreLApéro)),
-            PartieStatus.Terminée => UnitResult.Failure(new Error(DomainErrorMessages.OnNePrendPasLApéroQuandLaPartieEstTerminée)),
+            PartieStatus.Apéro => new Error(DomainErrorMessages.OnEstDéjàEnTrainDePrendreLApéro),
+            PartieStatus.Terminée => new Error(DomainErrorMessages.OnNePrendPasLApéroQuandLaPartieEstTerminée),
             _ => AlApero(eventTime)
         };
 
@@ -102,16 +98,85 @@ public class PartieDeChasse
         {
             Events.Add(new Event(eventTime,
                 $"{chasseur} veut tirer -> On tire pas pendant l'apéro, c'est sacré !!!"));
-            return UnitResult.Failure(new Error(DomainErrorMessages.OnTirePasPendantLapéroCestSacré));
+            return new Error(DomainErrorMessages.OnTirePasPendantLapéroCestSacré);
         }
 
         if (Status == PartieStatus.Terminée)
         {
             Events.Add(new Event(eventTime,
                 $"{chasseur} veut tirer -> On tire pas quand la partie est terminée"));
-            return UnitResult.Failure(new Error(DomainErrorMessages.OnTirePasQuandLaPartieEstTerminée));
+            return new Error(DomainErrorMessages.OnTirePasQuandLaPartieEstTerminée);
         }
 
         return UnitResult.Success<Error>();
     }
+    public UnitResult<Error> ChasseurTireSurUneGalinette(string chasseur, DateTime timeProvider, Action<PartieDeChasse> action)
+    {
+        var assezDeGalinettes = AAssezDeGalinettes();
+        if (assezDeGalinettes.IsFailure)
+        {
+            return assezDeGalinettes;
+        }
+        var laPartieEstEncours = PartieEnCours(chasseur, timeProvider, action);
+        if (laPartieEstEncours.IsFailure)
+        {
+            return laPartieEstEncours;
+        }
+
+        var chasseurQuiVeutTirer = GetChasseur(chasseur);
+        if (chasseurQuiVeutTirer.IsFailure)
+        {
+            return chasseurQuiVeutTirer;
+        }
+
+        var chasseurQuiTire = chasseurQuiVeutTirer.Value;
+
+        return chasseurQuiTire
+            .TireSurUneGalinette()
+            .Tap(() =>
+            {
+                Terrain.NbGalinettes--;
+                Events.Add(new Event(timeProvider, $"{chasseur} tire sur une galinette"));
+            })
+            .TapError(error =>
+            {
+                Events.Add(new Event(timeProvider,
+                    $"{chasseur} veut tirer sur une galinette -> T'as plus de balles mon vieux, chasse à la main"));
+                action(this);
+            });
+    }
+
+    private UnitResult<Error> PartieEnCours(
+        string chasseur,
+        DateTime timeProvider,
+        Action<PartieDeChasse> action)
+    {
+        if (Status == PartieStatus.Apéro)
+        {
+            Events.Add(
+                new Event(
+                    timeProvider,
+                    $"{chasseur} veut tirer -> On tire pas pendant l'apéro, c'est sacré !!!"));
+            action(this);
+
+            return new Error(DomainErrorMessages.OnTirePasPendantLapéroCestSacré);
+        }
+
+        if (Status == PartieStatus.Terminée)
+        {
+            Events.Add(
+                new Event(
+                    timeProvider,
+                    $"{chasseur} veut tirer -> On tire pas quand la partie est terminée"));
+            action(this);
+
+            return new Error(DomainErrorMessages.OnTirePasQuandLaPartieEstTerminée);
+        }
+        return UnitResult.Success<Error>();
+    }
+
+    private UnitResult<Error> AAssezDeGalinettes()
+        => Terrain.NbGalinettes == 0
+            ? new Error(DomainErrorMessages.TasTropPicoléMonVieuxTasRienTouché)
+            : UnitResult.Success<Error>();
 }

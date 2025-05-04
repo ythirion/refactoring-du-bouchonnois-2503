@@ -27,7 +27,7 @@ public class TirerUseCase(IPartieDeChasseRepository repository, Func<DateTime> t
 
     private UnitResult<Error> Tire((PartieDeChasse partie, Chasseur tireur) context)
         => context.tireur
-            .TireSansCible()
+            .TireDansLeVide()
             .Tap(() =>
             {
                 context.partie.Events.Add(
