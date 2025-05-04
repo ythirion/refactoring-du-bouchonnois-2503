@@ -40,20 +40,24 @@ public class PrendreLAperoUseCase(IPartieDeChasseRepository repository, Func<Dat
             return UnitResult.Failure(new Error("La partie de chasse n'existe pas"));
         }
 
+        return PrendreLApero(partieDeChasse);
+    }
+
+    private UnitResult<Error> PrendreLApero(PartieDeChasse partieDeChasse)
+    {
         if (partieDeChasse.Status == PartieStatus.Apéro)
         {
             return UnitResult.Failure(new Error("On est déjà en train de prendre l'apéro"));
         }
-        else if (partieDeChasse.Status == PartieStatus.Terminée)
+
+        if (partieDeChasse.Status == PartieStatus.Terminée)
         {
             return UnitResult.Failure(new Error("On ne prend pas l'apéro quand la partie est terminée"));
         }
-        else
-        {
-            partieDeChasse.Status = PartieStatus.Apéro;
-            partieDeChasse.Events.Add(new Event(timeProvider(), "Petit apéro"));
-            repository.Save(partieDeChasse);
-        }
+
+        partieDeChasse.Status = PartieStatus.Apéro;
+        partieDeChasse.Events.Add(new Event(timeProvider(), "Petit apéro"));
+        repository.Save(partieDeChasse);
 
 
         return UnitResult.Success<Error>();
