@@ -1,6 +1,6 @@
 using Bouchonnois.Domain;
 using Bouchonnois.Tests.UseCases.Common;
-using Bouchonnois.UseCases.Exceptions;
+using Bouchonnois.UseCases.Errors;
 using Bouchonnois.UseCases.Queries;
 
 using static Bouchonnois.Tests.Builders.PartieDeChasseBuilder;
@@ -26,12 +26,14 @@ public class ConsulterStatus : UseCaseTest
                         new DateTime(2024, 4, 25, 9, 0, 12),
                         "La partie de chasse commence à Pitibon sur Sauldre avec Dédé (20 balles), Bernard (8 balles), Robert (12 balles)")));
 
-
         var status = _consulterStatusUseCase.Handle(id);
 
-        status.Should()
-            .Be(
-                "09:00 - La partie de chasse commence à Pitibon sur Sauldre avec Dédé (20 balles), Bernard (8 balles), Robert (12 balles)");
+        status
+            .Should()
+            .Succeed()
+            .And.Subject.Value
+            .Should()
+            .Be("09:00 - La partie de chasse commence à Pitibon sur Sauldre avec Dédé (20 balles), Bernard (8 balles), Robert (12 balles)");
     }
 
     [Fact]
@@ -65,8 +67,11 @@ public class ConsulterStatus : UseCaseTest
         // @formatter:on
 
         var status = _consulterStatusUseCase.Handle(id);
-
-        status.Should()
+        status
+            .Should()
+            .Succeed()
+            .And.Subject.Value
+            .Should()
             .BeEquivalentTo(
                 """
                 15:30 - La partie de chasse est terminée, vainqueur :  Robert - 3 galinettes
@@ -93,15 +98,28 @@ public class ConsulterStatus : UseCaseTest
                 """);
     }
 
-    [Fact]
-    public void EchoueCarPartieNexistePas()
+    public class Failure : UseCaseTest
     {
-        var id = UnePartieDeChasseInexistante();
+        private readonly ConsulterStatusUseCase _sut;
+        public Failure()
+        {
+            _sut = new ConsulterStatusUseCase(Repository);
+        }
 
-        var reprendrePartieQuandPartieExistePas = () => _consulterStatusUseCase.Handle(id);
 
-        reprendrePartieQuandPartieExistePas.Should().Throw<LaPartieDeChasseNexistePas>();
+        [Fact]
+        public void EchoueCarPartieNexistePas()
+        {
+            var id = UnePartieDeChasseInexistante();
 
-        Repository.SavedPartieDeChasse().Should().BeNull();
+            _sut.Handle(id)
+                .Should()
+                .FailWith(new Error(UseCasesErrorMessages.LaPartieDeChasseNExistePas));
+
+            Repository
+                .SavedPartieDeChasse()
+                .Should()
+                .BeNull();
+        }
     }
 }

@@ -169,3 +169,9 @@ public class PartieDeChasse
         }
     }
 }
+
+public static class PartieDeChasseExtensions
+{
+    public static string EventMessage(this PartieDeChasse partieDeChasse)
+        => $"La partie de chasse commence à {partieDeChasse.Terrain.Nom} avec {partieDeChasse.ChasseursToString()}";
+}

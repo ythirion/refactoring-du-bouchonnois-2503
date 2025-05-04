@@ -1,7 +1,7 @@
 using Bouchonnois.Domain;
+using Bouchonnois.Domain.Errors;
 using Bouchonnois.Tests.UseCases.Common;
 using Bouchonnois.UseCases.Commands;
-using Bouchonnois.UseCases.Exceptions;
 
 using FsCheck;
 using FsCheck.Fluent;
@@ -19,10 +19,10 @@ using GroupDeChasseurs = (string nom, int nbBalles)[];
 
 public class DemarrerUnePartieDeChasse : UseCaseTest
 {
-    private readonly DemarrerUseCase sut;
+    private readonly DemarrerUseCase _sut;
     public DemarrerUnePartieDeChasse()
     {
-        sut = new DemarrerUseCase(Repository, () => Now);
+        _sut = new DemarrerUseCase(Repository, () => Now);
         ;
     }
 
@@ -38,13 +38,17 @@ public class DemarrerUnePartieDeChasse : UseCaseTest
 
         var terrainDeChasse = ("Pitibon sur Sauldre", 3);
 
-        var id = sut.Handle(terrainDeChasse, chasseurs);
+        var guidOrError
+            = _sut.Handle(terrainDeChasse, chasseurs);
+        guidOrError
+            .Should()
+            .Succeed();
 
         Repository.SavedPartieDeChasse()
             .Should()
             .BeEquivalentTo(
                 UnePartieDeChasse()
-                    .IdentifiéePar(id)
+                    .IdentifiéePar(guidOrError.Value)
                     .EnCours()
                     .Sur(UnTerrain().Nommé("Pitibon sur Sauldre").AyantGalinettes(3))
                     .Avec(
@@ -72,16 +76,15 @@ public class DemarrerUnePartieDeChasse : UseCaseTest
         => DémarrerLaPartieAvecSuccès(terrainRicheEnGalinettes, chasseursAvecDesBalles);
 
     private Property DémarrerLaPartieAvecSuccès(Terrain terrainDeChasse, GroupDeChasseurs chasseurs)
-        => (sut.Handle(terrainDeChasse, chasseurs.ToList()) == Repository.SavedPartieDeChasse().Id)
+        => (_sut.Handle(terrainDeChasse, chasseurs.ToList()).Value == Repository.SavedPartieDeChasse().Id)
             .Label("Démarrer la partie avec succès");
-
 
     public class Failure : UseCaseTest
     {
-        private readonly DemarrerUseCase sut;
+        private readonly DemarrerUseCase _sut;
         public Failure()
         {
-            sut = new DemarrerUseCase(Repository, () => Now);
+            _sut = new DemarrerUseCase(Repository, () => Now);
         }
 
         [Fact]
@@ -90,9 +93,9 @@ public class DemarrerUnePartieDeChasse : UseCaseTest
             var chasseurs = new List<(string, int)>();
             var terrainDeChasse = ("Pitibon sur Sauldre", 3);
 
-            var demarrerPartieSansChasseurs = () => sut.Handle(terrainDeChasse, chasseurs);
-
-            demarrerPartieSansChasseurs.Should().Throw<ImpossibleDeDémarrerUnePartieSansChasseur>();
+            _sut.Handle(terrainDeChasse, chasseurs)
+                .Should()
+                .FailWith(new Error(DomainErrorMessages.ImpossibleDeDémarrerUnePartieSansChasseur));
 
             Repository.SavedPartieDeChasse().Should().BeNull();
         }
@@ -103,9 +106,9 @@ public class DemarrerUnePartieDeChasse : UseCaseTest
             var chasseurs = new List<(string, int)>();
             var terrainDeChasse = ("Pitibon sur Sauldre", 0);
 
-            var demarrerPartieSansChasseurs = () => sut.Handle(terrainDeChasse, chasseurs);
-
-            demarrerPartieSansChasseurs.Should().Throw<ImpossibleDeDémarrerUnePartieSansGalinettes>();
+            _sut.Handle(terrainDeChasse, chasseurs)
+                .Should()
+                .FailWith(new Error(DomainErrorMessages.ImpossibleDeDémarrerUnePartieSansGalinettes));
 
             Repository.SavedPartieDeChasse().Should().BeNull();
         }
@@ -121,9 +124,10 @@ public class DemarrerUnePartieDeChasse : UseCaseTest
 
             var terrainDeChasse = ("Pitibon sur Sauldre", 3);
 
-            var demarrerPartieAvecChasseurSansBalle = () => sut.Handle(terrainDeChasse, chasseurs);
-
-            demarrerPartieAvecChasseurSansBalle.Should().Throw<ImpossibleDeDémarrerUnePartieAvecUnChasseurSansBalle>();
+            _sut
+                .Handle(terrainDeChasse, chasseurs)
+                .Should()
+                .FailWith(new Error(DomainErrorMessages.ImpossibleDeDémarrerUnePartieAvecUnChasseurSansBalle));
 
             Repository.SavedPartieDeChasse().Should().BeNull();
         }

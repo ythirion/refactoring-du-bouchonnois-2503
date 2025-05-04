@@ -1,22 +1,26 @@
 ﻿using Bouchonnois.Domain;
-using Bouchonnois.UseCases.Exceptions;
+using Bouchonnois.UseCases.Errors;
+
+using CSharpFunctionalExtensions;
 
 namespace Bouchonnois.UseCases.Queries;
 
 public class ConsulterStatusUseCase(IPartieDeChasseRepository repository)
 {
-    public string Handle(Guid id)
+    public Result<string, Error> Handle(Guid id)
     {
-        var partieDeChasse = repository.GetById(id);
+        var partieDeChasse = repository.GetSafeById(id);
 
-        if (partieDeChasse == null)
+        if (partieDeChasse.HasNoValue)
         {
-            throw new LaPartieDeChasseNexistePas();
+            return new Error(UseCasesErrorMessages.LaPartieDeChasseNExistePas);
         }
 
         return string.Join(
             Environment.NewLine,
-            partieDeChasse.Events
+            partieDeChasse
+                .Value
+                .Events
                 .OrderByDescending(@event => @event.Date)
                 .Select(@event => @event.ToString())
         );

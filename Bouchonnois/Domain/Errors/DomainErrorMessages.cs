@@ -11,4 +11,7 @@ public static class DomainErrorMessages
     public const string TasPlusDeBallesMonVieuxChasseALaMain = "T'as plus de balles mon vieux, chasse à la main";
     public const string LeChasseurNestPasDansLaPartie = "Chasseur inconnu";
     public const string TasTropPicoléMonVieuxTasRienTouché = "T'as trop puicolé mon vieux t'as rien touché";
+    public const string ImpossibleDeDémarrerUnePartieSansGalinettes = "Impossible de démarrer une partie sans galinettes";
+    public const string ImpossibleDeDémarrerUnePartieSansChasseur = "Impossible de démarrer une partie sans chasseur";
+    public const string ImpossibleDeDémarrerUnePartieAvecUnChasseurSansBalle = "Impossible de démarrer une partie avec un chasseur sans balle";
 }

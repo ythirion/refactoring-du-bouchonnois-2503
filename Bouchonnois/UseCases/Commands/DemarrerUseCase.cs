@@ -1,15 +1,26 @@
 ﻿using Bouchonnois.Domain;
-using Bouchonnois.UseCases.Exceptions;
+using Bouchonnois.Domain.Errors;
+
+using CSharpFunctionalExtensions;
 
 namespace Bouchonnois.UseCases.Commands;
 
 public class DemarrerUseCase(IPartieDeChasseRepository repository, Func<DateTime> timeProvider)
 {
-    public Guid Handle((string nom, int nbGalinettes) terrainDeChasse, List<(string nom, int nbBalles)> chasseurs)
+    public Result<Guid, Error> Handle(
+        (string nom, int nbGalinettes) terrainDeChasse,
+        List<(string nom, int nbBalles)> chasseurs)
     {
         if (terrainDeChasse.nbGalinettes <= 0)
         {
-            throw new ImpossibleDeDémarrerUnePartieSansGalinettes();
+            return new Error(DomainErrorMessages.ImpossibleDeDémarrerUnePartieSansGalinettes);
+        }
+        foreach (var chasseur in chasseurs)
+        {
+            if (chasseur.nbBalles == 0)
+            {
+                return new Error(DomainErrorMessages.ImpossibleDeDémarrerUnePartieAvecUnChasseurSansBalle);
+            }
         }
 
         var partieDeChasse = new PartieDeChasse(Guid.NewGuid(), PartieStatus.EnCours,
@@ -19,24 +30,17 @@ public class DemarrerUseCase(IPartieDeChasseRepository repository, Func<DateTime
 
         foreach (var chasseur in chasseurs)
         {
-            if (chasseur.nbBalles == 0)
-            {
-                throw new ImpossibleDeDémarrerUnePartieAvecUnChasseurSansBalle();
-            }
-
             partieDeChasse.AddChasseur(new Chasseur(chasseur.nom, chasseur.nbBalles));
         }
 
         if (partieDeChasse.EstSansChasseur())
         {
-            throw new ImpossibleDeDémarrerUnePartieSansChasseur();
+            return new Error(DomainErrorMessages.ImpossibleDeDémarrerUnePartieSansChasseur);
         }
 
-        var chasseursToString = partieDeChasse.ChasseursToString();
-
-        partieDeChasse.Events.Add(new Event(timeProvider(),
-            $"La partie de chasse commence à {partieDeChasse.Terrain.Nom} avec {chasseursToString}")
-        );
+        partieDeChasse
+            .Events
+            .Add(new Event(timeProvider(), partieDeChasse.EventMessage()));
 
         repository.Save(partieDeChasse);
 
