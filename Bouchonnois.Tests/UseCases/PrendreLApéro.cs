@@ -1,6 +1,8 @@
 using Bouchonnois.Domain;
+using Bouchonnois.Domain.Common;
 using Bouchonnois.Tests.UseCases.Common;
 using Bouchonnois.Tests.Verifications;
+using CSharpFunctionalExtensions;
 using static Bouchonnois.Domain.Common.Errors;
 using static Bouchonnois.Tests.Builders.PartieDeChasseBuilder;
 using static Bouchonnois.UseCases.PrendreLApéro;
@@ -20,7 +22,7 @@ public class PrendreLApéro : UseCaseTest
             UnePartieDeChasse()
                 .EnCours());
 
-        _useCase.Handle(new Request(id))
+        QuandPrendreLApéro(id)
             .Should()
             .Succeed();
 
@@ -34,7 +36,7 @@ public class PrendreLApéro : UseCaseTest
     {
         var id = UnePartieDeChasseInexistante();
 
-        _useCase.Handle(new Request(id))
+        QuandPrendreLApéro(id)
             .Should()
             .FailWith(LaPartieDeChasseNexistePas());
 
@@ -46,7 +48,7 @@ public class PrendreLApéro : UseCaseTest
     {
         var id = UnePartieDeChasseExistante(UnePartieDeChasse().ALApéro());
 
-        _useCase.Handle(new Request(id))
+        QuandPrendreLApéro(id)
             .Should()
             .FailWith(OnEstDéjàEnTrainDePrendreLApéro());
 
@@ -58,10 +60,12 @@ public class PrendreLApéro : UseCaseTest
     {
         var id = UnePartieDeChasseExistante(UnePartieDeChasse().Terminée());
 
-        _useCase.Handle(new Request(id))
+        QuandPrendreLApéro(id)
             .Should()
             .FailWith(OnNePrendPasLapéroQuandLaPartieEstTerminée());
 
         Repository.NeDevraitPasAvoirSauvegarderDePartieDeChasse();
     }
+
+    private UnitResult<Error> QuandPrendreLApéro(Guid id) => _useCase.Handle(new Request(id));
 }
