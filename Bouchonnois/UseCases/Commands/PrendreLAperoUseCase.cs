@@ -6,7 +6,7 @@ namespace Bouchonnois.UseCases.Commands;
 
 public class PrendreLAperoUseCase(IPartieDeChasseRepository repository, Func<DateTime> timeProvider)
 {
-    public UnitResult<Error> HandleWithoutException(Guid id)
+    public UnitResult<Error> Handle(Guid id)
     {
         var partieDeChasse = repository.GetById(id);
         if (partieDeChasse == null)
