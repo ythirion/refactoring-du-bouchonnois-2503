@@ -19,7 +19,9 @@ public class PrendreLApéro : UseCaseTest
             UnePartieDeChasse()
                 .EnCours());
 
-        _useCase.Handle(new Command(id));
+        _useCase.Handle(new Command(id))
+            .Should()
+            .Succeed();
 
         Repository.SavedPartieDeChasse()
             .DevraitEtreALApéro()
