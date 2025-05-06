@@ -32,12 +32,12 @@ public class PartieDeChasse
 
         Status = PartieStatus.Apéro;
 
-        Emet(new ApéroDemarée(timeProvider()));
+        Emet(new ApéroDémarré(timeProvider()));
 
         return this;
     }
 
-    private void Emet(ApéroDemarée @event) => Events.Add(@event);
+    private void Emet(ApéroDémarré @event) => Events.Add(@event);
 
     private bool LaPartieEstTerminée() => Status == PartieStatus.Terminée;
 
