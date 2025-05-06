@@ -74,9 +74,9 @@ public class TirerSurUneGalinette : UseCaseTest
                 .Avec(Bernard())
                 .SurUnTerrainSansGalinettes());
 
-        var tirerAlorsQuePasDeGalinettes = () => _tirerSurGalinette.HandleUnsafe(new Request(id, Bernard));
-
-        tirerAlorsQuePasDeGalinettes.Should().Throw<TasTropPicoléMonVieuxTasRienTouché>();
+        _tirerSurGalinette.Handle(new Request(id, Bernard))
+            .Should()
+            .FailWith(Errors.TasTropPicoléMonVieuxTasRienTouché());
 
         Repository.SavedPartieDeChasse().Should().BeNull();
     }
@@ -92,7 +92,7 @@ public class TirerSurUneGalinette : UseCaseTest
         _tirerSurGalinette.Handle(new Request(id, ChasseurInconnu))
             .Should()
             .FailWith(Errors.ChasseurInconnu(ChasseurInconnu));
-        
+
         Repository.SavedPartieDeChasse().Should().BeNull();
     }
 
@@ -107,7 +107,7 @@ public class TirerSurUneGalinette : UseCaseTest
         _tirerSurGalinette.Handle(new Request(id, ChasseurInconnu))
             .Should()
             .FailWith(Errors.OnTirePasPendantLapéroCestSacré());
-        
+
         Repository.SavedPartieDeChasse()
             .DevraitAvoirEmis(Now, "Chasseur inconnu veut tirer -> On tire pas pendant l'apéro, c'est sacré !!!");
     }
@@ -120,7 +120,7 @@ public class TirerSurUneGalinette : UseCaseTest
         _tirerSurGalinette.Handle(new Request(id, "Chasseur inconnu"))
             .Should()
             .FailWith(Errors.OnTirePasQuandLaPartieEstTerminée());
-        
+
         Repository.SavedPartieDeChasse()
             .DevraitAvoirEmis(Now, "Chasseur inconnu veut tirer -> On tire pas quand la partie est terminée");
     }

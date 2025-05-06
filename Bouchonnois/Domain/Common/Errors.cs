@@ -24,4 +24,7 @@ public static class Errors
 
     public static Error OnTirePasQuandLaPartieEstTerminée()
         => new("On tire pas quand la partie est terminée");
+
+    public static Error TasTropPicoléMonVieuxTasRienTouché()
+        => new("T'as trop picolé mon vieux, t'as rien touché");
 }

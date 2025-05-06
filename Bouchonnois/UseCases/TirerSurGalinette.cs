@@ -109,6 +109,10 @@ public static class TirerSurGalinette
             {
                 return Errors.OnTirePasQuandLaPartieEstTerminée();
             }
+            catch (TasTropPicoléMonVieuxTasRienTouché)
+            {
+                return Errors.TasTropPicoléMonVieuxTasRienTouché();
+            }
 
             return UnitResult.Success<Error>();
         }
