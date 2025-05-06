@@ -28,6 +28,12 @@ public static class TirerSurGalinette
             {
                 return Errors.TasTropPicoléMonVieuxTasRienTouché();
             }
+            
+            var chasseurQuiTire = partieDeChasse.Chasseurs.FirstOrDefault(c => c.Nom == chasseur);
+            if (chasseurQuiTire is null)
+            {
+                return Errors.ChasseurInconnu(chasseur);
+            }
 
             if (partieDeChasse.Status == PartieStatus.Apéro)
             {
@@ -50,11 +56,7 @@ public static class TirerSurGalinette
                 return Errors.OnTirePasQuandLaPartieEstTerminée();
             }
 
-            var chasseurQuiTire = partieDeChasse.Chasseurs.FirstOrDefault(c => c.Nom == chasseur);
-            if (chasseurQuiTire is null)
-            {
-                return Errors.ChasseurInconnu(chasseur);
-            }
+            
 
             if (chasseurQuiTire.BallesRestantes == 0)
             {

@@ -1,7 +1,6 @@
 using Bouchonnois.Domain.Common;
 using Bouchonnois.Tests.UseCases.Common;
 using Bouchonnois.Tests.Verifications;
-using Bouchonnois.UseCases.Exceptions;
 using static Bouchonnois.Tests.Builders.ChasseurBuilder;
 using static Bouchonnois.Tests.Builders.PartieDeChasseBuilder;
 using static Bouchonnois.UseCases.TirerSurGalinette;
@@ -102,26 +101,31 @@ public class TirerSurUneGalinette : UseCaseTest
         var id = UnePartieDeChasseExistante(
             UnePartieDeChasse()
                 .ALApéro()
+                .Avec(Bernard())
                 .SurUnTerrainRicheEnGalinettes());
 
-        _tirerSurGalinette.Handle(new Request(id, ChasseurInconnu))
+        _tirerSurGalinette.Handle(new Request(id, Bernard))
             .Should()
             .FailWith(Errors.OnTirePasPendantLapéroCestSacré());
 
         Repository.SavedPartieDeChasse()
-            .DevraitAvoirEmis(Now, "Chasseur inconnu veut tirer -> On tire pas pendant l'apéro, c'est sacré !!!");
+            .DevraitAvoirEmis(Now, "Bernard veut tirer -> On tire pas pendant l'apéro, c'est sacré !!!");
     }
 
     [Fact]
     public void EchoueSiLaPartieDeChasseEstTerminée()
     {
-        var id = UnePartieDeChasseExistante(UnePartieDeChasse().Terminée().SurUnTerrainRicheEnGalinettes());
+        var id = UnePartieDeChasseExistante(
+            UnePartieDeChasse()
+                .Terminée()
+                .Avec(Bernard())
+                .SurUnTerrainRicheEnGalinettes());
 
-        _tirerSurGalinette.Handle(new Request(id, "Chasseur inconnu"))
+        _tirerSurGalinette.Handle(new Request(id, Bernard))
             .Should()
             .FailWith(Errors.OnTirePasQuandLaPartieEstTerminée());
 
         Repository.SavedPartieDeChasse()
-            .DevraitAvoirEmis(Now, "Chasseur inconnu veut tirer -> On tire pas quand la partie est terminée");
+            .DevraitAvoirEmis(Now, "Bernard veut tirer -> On tire pas quand la partie est terminée");
     }
 }
