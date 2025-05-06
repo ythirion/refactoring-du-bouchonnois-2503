@@ -11,6 +11,6 @@ public class PrendreLAperoUseCase(IPartieDeChasseRepository repository, Func<Dat
 {
     public UnitResult<Error> Handle(PrendreLAperoCommand command)
         => repository.FindById(command.PartieDeChasseId)
-            .Bind(partieDeChasse => partieDeChasse.PrendreLApero(timeProvider))
+            .Bind(partieDeChasse => partieDeChasse.PrendreLApéro(timeProvider))
             .Tap(repository.Save);
 }

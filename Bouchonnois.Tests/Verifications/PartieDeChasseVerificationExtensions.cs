@@ -20,8 +20,12 @@ public static class PartieDeChasseVerificationExtensions
                             new Event(date, message)
                         ],
                         $"Les events devraient contenir {message}."));
-
-
+    
+    public static PartieDeChasse DevraitAvoirEmis(
+        this PartieDeChasse partieDeChasse,
+        Event @event)
+        => partieDeChasse.DevraitAvoirEmis(@event.Date, @event.Message);
+    
     private static Chasseur Chasseur(this PartieDeChasse partieDeChasse, string nom)
         => partieDeChasse
             .Chasseurs

@@ -26,7 +26,7 @@ public class PrendreLApéro : UseCaseTest
 
         Repository.SavedPartieDeChasse()
             .DevraitEtreALApéro()
-            .DevraitAvoirEmis(Now, "Petit apéro");
+            .DevraitAvoirEmis(new ApéroDemarée(Now));
     }
 
     [Fact]

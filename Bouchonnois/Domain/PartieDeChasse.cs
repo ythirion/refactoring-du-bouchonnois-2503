@@ -24,22 +24,22 @@ public class PartieDeChasse
 
     public List<Event> Events { get; }
 
-    public Result<PartieDeChasse, Error> PrendreLApero(Func<DateTime> timeProvider)
+    public Result<PartieDeChasse, Error> PrendreLApéro(Func<DateTime> timeProvider)
     {
-        if (LapéroEstEnCours()) return OnEstDéjàEnTrainDePrendreLapéro();
+        if (LApéroEstEnCours()) return OnEstDéjàEnTrainDePrendreLapéro();
 
         if (LaPartieEstTerminée()) return OnNePrendPasLapéroQuandLaPartieEstTerminée();
 
         Status = PartieStatus.Apéro;
 
-        Émet(new ApéroDemarée(timeProvider()));
+        Emet(new ApéroDemarée(timeProvider()));
 
         return this;
     }
 
-    private void Émet(ApéroDemarée @event) => Events.Add(@event);
+    private void Emet(ApéroDemarée @event) => Events.Add(@event);
 
     private bool LaPartieEstTerminée() => Status == PartieStatus.Terminée;
 
-    private bool LapéroEstEnCours() => Status == PartieStatus.Apéro;
+    private bool LApéroEstEnCours() => Status == PartieStatus.Apéro;
 }
