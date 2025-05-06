@@ -93,6 +93,10 @@ public static class TirerSurGalinette
             {
                 return Errors.LaPartieDeChasseNexistePas();
             }
+            catch (TasPlusDeBallesMonVieuxChasseALaMain)
+            {
+                return Errors.TasPlusDeBallesMonVieuxChasseALaMain();
+            }
 
             return UnitResult.Success<Error>();
         }

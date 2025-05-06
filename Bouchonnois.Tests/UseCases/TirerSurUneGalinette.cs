@@ -1,7 +1,6 @@
 using Bouchonnois.Domain.Common;
 using Bouchonnois.Tests.UseCases.Common;
 using Bouchonnois.Tests.Verifications;
-using Bouchonnois.UseCases;
 using Bouchonnois.UseCases.Exceptions;
 using static Bouchonnois.Tests.Builders.ChasseurBuilder;
 using static Bouchonnois.Tests.Builders.PartieDeChasseBuilder;
@@ -12,13 +11,11 @@ namespace Bouchonnois.Tests.UseCases;
 public class TirerSurUneGalinette : UseCaseTest
 {
     private readonly UseCase _tirerSurGalinette;
+
     public TirerSurUneGalinette()
-    {
-        _tirerSurGalinette = new UseCase(
+        => _tirerSurGalinette = new UseCase(
             Repository,
-            () => Now
-        );
-    }
+            () => Now);
 
     [Fact]
     public void AvecUnChasseurAyantDesBallesEtAssezDeGalinettesSurLeTerrain()
@@ -42,8 +39,10 @@ public class TirerSurUneGalinette : UseCaseTest
     {
         var id = UnePartieDeChasseInexistante();
 
-        _tirerSurGalinette.Handle(new Request(id, "Bernard")).Should().FailWith(Errors.LaPartieDeChasseNexistePas());
-        
+        _tirerSurGalinette.Handle(new Request(id, "Bernard"))
+            .Should()
+            .FailWith(Errors.LaPartieDeChasseNexistePas());
+
         Repository.SavedPartieDeChasse().Should().BeNull();
     }
 
@@ -56,9 +55,9 @@ public class TirerSurUneGalinette : UseCaseTest
                 .Avec(Bernard().SansBalles())
                 .SurUnTerrainAyantGalinettes(3));
 
-        var tirerSansBalle = () => _tirerSurGalinette.HandleUnsafe(new Request(id, Bernard));
-
-        tirerSansBalle.Should().Throw<TasPlusDeBallesMonVieuxChasseALaMain>();
+        _tirerSurGalinette.Handle(new Request(id, Bernard))
+            .Should()
+            .FailWith(Errors.TasPlusDeBallesMonVieuxChasseALaMain());
 
         Repository.SavedPartieDeChasse()
             .DevraitAvoirEmis(
