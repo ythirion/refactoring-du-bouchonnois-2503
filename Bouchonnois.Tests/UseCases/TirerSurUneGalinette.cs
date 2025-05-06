@@ -4,15 +4,16 @@ using Bouchonnois.UseCases;
 using Bouchonnois.UseCases.Exceptions;
 using static Bouchonnois.Tests.Builders.ChasseurBuilder;
 using static Bouchonnois.Tests.Builders.PartieDeChasseBuilder;
+using static Bouchonnois.UseCases.TirerSurGalinette;
 
 namespace Bouchonnois.Tests.UseCases;
 
 public class TirerSurUneGalinette : UseCaseTest
 {
-    private readonly TirerSurGalinetteUseCase _tirerSurGalinetteUseCase;
+    private readonly UseCase _tirerSurGalinette;
     public TirerSurUneGalinette()
     {
-        _tirerSurGalinetteUseCase = new TirerSurGalinetteUseCase(
+        _tirerSurGalinette = new UseCase(
             Repository,
             () => Now
         );
@@ -27,7 +28,7 @@ public class TirerSurUneGalinette : UseCaseTest
                 .Avec(Bernard().AyantDesBalles(8).Brocouille())
                 .SurUnTerrainAyantGalinettes(3));
 
-        _tirerSurGalinetteUseCase.Handle(new TirerSurGalinetteRequest(id, Bernard));
+        _tirerSurGalinette.Handle(new Request(id, Bernard));
 
         Repository.SavedPartieDeChasse()
             .DevraitAvoirEmis(Now, "Bernard tire sur une galinette")
@@ -40,7 +41,7 @@ public class TirerSurUneGalinette : UseCaseTest
     {
         var id = UnePartieDeChasseInexistante();
 
-        var tirerQuandPartieExistePas = () => _tirerSurGalinetteUseCase.Handle(new TirerSurGalinetteRequest(id, "Bernard"));
+        var tirerQuandPartieExistePas = () => _tirerSurGalinette.Handle(new Request(id, "Bernard"));
 
         tirerQuandPartieExistePas.Should().Throw<LaPartieDeChasseNexistePas>();
 
@@ -56,7 +57,7 @@ public class TirerSurUneGalinette : UseCaseTest
                 .Avec(Bernard().SansBalles())
                 .SurUnTerrainAyantGalinettes(3));
 
-        var tirerSansBalle = () => _tirerSurGalinetteUseCase.Handle(new TirerSurGalinetteRequest(id, Bernard));
+        var tirerSansBalle = () => _tirerSurGalinette.Handle(new Request(id, Bernard));
 
         tirerSansBalle.Should().Throw<TasPlusDeBallesMonVieuxChasseALaMain>();
 
@@ -75,7 +76,7 @@ public class TirerSurUneGalinette : UseCaseTest
                 .Avec(Bernard())
                 .SurUnTerrainSansGalinettes());
 
-        var tirerAlorsQuePasDeGalinettes = () => _tirerSurGalinetteUseCase.Handle(new TirerSurGalinetteRequest(id, Bernard));
+        var tirerAlorsQuePasDeGalinettes = () => _tirerSurGalinette.Handle(new Request(id, Bernard));
 
         tirerAlorsQuePasDeGalinettes.Should().Throw<TasTropPicoléMonVieuxTasRienTouché>();
 
@@ -90,7 +91,7 @@ public class TirerSurUneGalinette : UseCaseTest
                 .EnCours()
                 .SurUnTerrainRicheEnGalinettes());
 
-        var chasseurInconnuVeutTirer = () => _tirerSurGalinetteUseCase.Handle(new TirerSurGalinetteRequest(id, ChasseurInconnu));
+        var chasseurInconnuVeutTirer = () => _tirerSurGalinette.Handle(new Request(id, ChasseurInconnu));
 
         chasseurInconnuVeutTirer.Should().Throw<ChasseurInconnu>().WithMessage("Chasseur inconnu Chasseur inconnu");
 
@@ -105,7 +106,7 @@ public class TirerSurUneGalinette : UseCaseTest
                 .ALApéro()
                 .SurUnTerrainRicheEnGalinettes());
 
-        var tirerEnPleinApéro = () => _tirerSurGalinetteUseCase.Handle(new TirerSurGalinetteRequest(id, ChasseurInconnu));
+        var tirerEnPleinApéro = () => _tirerSurGalinette.Handle(new Request(id, ChasseurInconnu));
 
         tirerEnPleinApéro.Should().Throw<OnTirePasPendantLapéroCestSacré>();
 
@@ -118,7 +119,7 @@ public class TirerSurUneGalinette : UseCaseTest
     {
         var id = UnePartieDeChasseExistante(UnePartieDeChasse().Terminée().SurUnTerrainRicheEnGalinettes());
 
-        var tirerQuandTerminée = () => _tirerSurGalinetteUseCase.Handle(new TirerSurGalinetteRequest(id, "Chasseur inconnu"));
+        var tirerQuandTerminée = () => _tirerSurGalinette.Handle(new Request(id, "Chasseur inconnu"));
 
         tirerQuandTerminée.Should().Throw<OnTirePasQuandLaPartieEstTerminée>();
 
