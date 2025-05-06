@@ -102,6 +102,6 @@ public class ConsulterStatus : UseCaseTest
 
         reprendrePartieQuandPartieExistePas.Should().Throw<LaPartieDeChasseNexistePas>();
 
-        Repository.SavedPartieDeChasse().Should().BeNull();
+        Repository.PartieDeChasseSauvegardée().Should().BeNull();
     }
 }

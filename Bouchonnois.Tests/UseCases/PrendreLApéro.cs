@@ -23,7 +23,7 @@ public class PrendreLApéro : UseCaseTest
             .Should()
             .Succeed();
 
-        Repository.SavedPartieDeChasse()
+        Repository.PartieDeChasseSauvegardée()
             .DevraitEtreALApéro()
             .DevraitAvoirEmis(new ApéroDemarée(Now));
     }

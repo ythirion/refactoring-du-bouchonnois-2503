@@ -30,7 +30,7 @@ public class TirerSurUneGalinette : UseCaseTest
 
         _tirerSurGalinetteUseCase.Handle(id, Bernard);
 
-        Repository.SavedPartieDeChasse()
+        Repository.PartieDeChasseSauvegardée()
             .DevraitAvoirEmis(Now, "Bernard tire sur une galinette")
             .TerrainDevraitAvoirGalinettesRestantes(2)
             .ChasseurDevraitAvoirTiréSurUneGalinette(Bernard, 7, 1);
@@ -45,7 +45,7 @@ public class TirerSurUneGalinette : UseCaseTest
 
         tirerQuandPartieExistePas.Should().Throw<LaPartieDeChasseNexistePas>();
 
-        Repository.SavedPartieDeChasse().Should().BeNull();
+        Repository.PartieDeChasseSauvegardée().Should().BeNull();
     }
 
     [Fact]
@@ -61,7 +61,7 @@ public class TirerSurUneGalinette : UseCaseTest
 
         tirerSansBalle.Should().Throw<TasPlusDeBallesMonVieuxChasseALaMain>();
 
-        Repository.SavedPartieDeChasse()
+        Repository.PartieDeChasseSauvegardée()
             .DevraitAvoirEmis(
                 Now,
                 "Bernard veut tirer sur une galinette -> T'as plus de balles mon vieux, chasse à la main");
@@ -80,7 +80,7 @@ public class TirerSurUneGalinette : UseCaseTest
 
         tirerAlorsQuePasDeGalinettes.Should().Throw<TasTropPicoléMonVieuxTasRienTouché>();
 
-        Repository.SavedPartieDeChasse().Should().BeNull();
+        Repository.PartieDeChasseSauvegardée().Should().BeNull();
     }
 
     [Fact]
@@ -95,7 +95,7 @@ public class TirerSurUneGalinette : UseCaseTest
 
         chasseurInconnuVeutTirer.Should().Throw<ChasseurInconnu>().WithMessage("Chasseur inconnu Chasseur inconnu");
 
-        Repository.SavedPartieDeChasse().Should().BeNull();
+        Repository.PartieDeChasseSauvegardée().Should().BeNull();
     }
 
     [Fact]
@@ -110,7 +110,7 @@ public class TirerSurUneGalinette : UseCaseTest
 
         tirerEnPleinApéro.Should().Throw<OnTirePasPendantLapéroCestSacré>();
 
-        Repository.SavedPartieDeChasse()
+        Repository.PartieDeChasseSauvegardée()
             .DevraitAvoirEmis(Now, "Chasseur inconnu veut tirer -> On tire pas pendant l'apéro, c'est sacré !!!");
     }
 
@@ -123,7 +123,7 @@ public class TirerSurUneGalinette : UseCaseTest
 
         tirerQuandTerminée.Should().Throw<OnTirePasQuandLaPartieEstTerminée>();
 
-        Repository.SavedPartieDeChasse()
+        Repository.PartieDeChasseSauvegardée()
             .DevraitAvoirEmis(Now, "Chasseur inconnu veut tirer -> On tire pas quand la partie est terminée");
     }
 }

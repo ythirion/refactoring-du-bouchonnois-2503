@@ -29,5 +29,5 @@ public class PartieDeChasseRepositoryForTests : IPartieDeChasseRepository
 
 
     public void Add(PartieDeChasse partieDeChasse) => _partiesDeChasse[partieDeChasse.Id] = partieDeChasse;
-    public PartieDeChasse SavedPartieDeChasse() => _savedPartieDeChasse!;
+    public PartieDeChasse PartieDeChasseSauvegardée() => _savedPartieDeChasse!;
 }

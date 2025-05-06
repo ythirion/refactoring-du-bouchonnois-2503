@@ -40,7 +40,7 @@ public class DemarrerUnePartieDeChasse : UseCaseTest
 
         var id = sut.Handle(terrainDeChasse, chasseurs);
 
-        Repository.SavedPartieDeChasse()
+        Repository.PartieDeChasseSauvegardée()
             .Should()
             .BeEquivalentTo(
                 UnePartieDeChasse()
@@ -72,7 +72,7 @@ public class DemarrerUnePartieDeChasse : UseCaseTest
         => DémarrerLaPartieAvecSuccès(terrainRicheEnGalinettes, chasseursAvecDesBalles);
 
     private Property DémarrerLaPartieAvecSuccès(Terrain terrainDeChasse, GroupDeChasseurs chasseurs)
-        => (sut.Handle(terrainDeChasse, chasseurs.ToList()) == Repository.SavedPartieDeChasse().Id)
+        => (sut.Handle(terrainDeChasse, chasseurs.ToList()) == Repository.PartieDeChasseSauvegardée().Id)
             .Label("Démarrer la partie avec succès");
 
     [Fact]
@@ -85,7 +85,7 @@ public class DemarrerUnePartieDeChasse : UseCaseTest
 
         demarrerPartieSansChasseurs.Should().Throw<ImpossibleDeDémarrerUnePartieSansChasseur>();
 
-        Repository.SavedPartieDeChasse().Should().BeNull();
+        Repository.PartieDeChasseSauvegardée().Should().BeNull();
     }
 
     [Fact]
@@ -98,7 +98,7 @@ public class DemarrerUnePartieDeChasse : UseCaseTest
 
         demarrerPartieSansChasseurs.Should().Throw<ImpossibleDeDémarrerUnePartieSansGalinettes>();
 
-        Repository.SavedPartieDeChasse().Should().BeNull();
+        Repository.PartieDeChasseSauvegardée().Should().BeNull();
     }
 
     [Fact]
@@ -116,6 +116,6 @@ public class DemarrerUnePartieDeChasse : UseCaseTest
 
         demarrerPartieAvecChasseurSansBalle.Should().Throw<ImpossibleDeDémarrerUnePartieAvecUnChasseurSansBalle>();
 
-        Repository.SavedPartieDeChasse().Should().BeNull();
+        Repository.PartieDeChasseSauvegardée().Should().BeNull();
     }
 }
