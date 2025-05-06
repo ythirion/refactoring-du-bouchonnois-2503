@@ -30,7 +30,7 @@ public class TerminerLaPartieDeChasse : UseCaseTest
 
         meilleurChasseur.Should().Be(Robert);
 
-        Repository.PartieDeChasseSauvegardée()
+        Repository.SavedPartieDeChasse()
             .DevraitAvoirEmis(Now, "La partie de chasse est terminée, vainqueur : Robert - 2 galinettes");
     }
 
@@ -46,7 +46,7 @@ public class TerminerLaPartieDeChasse : UseCaseTest
 
         meilleurChasseur.Should().Be(Robert);
 
-        Repository.PartieDeChasseSauvegardée()
+        Repository.SavedPartieDeChasse()
             .DevraitAvoirEmis(Now, "La partie de chasse est terminée, vainqueur : Robert - 2 galinettes");
     }
 
@@ -65,7 +65,7 @@ public class TerminerLaPartieDeChasse : UseCaseTest
 
         meilleurChasseur.Should().Be("Dédé, Bernard");
 
-        Repository.PartieDeChasseSauvegardée()
+        Repository.SavedPartieDeChasse()
             .DevraitAvoirEmis(
                 Now,
                 "La partie de chasse est terminée, vainqueur : Dédé - 2 galinettes, Bernard - 2 galinettes");
@@ -86,7 +86,7 @@ public class TerminerLaPartieDeChasse : UseCaseTest
 
         meilleurChasseur.Should().Be("Brocouille");
 
-        Repository.PartieDeChasseSauvegardée()
+        Repository.SavedPartieDeChasse()
             .DevraitAvoirEmis(
                 Now,
                 "La partie de chasse est terminée, vainqueur : Brocouille");
@@ -107,7 +107,7 @@ public class TerminerLaPartieDeChasse : UseCaseTest
 
         meilleurChasseur.Should().Be("Dédé, Bernard, Robert");
 
-        Repository.PartieDeChasseSauvegardée()
+        Repository.SavedPartieDeChasse()
             .DevraitAvoirEmis(
                 Now,
                 "La partie de chasse est terminée, vainqueur : Dédé - 3 galinettes, Bernard - 3 galinettes, Robert - 3 galinettes");
@@ -124,6 +124,6 @@ public class TerminerLaPartieDeChasse : UseCaseTest
 
         prendreLapéroQuandTerminée.Should().Throw<QuandCestFiniCestFini>();
 
-        Repository.PartieDeChasseSauvegardée().Should().BeNull();
+        Repository.SavedPartieDeChasse().Should().BeNull();
     }
 }

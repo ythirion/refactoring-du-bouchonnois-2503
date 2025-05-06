@@ -6,7 +6,7 @@ public static class RepositoryVerificationExtensions
 {
     public static PartieDeChasseRepositoryForTests NeDevraitPasAvoirSauvegarderDePartieDeChasse(this PartieDeChasseRepositoryForTests repository)
     {
-        repository.PartieDeChasseSauvegardée().Should().BeNull();
+        repository.SavedPartieDeChasse().Should().BeNull();
         return repository;
     }
 }

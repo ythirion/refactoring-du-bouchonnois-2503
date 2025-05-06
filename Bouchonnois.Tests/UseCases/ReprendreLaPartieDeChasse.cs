@@ -22,7 +22,7 @@ public class ReprendreLaPartieDeChasse : UseCaseTest
 
         _reprendreLaPartieUseCase.Handle(id);
 
-        Repository.PartieDeChasseSauvegardée()
+        Repository.SavedPartieDeChasse()
             .DevraitEtreEnCours()
             .DevraitAvoirEmis(Now, "Reprise de la chasse");
     }
@@ -36,7 +36,7 @@ public class ReprendreLaPartieDeChasse : UseCaseTest
 
         reprendrePartieQuandPartieExistePas.Should().Throw<LaPartieDeChasseNexistePas>();
 
-        Repository.PartieDeChasseSauvegardée().Should().BeNull();
+        Repository.SavedPartieDeChasse().Should().BeNull();
     }
 
     [Fact]
@@ -48,7 +48,7 @@ public class ReprendreLaPartieDeChasse : UseCaseTest
 
         reprendreLaPartieQuandChasseEnCours.Should().Throw<LaChasseEstDéjàEnCours>();
 
-        Repository.PartieDeChasseSauvegardée().Should().BeNull();
+        Repository.SavedPartieDeChasse().Should().BeNull();
     }
 
     [Fact]
@@ -60,6 +60,6 @@ public class ReprendreLaPartieDeChasse : UseCaseTest
 
         prendreLapéroQuandTerminée.Should().Throw<QuandCestFiniCestFini>();
 
-        Repository.PartieDeChasseSauvegardée().Should().BeNull();
+        Repository.SavedPartieDeChasse().Should().BeNull();
     }
 }
