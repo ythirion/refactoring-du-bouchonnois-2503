@@ -11,7 +11,6 @@ public class PrendreLAperoUseCase(IPartieDeChasseRepository repository, Func<Dat
 {
     public UnitResult<Error> Handle(PrendreLAperoCommand command)
         => repository.GetByIdMaybe(command.PartieDeChasseId)
-            .Map(partieDeChasse => partieDeChasse.PrendreLApero(timeProvider))
-            .Ensure(result => result.IsSuccess, result => result.Error)
-            .Tap(result => result.Tap(repository.Save));
+            .Bind(partieDeChasse => partieDeChasse.PrendreLApero(timeProvider))
+            .Tap(repository.Save);
 }
