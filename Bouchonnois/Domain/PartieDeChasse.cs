@@ -1,5 +1,4 @@
-﻿using Bouchonnois.UseCases.Commands;
-using CSharpFunctionalExtensions;
+﻿using CSharpFunctionalExtensions;
 using static Bouchonnois.Domain.Errors;
 
 namespace Bouchonnois.Domain;
@@ -27,18 +26,12 @@ public class PartieDeChasse
 
     public Result<PartieDeChasse, Error> PrendreLApero(Func<DateTime> timeProvider)
     {
-        if (LapéroEstEnCours())
-        {
-            return OnEstDéjàEnTrainDePrendreLapéro();
-        }
+        if (LapéroEstEnCours()) return OnEstDéjàEnTrainDePrendreLapéro();
 
-        if (LaPartieEstTerminée())
-        {
-            return OnNePrendPasLapéroQuandLaPartieEstTerminée();
-        }
+        if (LaPartieEstTerminée()) return OnNePrendPasLapéroQuandLaPartieEstTerminée();
 
         Status = PartieStatus.Apéro;
-        
+
         Émet(new ApéroDemarée(timeProvider()));
 
         return this;
