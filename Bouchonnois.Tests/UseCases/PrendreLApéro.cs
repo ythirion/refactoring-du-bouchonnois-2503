@@ -1,19 +1,16 @@
 using Bouchonnois.Domain;
 using Bouchonnois.Tests.UseCases.Common;
 using Bouchonnois.Tests.Verifications;
-using Bouchonnois.UseCases.Commands;
 using static Bouchonnois.Tests.Builders.PartieDeChasseBuilder;
+using static Bouchonnois.UseCases.PrendreLApero;
 
-namespace Bouchonnois.Tests.UseCases.Commands;
+namespace Bouchonnois.Tests.UseCases;
 
 public class PrendreLApéro : UseCaseTest
 {
-    private readonly PrendreLAperoUseCase _useCase;
+    private readonly UseCase _useCase;
 
-    public PrendreLApéro()
-        => _useCase = new PrendreLAperoUseCase(
-            Repository,
-            () => Now);
+    public PrendreLApéro() => _useCase = new UseCase(Repository, () => Now);
 
     [Fact]
     public void QuandLaPartieEstEnCours()
@@ -22,7 +19,7 @@ public class PrendreLApéro : UseCaseTest
             UnePartieDeChasse()
                 .EnCours());
 
-        _useCase.Handle(new PrendreLAperoCommand(id));
+        _useCase.Handle(new Command(id));
 
         Repository.SavedPartieDeChasse()
             .DevraitEtreALApéro()
@@ -34,7 +31,7 @@ public class PrendreLApéro : UseCaseTest
     {
         var id = UnePartieDeChasseInexistante();
 
-        _useCase.Handle(new PrendreLAperoCommand(id))
+        _useCase.Handle(new Command(id))
             .Should()
             .FailWith(new Error("La partie de chasse n'existe pas"));
 
@@ -46,7 +43,7 @@ public class PrendreLApéro : UseCaseTest
     {
         var id = UnePartieDeChasseExistante(UnePartieDeChasse().ALApéro());
 
-        _useCase.Handle(new PrendreLAperoCommand(id))
+        _useCase.Handle(new Command(id))
             .Should()
             .FailWith(new Error("On est déjà en train de prendre l'apéro"));
 
@@ -58,7 +55,7 @@ public class PrendreLApéro : UseCaseTest
     {
         var id = UnePartieDeChasseExistante(UnePartieDeChasse().Terminée());
 
-        _useCase.Handle(new PrendreLAperoCommand(id))
+        _useCase.Handle(new Command(id))
             .Should()
             .FailWith(new Error("On ne prend pas l'apéro quand la partie est terminée"));
 
