@@ -6,5 +6,5 @@ public interface IPartieDeChasseRepository
 {
     void Save(PartieDeChasse partieDeChasse);
     PartieDeChasse GetById(Guid partieDeChasseId);
-    Result<PartieDeChasse, Error> GetByIdMaybe(Guid partieDeChasseId);
+    Result<PartieDeChasse, Error> FindById(Guid partieDeChasseId);
 }

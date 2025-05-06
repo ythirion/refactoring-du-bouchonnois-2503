@@ -19,7 +19,7 @@ public class PartieDeChasseRepositoryForTests : IPartieDeChasseRepository
             ? _partiesDeChasse[partieDeChasseId]
             : null)!;
 
-    public Result<PartieDeChasse, Error> GetByIdMaybe(Guid partieDeChasseId)
+    public Result<PartieDeChasse, Error> FindById(Guid partieDeChasseId)
     {
         var potentialPartieDeChasse = GetById(partieDeChasseId);
         return potentialPartieDeChasse is not null

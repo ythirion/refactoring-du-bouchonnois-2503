@@ -10,7 +10,7 @@ public class PrendreLAperoUseCase(IPartieDeChasseRepository repository, Func<Dat
     : ICommandUseCase<PrendreLAperoCommand>
 {
     public UnitResult<Error> Handle(PrendreLAperoCommand command)
-        => repository.GetByIdMaybe(command.PartieDeChasseId)
+        => repository.FindById(command.PartieDeChasseId)
             .Bind(partieDeChasse => partieDeChasse.PrendreLApero(timeProvider))
             .Tap(repository.Save);
 }
