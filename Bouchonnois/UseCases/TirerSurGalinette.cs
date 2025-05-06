@@ -15,6 +15,7 @@ public static class TirerSurGalinette
         public UnitResult<Error> Handle(Request request)
             => repository
                 .FindById(request.Id)
-                .Bind(partieDeChasse => partieDeChasse.TirerSurGalinette(request.Chasseur, repository, timeProvider));
+                .Bind(partieDeChasse => partieDeChasse.TirerSurGalinette(request.Chasseur, repository, timeProvider)
+                    .MapError(r => r.Item1));
     }
 }

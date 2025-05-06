@@ -44,15 +44,15 @@ public class PartieDeChasse
 
     private bool LApéroEstEnCours() => Status == PartieStatus.Apéro;
 
-    public Result<PartieDeChasse, Error> TirerSurGalinette(
+    public Result<PartieDeChasse, (Error, Maybe<PartieDeChasse>)> TirerSurGalinette(
         string chasseur,
         IPartieDeChasseRepository partieDeChasseRepository,
         Func<DateTime> timeProvider)
     {
-        if (Terrain.NbGalinettes == 0) return TasTropPicoléMonVieuxTasRienTouché();
+        if (TerrainSansGalinettes()) return (TasTropPicoléMonVieuxTasRienTouché(), Maybe<PartieDeChasse>.None);
 
         var chasseurQuiTire = Chasseurs.FirstOrDefault(c => c.Nom == chasseur);
-        if (chasseurQuiTire is null) return ChasseurInconnu(chasseur);
+        if (chasseurQuiTire is null) return (ChasseurInconnu(chasseur), Maybe<PartieDeChasse>.None);
 
         if (Status == PartieStatus.Apéro)
         {
@@ -61,7 +61,7 @@ public class PartieDeChasse
                     timeProvider(),
                     $"{chasseur} veut tirer -> On tire pas pendant l'apéro, c'est sacré !!!"));
             partieDeChasseRepository.Save(this);
-            return OnTirePasPendantLapéroCestSacré();
+            return (OnTirePasPendantLapéroCestSacré(), this);
         }
 
         if (Status == PartieStatus.Terminée)
@@ -72,7 +72,7 @@ public class PartieDeChasse
                     $"{chasseur} veut tirer -> On tire pas quand la partie est terminée"));
             partieDeChasseRepository.Save(this);
 
-            return OnTirePasQuandLaPartieEstTerminée();
+            return (OnTirePasQuandLaPartieEstTerminée(), this);
         }
 
 
@@ -84,7 +84,7 @@ public class PartieDeChasse
                     $"{chasseur} veut tirer sur une galinette -> T'as plus de balles mon vieux, chasse à la main"));
             partieDeChasseRepository.Save(this);
 
-            return TasPlusDeBallesMonVieuxChasseALaMain();
+            return (TasPlusDeBallesMonVieuxChasseALaMain(), this);
         }
 
         chasseurQuiTire.BallesRestantes--;
@@ -96,4 +96,6 @@ public class PartieDeChasse
 
         return this;
     }
+
+    private bool TerrainSansGalinettes() => Terrain.NbGalinettes == 0;
 }
