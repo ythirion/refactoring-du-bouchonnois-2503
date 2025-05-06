@@ -46,10 +46,7 @@ public class PartieDeChasse
 
         if (LApéroEstEnCours())
         {
-            Events.Add(
-                new Event(
-                    timeProvider(),
-                    $"{chasseur} veut tirer -> On tire pas pendant l'apéro, c'est sacré !!!"));
+            Emet(new ChasseurAVouluTiréPendantLApéro(timeProvider(), chasseur));
             return (OnTirePasPendantLapéroCestSacré(), this);
         }
 
@@ -82,7 +79,7 @@ public class PartieDeChasse
         return this;
     }
 
-    private void Emet(ApéroDémarré @event) => Events.Add(@event);
+    private void Emet(Event @event) => Events.Add(@event);
 
     private bool LaPartieEstTerminée() => Status == PartieStatus.Terminée;
 
