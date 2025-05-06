@@ -1,3 +1,4 @@
+using Bouchonnois.Domain.Common;
 using Bouchonnois.Tests.UseCases.Common;
 using Bouchonnois.Tests.Verifications;
 using Bouchonnois.UseCases;
@@ -28,7 +29,7 @@ public class TirerSurUneGalinette : UseCaseTest
                 .Avec(Bernard().AyantDesBalles(8).Brocouille())
                 .SurUnTerrainAyantGalinettes(3));
 
-        _tirerSurGalinette.HandleUnsafe(new Request(id, Bernard));
+        _tirerSurGalinette.Handle(new Request(id, Bernard));
 
         Repository.SavedPartieDeChasse()
             .DevraitAvoirEmis(Now, "Bernard tire sur une galinette")
@@ -41,10 +42,8 @@ public class TirerSurUneGalinette : UseCaseTest
     {
         var id = UnePartieDeChasseInexistante();
 
-        var tirerQuandPartieExistePas = () => _tirerSurGalinette.HandleUnsafe(new Request(id, "Bernard"));
-
-        tirerQuandPartieExistePas.Should().Throw<LaPartieDeChasseNexistePas>();
-
+        _tirerSurGalinette.Handle(new Request(id, "Bernard")).Should().FailWith(Errors.LaPartieDeChasseNexistePas());
+        
         Repository.SavedPartieDeChasse().Should().BeNull();
     }
 

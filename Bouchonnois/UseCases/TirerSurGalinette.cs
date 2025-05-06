@@ -83,6 +83,18 @@ public static class TirerSurGalinette
             repository.Save(partieDeChasse);
         }
 
-        public UnitResult<Error> Handle(Request command) => throw new NotImplementedException();
+        public UnitResult<Error> Handle(Request command)
+        {
+            try
+            {
+                HandleUnsafe(command);
+            }
+            catch (LaPartieDeChasseNexistePas)
+            {
+                return Errors.LaPartieDeChasseNexistePas();
+            }
+
+            return UnitResult.Success<Error>();
+        }
     }
 }
