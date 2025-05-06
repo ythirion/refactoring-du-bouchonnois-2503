@@ -5,7 +5,7 @@ using CSharpFunctionalExtensions;
 
 namespace Bouchonnois.UseCases;
 
-public static class PrendreLApero
+public static class PrendreLApéro
 {
     public record Command(Guid PartieDeChasseId) : ICommand;
 

@@ -11,7 +11,7 @@ public class ScenarioTests
     private readonly DemarrerUseCase _demarrer;
     private readonly TirerUseCase _tirer;
     private readonly TirerSurGalinetteUseCase _tirerSurGalinette;
-    private readonly PrendreLApero.UseCase _prendreLApero;
+    private readonly PrendreLApéro.UseCase _prendreLApero;
     private readonly ReprendreLaPartieUseCase _reprendreLaPartie;
     private readonly TerminerLaPartieUseCase _terminerLaPartie;
     private readonly ConsulterStatusUseCase _consulterStatus;
@@ -21,7 +21,7 @@ public class ScenarioTests
         _demarrer = new DemarrerUseCase(_repository, () => _time);
         _tirer = new TirerUseCase(_repository, () => _time);
         _tirerSurGalinette = new TirerSurGalinetteUseCase(_repository, () => _time);
-        _prendreLApero = new PrendreLApero.UseCase(_repository, () => _time);
+        _prendreLApero = new PrendreLApéro.UseCase(_repository, () => _time);
         _reprendreLaPartie = new ReprendreLaPartieUseCase(_repository, () => _time);
         _terminerLaPartie = new TerminerLaPartieUseCase(_repository, () => _time);
         _consulterStatus = new ConsulterStatusUseCase(_repository);
@@ -43,13 +43,13 @@ public class ScenarioTests
 
         After(10.MinutesLater(), () => _tirer.Handle(id, "Dédé"));
         After(30.MinutesLater(), () => _tirerSurGalinette.Handle(id, "Robert"));
-        After(20.MinutesLater(), () => _prendreLApero.Handle(new PrendreLApero.Command(id)));
+        After(20.MinutesLater(), () => _prendreLApero.Handle(new PrendreLApéro.Command(id)));
         After(1.HoursLater(), () => _reprendreLaPartie.Handle(id));
         After(2.MinutesLater(), () => _tirer.Handle(id, "Bernard"));
         After(1.MinutesLater(), () => _tirer.Handle(id, "Bernard"));
         After(1.MinutesLater(), () => _tirerSurGalinette.Handle(id, "Dédé"));
         After(26.MinutesLater(), () => _tirerSurGalinette.Handle(id, "Robert"));
-        After(10.MinutesLater(), () => _prendreLApero.Handle(new PrendreLApero.Command(id)));
+        After(10.MinutesLater(), () => _prendreLApero.Handle(new PrendreLApéro.Command(id)));
         After(170.MinutesLater(), () => _reprendreLaPartie.Handle(id));
         After(11.MinutesLater(), () => _tirer.Handle(id, "Bernard"));
         After(1.SecondsLater(), () => _tirer.Handle(id, "Bernard"));
