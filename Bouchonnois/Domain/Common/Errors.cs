@@ -18,4 +18,8 @@ public static class Errors
 
     public static Error ChasseurInconnu(string chasseur)
         => new($"Chasseur inconnu {chasseur}");
+
+    public static Error OnTirePasPendantLapéroCestSacré()
+        => new("On tire pas pendant l'apéro, c'est sacré !!!");
+
 }

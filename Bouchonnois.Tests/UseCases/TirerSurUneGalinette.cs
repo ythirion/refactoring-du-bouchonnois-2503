@@ -104,10 +104,10 @@ public class TirerSurUneGalinette : UseCaseTest
                 .ALApéro()
                 .SurUnTerrainRicheEnGalinettes());
 
-        var tirerEnPleinApéro = () => _tirerSurGalinette.HandleUnsafe(new Request(id, ChasseurInconnu));
-
-        tirerEnPleinApéro.Should().Throw<OnTirePasPendantLapéroCestSacré>();
-
+        _tirerSurGalinette.Handle(new Request(id, ChasseurInconnu))
+            .Should()
+            .FailWith(Errors.OnTirePasPendantLapéroCestSacré());
+        
         Repository.SavedPartieDeChasse()
             .DevraitAvoirEmis(Now, "Chasseur inconnu veut tirer -> On tire pas pendant l'apéro, c'est sacré !!!");
     }

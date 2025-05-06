@@ -101,6 +101,10 @@ public static class TirerSurGalinette
             {
                 return Errors.ChasseurInconnu(command.Chasseur);
             }
+            catch (OnTirePasPendantLapéroCestSacré)
+            {
+                return Errors.OnTirePasPendantLapéroCestSacré();
+            }
 
             return UnitResult.Success<Error>();
         }
