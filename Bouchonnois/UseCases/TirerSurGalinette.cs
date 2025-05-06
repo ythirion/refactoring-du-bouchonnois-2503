@@ -13,7 +13,7 @@ public static class TirerSurGalinette
     public class UseCase(IPartieDeChasseRepository repository, Func<DateTime> timeProvider)
         : IUseCase<Request, UnitResult<Error>>
     {
-        public void HandleUnsafe(Request request)
+        public UnitResult<Error> Handle(Request request)
         {
             var id = request.Id;
             var chasseur = request.Chasseur;
@@ -21,7 +21,7 @@ public static class TirerSurGalinette
 
             if (partieDeChasse == null)
             {
-                throw new LaPartieDeChasseNexistePas();
+                return Errors.LaPartieDeChasseNexistePas();
             }
 
             if (partieDeChasse.Terrain.NbGalinettes != 0)
@@ -41,7 +41,7 @@ public static class TirerSurGalinette
                                         $"{chasseur} veut tirer sur une galinette -> T'as plus de balles mon vieux, chasse à la main"));
                                 repository.Save(partieDeChasse);
 
-                                throw new TasPlusDeBallesMonVieuxChasseALaMain();
+                                return Errors.TasPlusDeBallesMonVieuxChasseALaMain();
                             }
 
                             chasseurQuiTire.BallesRestantes--;
@@ -51,7 +51,7 @@ public static class TirerSurGalinette
                         }
                         else
                         {
-                            throw new ChasseurInconnu(chasseur);
+                            return Errors.ChasseurInconnu(chasseur);
                         }
                     }
                     else
@@ -62,7 +62,7 @@ public static class TirerSurGalinette
                                 $"{chasseur} veut tirer -> On tire pas quand la partie est terminée"));
                         repository.Save(partieDeChasse);
 
-                        throw new OnTirePasQuandLaPartieEstTerminée();
+                        return Errors.OnTirePasQuandLaPartieEstTerminée();
                     }
                 }
                 else
@@ -72,47 +72,15 @@ public static class TirerSurGalinette
                             timeProvider(),
                             $"{chasseur} veut tirer -> On tire pas pendant l'apéro, c'est sacré !!!"));
                     repository.Save(partieDeChasse);
-                    throw new OnTirePasPendantLapéroCestSacré();
+                    return Errors.OnTirePasPendantLapéroCestSacré();
                 }
             }
             else
             {
-                throw new TasTropPicoléMonVieuxTasRienTouché();
+                return Errors.TasTropPicoléMonVieuxTasRienTouché();
             }
 
             repository.Save(partieDeChasse);
-        }
-
-        public UnitResult<Error> Handle(Request command)
-        {
-            try
-            {
-                HandleUnsafe(command);
-            }
-            catch (LaPartieDeChasseNexistePas)
-            {
-                return Errors.LaPartieDeChasseNexistePas();
-            }
-            catch (TasPlusDeBallesMonVieuxChasseALaMain)
-            {
-                return Errors.TasPlusDeBallesMonVieuxChasseALaMain();
-            }
-            catch (ChasseurInconnu)
-            {
-                return Errors.ChasseurInconnu(command.Chasseur);
-            }
-            catch (OnTirePasPendantLapéroCestSacré)
-            {
-                return Errors.OnTirePasPendantLapéroCestSacré();
-            }
-            catch (OnTirePasQuandLaPartieEstTerminée)
-            {
-                return Errors.OnTirePasQuandLaPartieEstTerminée();
-            }
-            catch (TasTropPicoléMonVieuxTasRienTouché)
-            {
-                return Errors.TasTropPicoléMonVieuxTasRienTouché();
-            }
 
             return UnitResult.Success<Error>();
         }
