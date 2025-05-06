@@ -37,7 +37,7 @@ public class PrendreLApéro : UseCaseTest
             .Should()
             .FailWith(new Error("La partie de chasse n'existe pas"));
 
-        Repository.SavedPartieDeChasse().Should().BeNull();
+        Repository.NeDevraitPasAvoirSauvegarderDePartieDeChasse();
     }
 
     [Fact]
@@ -49,7 +49,7 @@ public class PrendreLApéro : UseCaseTest
             .Should()
             .FailWith(new Error("On est déjà en train de prendre l'apéro"));
 
-        Repository.SavedPartieDeChasse().Should().BeNull();
+        Repository.NeDevraitPasAvoirSauvegarderDePartieDeChasse();
     }
 
     [Fact]
@@ -61,6 +61,6 @@ public class PrendreLApéro : UseCaseTest
             .Should()
             .FailWith(new Error("On ne prend pas l'apéro quand la partie est terminée"));
 
-        Repository.SavedPartieDeChasse().Should().BeNull();
+        Repository.NeDevraitPasAvoirSauvegarderDePartieDeChasse();
     }
 }
