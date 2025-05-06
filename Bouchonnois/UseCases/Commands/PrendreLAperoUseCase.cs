@@ -25,24 +25,24 @@ public class PrendreLAperoUseCase(IPartieDeChasseRepository repository, Func<Dat
     public UnitResult<Error> HandleWithoutException(Guid id)
     {
         var partieDeChasse = repository.GetById(id);
-        if (partieDeChasse == null)
-        {
-            return UnitResult.Failure(new Error("La partie de chasse n'existe pas"));
-        }
+        Result<PartieDeChasse, LaPartieDeChasseNexistePas> retrievedResult = partieDeChasse.ToResult(new LaPartieDeChasseNexistePas());
 
-        if (partieDeChasse.Status == PartieStatus.Apéro)
+        if (retrievedResult.IsSuccess)
         {
-            return UnitResult.Failure(new Error("On est déjà en train de prendre l'apéro"));
-        }
+            switch (partieDeChasse.Status)
+            {
+                case PartieStatus.Apéro:
+                    return UnitResult.Failure(new Error("On est déjà en train de prendre l'apéro"));
+                case PartieStatus.Terminée:
+                    return UnitResult.Failure(new Error("On ne prend pas l'apéro quand la partie est terminée"));
+            }
 
-        if (partieDeChasse.Status == PartieStatus.Terminée)
-        {
-            return UnitResult.Failure(new Error("On ne prend pas l'apéro quand la partie est terminée"));
-        }
+            retrievedResult.Value.Status = PartieStatus.Apéro;
 
-        partieDeChasse.Status = PartieStatus.Apéro;
-        partieDeChasse.Events.Add(new Event(timeProvider(), "Petit apéro"));
-        repository.Save(partieDeChasse);
+            partieDeChasse.Events.Add(new Event(timeProvider(), "Petit apéro"));
+            // TODO > First save then add event?
+            repository.Save(partieDeChasse);
+        }
 
         return UnitResult.Success<Error>();
     }

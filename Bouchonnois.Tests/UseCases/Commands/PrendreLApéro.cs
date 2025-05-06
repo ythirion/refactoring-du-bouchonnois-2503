@@ -11,11 +11,11 @@ namespace Bouchonnois.Tests.UseCases.Commands;
 
 public class PrendreLApéro : UseCaseTest
 {
-    private readonly PrendreLAperoUseCase _prendereLAperoUseCase;
+    private readonly PrendreLAperoUseCase _prendreLAperoUseCase;
 
     public PrendreLApéro()
     {
-        _prendereLAperoUseCase = new PrendreLAperoUseCase(
+        _prendreLAperoUseCase = new PrendreLAperoUseCase(
             Repository,
             () => Now
         );
@@ -28,7 +28,7 @@ public class PrendreLApéro : UseCaseTest
             UnePartieDeChasse()
                 .EnCours());
 
-        _prendereLAperoUseCase.Handle(id);
+        _prendreLAperoUseCase.Handle(id);
 
         Repository.SavedPartieDeChasse()
             .DevraitEtreALApéro()
@@ -40,9 +40,8 @@ public class PrendreLApéro : UseCaseTest
     {
         var id = UnePartieDeChasseInexistante();
 
-        _prendereLAperoUseCase.HandleWithoutException(id)
-            .Should()
-            .FailWith(new Error("La partie de chasse n'existe pas"));
+        _prendreLAperoUseCase.HandleWithoutException(id)
+            .ConvertFailure<LaPartieDeChasseNexistePas>().Should().BeOfType<LaPartieDeChasseNexistePas>();
 
         Repository.SavedPartieDeChasse().Should().BeNull();
     }
@@ -52,7 +51,7 @@ public class PrendreLApéro : UseCaseTest
     {
         var id = UnePartieDeChasseExistante(UnePartieDeChasse().ALApéro());
 
-        _prendereLAperoUseCase.HandleWithoutException(id)
+        _prendreLAperoUseCase.HandleWithoutException(id)
             .Should()
             .FailWith(new Error("On est déjà en train de prendre l'apéro"));
 
@@ -64,7 +63,7 @@ public class PrendreLApéro : UseCaseTest
     {
         var id = UnePartieDeChasseExistante(UnePartieDeChasse().Terminée());
 
-        var prendreLapéroQuandTerminée = _prendereLAperoUseCase.HandleWithoutException(id);
+        var prendreLapéroQuandTerminée = _prendreLAperoUseCase.HandleWithoutException(id);
 
         prendreLapéroQuandTerminée.Should().FailWith(new Error("On ne prend pas l'apéro quand la partie est terminée"));
 
