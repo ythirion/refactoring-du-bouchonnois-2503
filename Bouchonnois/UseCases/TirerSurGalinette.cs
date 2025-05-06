@@ -24,61 +24,53 @@ public static class TirerSurGalinette
                 return Errors.LaPartieDeChasseNexistePas();
             }
 
-            if (partieDeChasse.Terrain.NbGalinettes != 0)
-            {
-                if (partieDeChasse.Status != PartieStatus.Apéro)
-                {
-                    if (partieDeChasse.Status != PartieStatus.Terminée)
-                    {
-                        var chasseurQuiTire = partieDeChasse.Chasseurs.FirstOrDefault(c => c.Nom == chasseur);
-                        if (chasseurQuiTire is not null)
-                        {
-                            if (chasseurQuiTire.BallesRestantes == 0)
-                            {
-                                partieDeChasse.Events.Add(
-                                    new Event(
-                                        timeProvider(),
-                                        $"{chasseur} veut tirer sur une galinette -> T'as plus de balles mon vieux, chasse à la main"));
-                                repository.Save(partieDeChasse);
-
-                                return Errors.TasPlusDeBallesMonVieuxChasseALaMain();
-                            }
-
-                            chasseurQuiTire.BallesRestantes--;
-                            chasseurQuiTire.NbGalinettes++;
-                            partieDeChasse.Terrain.NbGalinettes--;
-                            partieDeChasse.Events.Add(new Event(timeProvider(), $"{chasseur} tire sur une galinette"));
-                        }
-                        else
-                        {
-                            return Errors.ChasseurInconnu(chasseur);
-                        }
-                    }
-                    else
-                    {
-                        partieDeChasse.Events.Add(
-                            new Event(
-                                timeProvider(),
-                                $"{chasseur} veut tirer -> On tire pas quand la partie est terminée"));
-                        repository.Save(partieDeChasse);
-
-                        return Errors.OnTirePasQuandLaPartieEstTerminée();
-                    }
-                }
-                else
-                {
-                    partieDeChasse.Events.Add(
-                        new Event(
-                            timeProvider(),
-                            $"{chasseur} veut tirer -> On tire pas pendant l'apéro, c'est sacré !!!"));
-                    repository.Save(partieDeChasse);
-                    return Errors.OnTirePasPendantLapéroCestSacré();
-                }
-            }
-            else
+            if (partieDeChasse.Terrain.NbGalinettes == 0)
             {
                 return Errors.TasTropPicoléMonVieuxTasRienTouché();
             }
+
+            if (partieDeChasse.Status == PartieStatus.Apéro)
+            {
+                partieDeChasse.Events.Add(
+                    new Event(
+                        timeProvider(),
+                        $"{chasseur} veut tirer -> On tire pas pendant l'apéro, c'est sacré !!!"));
+                repository.Save(partieDeChasse);
+                return Errors.OnTirePasPendantLapéroCestSacré();
+            }
+
+            if (partieDeChasse.Status == PartieStatus.Terminée)
+            {
+                partieDeChasse.Events.Add(
+                    new Event(
+                        timeProvider(),
+                        $"{chasseur} veut tirer -> On tire pas quand la partie est terminée"));
+                repository.Save(partieDeChasse);
+
+                return Errors.OnTirePasQuandLaPartieEstTerminée();
+            }
+
+            var chasseurQuiTire = partieDeChasse.Chasseurs.FirstOrDefault(c => c.Nom == chasseur);
+            if (chasseurQuiTire is null)
+            {
+                return Errors.ChasseurInconnu(chasseur);
+            }
+
+            if (chasseurQuiTire.BallesRestantes == 0)
+            {
+                partieDeChasse.Events.Add(
+                    new Event(
+                        timeProvider(),
+                        $"{chasseur} veut tirer sur une galinette -> T'as plus de balles mon vieux, chasse à la main"));
+                repository.Save(partieDeChasse);
+
+                return Errors.TasPlusDeBallesMonVieuxChasseALaMain();
+            }
+
+            chasseurQuiTire.BallesRestantes--;
+            chasseurQuiTire.NbGalinettes++;
+            partieDeChasse.Terrain.NbGalinettes--;
+            partieDeChasse.Events.Add(new Event(timeProvider(), $"{chasseur} tire sur une galinette"));
 
             repository.Save(partieDeChasse);
 
