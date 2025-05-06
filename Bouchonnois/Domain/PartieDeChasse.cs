@@ -26,7 +26,7 @@ public class PartieDeChasse
 
     public Result<PartieDeChasse, Error> PrendreLApéro(Func<DateTime> timeProvider)
     {
-        if (LApéroEstEnCours()) return OnEstDéjàEnTrainDePrendreLapéro();
+        if (LApéroEstEnCours()) return OnEstDéjàEnTrainDePrendreLApéro();
 
         if (LaPartieEstTerminée()) return OnNePrendPasLapéroQuandLaPartieEstTerminée();
 

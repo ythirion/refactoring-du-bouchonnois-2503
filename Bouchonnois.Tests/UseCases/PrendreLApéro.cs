@@ -1,6 +1,7 @@
 using Bouchonnois.Domain;
 using Bouchonnois.Tests.UseCases.Common;
 using Bouchonnois.Tests.Verifications;
+using static Bouchonnois.Domain.Errors;
 using static Bouchonnois.Tests.Builders.PartieDeChasseBuilder;
 using static Bouchonnois.UseCases.PrendreLApero;
 
@@ -29,25 +30,25 @@ public class PrendreLApéro : UseCaseTest
     }
 
     [Fact]
-    public void EchoueCarPartieNexistePas()
+    public void EchoueCarPartieNExistePas()
     {
         var id = UnePartieDeChasseInexistante();
 
         _useCase.Handle(new Command(id))
             .Should()
-            .FailWith(new Error("La partie de chasse n'existe pas"));
+            .FailWith(LaPartieDeChasseNexistePas());
 
         Repository.NeDevraitPasAvoirSauvegarderDePartieDeChasse();
     }
 
     [Fact]
-    public void EchoueSiLesChasseursSontDéjaEnApero()
+    public void EchoueSiLesChasseursSontDéjaEnApéro()
     {
         var id = UnePartieDeChasseExistante(UnePartieDeChasse().ALApéro());
 
         _useCase.Handle(new Command(id))
             .Should()
-            .FailWith(new Error("On est déjà en train de prendre l'apéro"));
+            .FailWith(OnEstDéjàEnTrainDePrendreLApéro());
 
         Repository.NeDevraitPasAvoirSauvegarderDePartieDeChasse();
     }
@@ -59,7 +60,7 @@ public class PrendreLApéro : UseCaseTest
 
         _useCase.Handle(new Command(id))
             .Should()
-            .FailWith(new Error("On ne prend pas l'apéro quand la partie est terminée"));
+            .FailWith(OnNePrendPasLapéroQuandLaPartieEstTerminée());
 
         Repository.NeDevraitPasAvoirSauvegarderDePartieDeChasse();
     }
