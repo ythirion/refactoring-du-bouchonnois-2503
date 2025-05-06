@@ -1,4 +1,3 @@
-using Bouchonnois.Domain;
 using Bouchonnois.Domain.Common;
 using CSharpFunctionalExtensions;
 
