@@ -46,7 +46,6 @@ public class PartieDeChasse
 
     public Result<PartieDeChasse, (Error, Maybe<PartieDeChasse>)> TirerSurGalinette(
         string chasseur,
-        IPartieDeChasseRepository partieDeChasseRepository,
         Func<DateTime> timeProvider)
     {
         if (TerrainSansGalinettes()) return (TasTropPicoléMonVieuxTasRienTouché(), Maybe<PartieDeChasse>.None);
@@ -60,7 +59,6 @@ public class PartieDeChasse
                 new Event(
                     timeProvider(),
                     $"{chasseur} veut tirer -> On tire pas pendant l'apéro, c'est sacré !!!"));
-            partieDeChasseRepository.Save(this);
             return (OnTirePasPendantLapéroCestSacré(), this);
         }
 
@@ -70,8 +68,6 @@ public class PartieDeChasse
                 new Event(
                     timeProvider(),
                     $"{chasseur} veut tirer -> On tire pas quand la partie est terminée"));
-            partieDeChasseRepository.Save(this);
-
             return (OnTirePasQuandLaPartieEstTerminée(), this);
         }
 
@@ -82,8 +78,6 @@ public class PartieDeChasse
                 new Event(
                     timeProvider(),
                     $"{chasseur} veut tirer sur une galinette -> T'as plus de balles mon vieux, chasse à la main"));
-            partieDeChasseRepository.Save(this);
-
             return (TasPlusDeBallesMonVieuxChasseALaMain(), this);
         }
 
@@ -91,9 +85,7 @@ public class PartieDeChasse
         chasseurQuiTire.NbGalinettes++;
         Terrain.NbGalinettes--;
         Events.Add(new Event(timeProvider(), $"{chasseur} tire sur une galinette"));
-
-        partieDeChasseRepository.Save(this);
-
+        
         return this;
     }
 
