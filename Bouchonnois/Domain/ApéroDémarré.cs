@@ -2,7 +2,4 @@ using Bouchonnois.Domain.Common;
 
 namespace Bouchonnois.Domain;
 
-public record ApéroDémarré(DateTime Date) : Event(Date, "Petit apéro")
-{
-    public override string ToString() => base.ToString();
-}
+public record ApéroDémarré(DateTime Date) : Event(Date, "Petit apéro");
