@@ -38,22 +38,13 @@ public class PartieDeChasse
         return this;
     }
 
-    private void Emet(ApéroDémarré @event) => Events.Add(@event);
-
-    private bool LaPartieEstTerminée() => Status == PartieStatus.Terminée;
-
-    private bool LApéroEstEnCours() => Status == PartieStatus.Apéro;
-
     public Result<PartieDeChasse, (Error, Maybe<PartieDeChasse>)> TirerSurGalinette(
         string chasseur,
         Func<DateTime> timeProvider)
     {
         if (TerrainSansGalinettes()) return (TasTropPicoléMonVieuxTasRienTouché(), Maybe<PartieDeChasse>.None);
 
-        var chasseurQuiTire = Chasseurs.FirstOrDefault(c => c.Nom == chasseur);
-        if (chasseurQuiTire is null) return (ChasseurInconnu(chasseur), Maybe<PartieDeChasse>.None);
-
-        if (Status == PartieStatus.Apéro)
+        if (LApéroEstEnCours())
         {
             Events.Add(
                 new Event(
@@ -62,7 +53,7 @@ public class PartieDeChasse
             return (OnTirePasPendantLapéroCestSacré(), this);
         }
 
-        if (Status == PartieStatus.Terminée)
+        if (LaPartieEstTerminée())
         {
             Events.Add(
                 new Event(
@@ -71,6 +62,8 @@ public class PartieDeChasse
             return (OnTirePasQuandLaPartieEstTerminée(), this);
         }
 
+        var chasseurQuiTire = Chasseurs.FirstOrDefault(c => c.Nom == chasseur);
+        if (chasseurQuiTire is null) return (ChasseurInconnu(chasseur), Maybe<PartieDeChasse>.None);
 
         if (chasseurQuiTire.BallesRestantes == 0)
         {
@@ -85,9 +78,15 @@ public class PartieDeChasse
         chasseurQuiTire.NbGalinettes++;
         Terrain.NbGalinettes--;
         Events.Add(new Event(timeProvider(), $"{chasseur} tire sur une galinette"));
-        
+
         return this;
     }
+
+    private void Emet(ApéroDémarré @event) => Events.Add(@event);
+
+    private bool LaPartieEstTerminée() => Status == PartieStatus.Terminée;
+
+    private bool LApéroEstEnCours() => Status == PartieStatus.Apéro;
 
     private bool TerrainSansGalinettes() => Terrain.NbGalinettes == 0;
 }
