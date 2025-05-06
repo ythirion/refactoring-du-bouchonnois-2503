@@ -48,12 +48,12 @@ public class PrendreLAperoUseCase(IPartieDeChasseRepository repository, Func<Dat
     {
         if (partieDeChasse.Status == PartieStatus.Apéro)
         {
-            return UnitResult.Failure(new Error("On est déjà en train de prendre l'apéro"));
+            return new Error("On est déjà en train de prendre l'apéro");
         }
 
         if (partieDeChasse.Status == PartieStatus.Terminée)
         {
-            return UnitResult.Failure(new Error("On ne prend pas l'apéro quand la partie est terminée"));
+            return new Error("On ne prend pas l'apéro quand la partie est terminée");
         }
 
         partieDeChasse.Status = PartieStatus.Apéro;
