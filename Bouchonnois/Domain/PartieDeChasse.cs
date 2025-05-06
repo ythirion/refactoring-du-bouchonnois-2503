@@ -43,4 +43,57 @@ public class PartieDeChasse
     private bool LaPartieEstTerminée() => Status == PartieStatus.Terminée;
 
     private bool LApéroEstEnCours() => Status == PartieStatus.Apéro;
+
+    public Result<PartieDeChasse, Error> TirerSurGalinette(
+        string chasseur,
+        IPartieDeChasseRepository partieDeChasseRepository,
+        Func<DateTime> timeProvider)
+    {
+        if (Terrain.NbGalinettes == 0) return Errors.TasTropPicoléMonVieuxTasRienTouché();
+
+        var chasseurQuiTire = Chasseurs.FirstOrDefault(c => c.Nom == chasseur);
+        if (chasseurQuiTire is null) return Errors.ChasseurInconnu(chasseur);
+
+        if (Status == PartieStatus.Apéro)
+        {
+            Events.Add(
+                new Event(
+                    timeProvider(),
+                    $"{chasseur} veut tirer -> On tire pas pendant l'apéro, c'est sacré !!!"));
+            partieDeChasseRepository.Save(this);
+            return Errors.OnTirePasPendantLapéroCestSacré();
+        }
+
+        if (Status == PartieStatus.Terminée)
+        {
+            Events.Add(
+                new Event(
+                    timeProvider(),
+                    $"{chasseur} veut tirer -> On tire pas quand la partie est terminée"));
+            partieDeChasseRepository.Save(this);
+
+            return Errors.OnTirePasQuandLaPartieEstTerminée();
+        }
+
+
+        if (chasseurQuiTire.BallesRestantes == 0)
+        {
+            Events.Add(
+                new Event(
+                    timeProvider(),
+                    $"{chasseur} veut tirer sur une galinette -> T'as plus de balles mon vieux, chasse à la main"));
+            partieDeChasseRepository.Save(this);
+
+            return Errors.TasPlusDeBallesMonVieuxChasseALaMain();
+        }
+
+        chasseurQuiTire.BallesRestantes--;
+        chasseurQuiTire.NbGalinettes++;
+        Terrain.NbGalinettes--;
+        Events.Add(new Event(timeProvider(), $"{chasseur} tire sur une galinette"));
+
+        partieDeChasseRepository.Save(this);
+
+        return this;
+    }
 }
