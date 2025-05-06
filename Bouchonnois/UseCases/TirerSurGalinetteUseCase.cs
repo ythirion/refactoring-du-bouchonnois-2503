@@ -1,6 +1,6 @@
 using Bouchonnois.Domain;
 using Bouchonnois.Domain.Common;
-using Bouchonnois.Domain.Exceptions;
+using Bouchonnois.UseCases.Exceptions;
 
 namespace Bouchonnois.UseCases;
 

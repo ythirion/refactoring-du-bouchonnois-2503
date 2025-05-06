@@ -1,7 +1,7 @@
 using Bouchonnois.Domain.Common;
-using Bouchonnois.Domain.Exceptions;
 using Bouchonnois.Tests.UseCases.Common;
 using Bouchonnois.UseCases;
+using Bouchonnois.UseCases.Exceptions;
 using static Bouchonnois.Tests.Builders.PartieDeChasseBuilder;
 
 namespace Bouchonnois.Tests.UseCases;

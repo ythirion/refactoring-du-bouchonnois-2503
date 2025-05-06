@@ -1,4 +1,4 @@
-namespace Bouchonnois.Domain.Exceptions;
+namespace Bouchonnois.UseCases.Exceptions;
 
 public class OnTirePasQuandLaPartieEstTerminée : Exception
 {
