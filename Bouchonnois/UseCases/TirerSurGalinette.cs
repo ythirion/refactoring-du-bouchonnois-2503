@@ -97,6 +97,10 @@ public static class TirerSurGalinette
             {
                 return Errors.TasPlusDeBallesMonVieuxChasseALaMain();
             }
+            catch (ChasseurInconnu)
+            {
+                return Errors.ChasseurInconnu(command.Chasseur);
+            }
 
             return UnitResult.Success<Error>();
         }

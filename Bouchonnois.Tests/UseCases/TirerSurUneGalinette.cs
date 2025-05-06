@@ -89,10 +89,10 @@ public class TirerSurUneGalinette : UseCaseTest
                 .EnCours()
                 .SurUnTerrainRicheEnGalinettes());
 
-        var chasseurInconnuVeutTirer = () => _tirerSurGalinette.HandleUnsafe(new Request(id, ChasseurInconnu));
-
-        chasseurInconnuVeutTirer.Should().Throw<ChasseurInconnu>().WithMessage("Chasseur inconnu Chasseur inconnu");
-
+        _tirerSurGalinette.Handle(new Request(id, ChasseurInconnu))
+            .Should()
+            .FailWith(Errors.ChasseurInconnu(ChasseurInconnu));
+        
         Repository.SavedPartieDeChasse().Should().BeNull();
     }
 

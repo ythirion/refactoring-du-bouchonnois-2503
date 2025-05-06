@@ -15,4 +15,7 @@ public static class Errors
 
     public static Error TasPlusDeBallesMonVieuxChasseALaMain() 
         => new("T'as plus de balles mon vieux, chasse à la main");
+
+    public static Error ChasseurInconnu(string chasseur)
+        => new($"Chasseur inconnu {chasseur}");
 }
