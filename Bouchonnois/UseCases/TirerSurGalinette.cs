@@ -13,14 +13,8 @@ public static class TirerSurGalinette
         : IUseCase<Request, UnitResult<Error>>
     {
         public UnitResult<Error> Handle(Request request)
-        {
-            var id = request.Id;
-            var chasseur = request.Chasseur;
-            var partieDeChasse = repository.GetById(id);
-
-            if (partieDeChasse == null) return Errors.LaPartieDeChasseNexistePas();
-
-            return partieDeChasse.TirerSurGalinette(chasseur, repository, timeProvider);
-        }
+            => repository
+                .FindById(request.Id)
+                .Bind(partieDeChasse => partieDeChasse.TirerSurGalinette(request.Chasseur, repository, timeProvider));
     }
 }

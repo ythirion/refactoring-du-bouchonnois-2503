@@ -49,10 +49,10 @@ public class PartieDeChasse
         IPartieDeChasseRepository partieDeChasseRepository,
         Func<DateTime> timeProvider)
     {
-        if (Terrain.NbGalinettes == 0) return Errors.TasTropPicoléMonVieuxTasRienTouché();
+        if (Terrain.NbGalinettes == 0) return TasTropPicoléMonVieuxTasRienTouché();
 
         var chasseurQuiTire = Chasseurs.FirstOrDefault(c => c.Nom == chasseur);
-        if (chasseurQuiTire is null) return Errors.ChasseurInconnu(chasseur);
+        if (chasseurQuiTire is null) return ChasseurInconnu(chasseur);
 
         if (Status == PartieStatus.Apéro)
         {
@@ -61,7 +61,7 @@ public class PartieDeChasse
                     timeProvider(),
                     $"{chasseur} veut tirer -> On tire pas pendant l'apéro, c'est sacré !!!"));
             partieDeChasseRepository.Save(this);
-            return Errors.OnTirePasPendantLapéroCestSacré();
+            return OnTirePasPendantLapéroCestSacré();
         }
 
         if (Status == PartieStatus.Terminée)
@@ -72,7 +72,7 @@ public class PartieDeChasse
                     $"{chasseur} veut tirer -> On tire pas quand la partie est terminée"));
             partieDeChasseRepository.Save(this);
 
-            return Errors.OnTirePasQuandLaPartieEstTerminée();
+            return OnTirePasQuandLaPartieEstTerminée();
         }
 
 
@@ -84,7 +84,7 @@ public class PartieDeChasse
                     $"{chasseur} veut tirer sur une galinette -> T'as plus de balles mon vieux, chasse à la main"));
             partieDeChasseRepository.Save(this);
 
-            return Errors.TasPlusDeBallesMonVieuxChasseALaMain();
+            return TasPlusDeBallesMonVieuxChasseALaMain();
         }
 
         chasseurQuiTire.BallesRestantes--;
