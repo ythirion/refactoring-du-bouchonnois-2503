@@ -43,13 +43,13 @@ public class ScenarioTests
 
         After(10.MinutesLater(), () => _tirer.Handle(id, "Dédé"));
         After(30.MinutesLater(), () => _tirerSurGalinette.Handle(id, "Robert"));
-        After(20.MinutesLater(), () => _prendreLApero.Handle(new PrendreLApéro.Command(id)));
+        After(20.MinutesLater(), () => _prendreLApero.Handle(new PrendreLApéro.Request(id)));
         After(1.HoursLater(), () => _reprendreLaPartie.Handle(id));
         After(2.MinutesLater(), () => _tirer.Handle(id, "Bernard"));
         After(1.MinutesLater(), () => _tirer.Handle(id, "Bernard"));
         After(1.MinutesLater(), () => _tirerSurGalinette.Handle(id, "Dédé"));
         After(26.MinutesLater(), () => _tirerSurGalinette.Handle(id, "Robert"));
-        After(10.MinutesLater(), () => _prendreLApero.Handle(new PrendreLApéro.Command(id)));
+        After(10.MinutesLater(), () => _prendreLApero.Handle(new PrendreLApéro.Request(id)));
         After(170.MinutesLater(), () => _reprendreLaPartie.Handle(id));
         After(11.MinutesLater(), () => _tirer.Handle(id, "Bernard"));
         After(1.SecondsLater(), () => _tirer.Handle(id, "Bernard"));

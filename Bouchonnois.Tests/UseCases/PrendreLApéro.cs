@@ -20,7 +20,7 @@ public class PrendreLApéro : UseCaseTest
             UnePartieDeChasse()
                 .EnCours());
 
-        _useCase.Handle(new Command(id))
+        _useCase.Handle(new Request(id))
             .Should()
             .Succeed();
 
@@ -34,7 +34,7 @@ public class PrendreLApéro : UseCaseTest
     {
         var id = UnePartieDeChasseInexistante();
 
-        _useCase.Handle(new Command(id))
+        _useCase.Handle(new Request(id))
             .Should()
             .FailWith(LaPartieDeChasseNexistePas());
 
@@ -46,7 +46,7 @@ public class PrendreLApéro : UseCaseTest
     {
         var id = UnePartieDeChasseExistante(UnePartieDeChasse().ALApéro());
 
-        _useCase.Handle(new Command(id))
+        _useCase.Handle(new Request(id))
             .Should()
             .FailWith(OnEstDéjàEnTrainDePrendreLApéro());
 
@@ -58,7 +58,7 @@ public class PrendreLApéro : UseCaseTest
     {
         var id = UnePartieDeChasseExistante(UnePartieDeChasse().Terminée());
 
-        _useCase.Handle(new Command(id))
+        _useCase.Handle(new Request(id))
             .Should()
             .FailWith(OnNePrendPasLapéroQuandLaPartieEstTerminée());
 

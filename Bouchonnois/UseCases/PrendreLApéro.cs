@@ -7,13 +7,14 @@ namespace Bouchonnois.UseCases;
 
 public static class PrendreLApéro
 {
-    public record Command(Guid PartieDeChasseId) : ICommand;
+    public record Request(Guid PartieDeChasseId) : IRequest;
 
-    public class UseCase(IPartieDeChasseRepository repository, Func<DateTime> timeProvider) : ICommandUseCase<Command>
+    public class UseCase(IPartieDeChasseRepository repository, Func<DateTime> timeProvider)
+        : IUseCase<Request, UnitResult<Error>>
     {
-        public UnitResult<Error> Handle(Command command)
+        public UnitResult<Error> Handle(Request request)
             => repository
-                .FindById(command.PartieDeChasseId)
+                .FindById(request.PartieDeChasseId)
                 .Bind(partieDeChasse => partieDeChasse.PrendreLApéro(timeProvider))
                 .Tap(repository.Save);
     }
