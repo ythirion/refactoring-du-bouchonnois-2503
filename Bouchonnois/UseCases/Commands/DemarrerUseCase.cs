@@ -1,4 +1,5 @@
 ﻿using Bouchonnois.Domain;
+using Bouchonnois.Domain.Common;
 using Bouchonnois.UseCases.Exceptions;
 
 namespace Bouchonnois.UseCases.Commands;

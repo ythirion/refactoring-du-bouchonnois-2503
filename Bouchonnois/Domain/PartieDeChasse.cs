@@ -1,5 +1,6 @@
-﻿using CSharpFunctionalExtensions;
-using static Bouchonnois.Domain.Errors;
+﻿using Bouchonnois.Domain.Common;
+using CSharpFunctionalExtensions;
+using static Bouchonnois.Domain.Common.Errors;
 
 namespace Bouchonnois.Domain;
 

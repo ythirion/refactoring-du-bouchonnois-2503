@@ -1,4 +1,4 @@
-namespace Bouchonnois.Domain;
+namespace Bouchonnois.Domain.Common;
 
 public record Event(DateTime Date, string Message)
 {
