@@ -27,12 +27,12 @@ public class PartieDeChasse
 
     public Result<PartieDeChasse, Error> PrendreLApero(Func<DateTime> timeProvider)
     {
-        if (Status == PartieStatus.Apéro)
+        if (LapéroEstEnCours())
         {
             return OnEstDéjàEnTrainDePrendreLapéro();
         }
 
-        if (Status == PartieStatus.Terminée)
+        if (LaPartieEstTerminée())
         {
             return OnNePrendPasLapéroQuandLaPartieEstTerminée();
         }
@@ -42,4 +42,8 @@ public class PartieDeChasse
 
         return this;
     }
+
+    private bool LaPartieEstTerminée() => Status == PartieStatus.Terminée;
+
+    private bool LapéroEstEnCours() => Status == PartieStatus.Apéro;
 }
