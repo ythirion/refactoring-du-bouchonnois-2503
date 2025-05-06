@@ -1,12 +1,11 @@
+using Bouchonnois.Domain.Exceptions;
 using Bouchonnois.Tests.UseCases.Common;
 using Bouchonnois.Tests.Verifications;
-using Bouchonnois.UseCases.Commands;
-using Bouchonnois.UseCases.Exceptions;
-
+using Bouchonnois.UseCases;
 using static Bouchonnois.Tests.Builders.PartieDeChasseBuilder;
 using static Bouchonnois.Tests.Builders.ChasseurBuilder;
 
-namespace Bouchonnois.Tests.UseCases.Commands;
+namespace Bouchonnois.Tests.UseCases;
 
 public class Tirer : UseCaseTest
 {

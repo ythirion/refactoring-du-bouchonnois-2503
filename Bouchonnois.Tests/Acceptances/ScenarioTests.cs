@@ -1,7 +1,5 @@
 using Bouchonnois.Tests.Doubles;
 using Bouchonnois.UseCases;
-using Bouchonnois.UseCases.Commands;
-using Bouchonnois.UseCases.Queries;
 
 namespace Bouchonnois.Tests.Acceptances;
 
