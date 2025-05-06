@@ -38,7 +38,8 @@ public class PartieDeChasse
         }
 
         Status = PartieStatus.Apéro;
-        Events.Add(new Event(timeProvider(), "Petit apéro"));
+        
+        Events.Add(new ApéroDemarée(timeProvider()));
 
         return this;
     }
