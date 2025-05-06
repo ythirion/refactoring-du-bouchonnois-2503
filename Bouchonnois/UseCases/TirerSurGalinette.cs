@@ -1,16 +1,19 @@
 using Bouchonnois.Domain;
 using Bouchonnois.Domain.Common;
+using Bouchonnois.UseCases.Common;
 using Bouchonnois.UseCases.Exceptions;
+using CSharpFunctionalExtensions;
 
 namespace Bouchonnois.UseCases;
 
 public static class TirerSurGalinette
 {
-    public record Request(Guid Id, string Chasseur);
+    public record Request(Guid Id, string Chasseur) : IRequest;
 
     public class UseCase(IPartieDeChasseRepository repository, Func<DateTime> timeProvider)
+        : IUseCase<Request, UnitResult<Error>>
     {
-        public void Handle(Request request)
+        public void HandleUnsafe(Request request)
         {
             var id = request.Id;
             var chasseur = request.Chasseur;
@@ -79,5 +82,7 @@ public static class TirerSurGalinette
 
             repository.Save(partieDeChasse);
         }
+
+        public UnitResult<Error> Handle(Request command) => throw new NotImplementedException();
     }
 }
