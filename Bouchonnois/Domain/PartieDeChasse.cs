@@ -1,5 +1,6 @@
 ﻿using Bouchonnois.UseCases.Commands;
 using CSharpFunctionalExtensions;
+using static Bouchonnois.Domain.Errors;
 
 namespace Bouchonnois.Domain;
 
@@ -28,12 +29,12 @@ public class PartieDeChasse
     {
         if (Status == PartieStatus.Apéro)
         {
-            return new Error("On est déjà en train de prendre l'apéro");
+            return OnEstDéjàEnTrainDePrendreLapéro();
         }
 
         if (Status == PartieStatus.Terminée)
         {
-            return new Error("On ne prend pas l'apéro quand la partie est terminée");
+            return OnNePrendPasLapéroQuandLaPartieEstTerminée();
         }
 
         Status = PartieStatus.Apéro;

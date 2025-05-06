@@ -24,7 +24,7 @@ public class PartieDeChasseRepositoryForTests : IPartieDeChasseRepository
         var potentialPartieDeChasse = GetById(partieDeChasseId);
         return potentialPartieDeChasse is not null
             ? potentialPartieDeChasse
-            : new Error("La partie de chasse n'existe pas");
+            : Errors.LaPartieDeChasseNexistePas();
     }
 
 
