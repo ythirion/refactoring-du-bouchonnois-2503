@@ -4,11 +4,15 @@ using Bouchonnois.UseCases.Exceptions;
 
 namespace Bouchonnois.UseCases;
 
+public record TirerSurGalinetteRequest(Guid Id, string Chasseur);
+
 public class TirerSurGalinetteUseCase(IPartieDeChasseRepository repository, Func<DateTime> timeProvider)
 {
 
-    public void Handle(Guid id, string chasseur)
+    public void Handle(TirerSurGalinetteRequest tirerSurGalinetteRequest)
     {
+        var id = tirerSurGalinetteRequest.Id;
+        var chasseur = tirerSurGalinetteRequest.Chasseur;
         var partieDeChasse = repository.GetById(id);
 
         if (partieDeChasse == null)
