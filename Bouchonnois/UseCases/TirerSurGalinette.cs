@@ -105,6 +105,10 @@ public static class TirerSurGalinette
             {
                 return Errors.OnTirePasPendantLapéroCestSacré();
             }
+            catch (OnTirePasQuandLaPartieEstTerminée)
+            {
+                return Errors.OnTirePasQuandLaPartieEstTerminée();
+            }
 
             return UnitResult.Success<Error>();
         }

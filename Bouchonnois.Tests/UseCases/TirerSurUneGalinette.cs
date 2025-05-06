@@ -117,10 +117,10 @@ public class TirerSurUneGalinette : UseCaseTest
     {
         var id = UnePartieDeChasseExistante(UnePartieDeChasse().Terminée().SurUnTerrainRicheEnGalinettes());
 
-        var tirerQuandTerminée = () => _tirerSurGalinette.HandleUnsafe(new Request(id, "Chasseur inconnu"));
-
-        tirerQuandTerminée.Should().Throw<OnTirePasQuandLaPartieEstTerminée>();
-
+        _tirerSurGalinette.Handle(new Request(id, "Chasseur inconnu"))
+            .Should()
+            .FailWith(Errors.OnTirePasQuandLaPartieEstTerminée());
+        
         Repository.SavedPartieDeChasse()
             .DevraitAvoirEmis(Now, "Chasseur inconnu veut tirer -> On tire pas quand la partie est terminée");
     }

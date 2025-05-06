@@ -22,4 +22,6 @@ public static class Errors
     public static Error OnTirePasPendantLapéroCestSacré()
         => new("On tire pas pendant l'apéro, c'est sacré !!!");
 
+    public static Error OnTirePasQuandLaPartieEstTerminée()
+        => new("On tire pas quand la partie est terminée");
 }
