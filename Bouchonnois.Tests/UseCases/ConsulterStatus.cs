@@ -1,11 +1,10 @@
-using Bouchonnois.Domain;
+using Bouchonnois.Domain.Common;
 using Bouchonnois.Tests.UseCases.Common;
+using Bouchonnois.UseCases;
 using Bouchonnois.UseCases.Exceptions;
-using Bouchonnois.UseCases.Queries;
-
 using static Bouchonnois.Tests.Builders.PartieDeChasseBuilder;
 
-namespace Bouchonnois.Tests.UseCases.Queries;
+namespace Bouchonnois.Tests.UseCases;
 
 public class ConsulterStatus : UseCaseTest
 {

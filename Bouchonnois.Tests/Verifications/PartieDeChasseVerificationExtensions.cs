@@ -1,4 +1,5 @@
 using Bouchonnois.Domain;
+using Bouchonnois.Domain.Common;
 
 namespace Bouchonnois.Tests.Verifications;
 
@@ -21,6 +22,18 @@ public static class PartieDeChasseVerificationExtensions
                         ],
                         $"Les events devraient contenir {message}."));
 
+    public static PartieDeChasse DevraitAvoirEmis(
+        this PartieDeChasse partieDeChasse,
+        Event @event)
+        => partieDeChasse.DevraitAvoirEmis(@event.Date, @event.Message);
+
+    public static PartieDeChasse NeDevraitRienAvoirEmis(this PartieDeChasse partieDeChasse)
+        => Assert(
+            partieDeChasse,
+            p =>
+                p.Events
+                    .Should()
+                    .HaveCount(0, "Les events devraient être vide."));
 
     private static Chasseur Chasseur(this PartieDeChasse partieDeChasse, string nom)
         => partieDeChasse

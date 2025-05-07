@@ -1,18 +1,16 @@
-using Bouchonnois.Domain;
+using Bouchonnois.Domain.Common;
 using Bouchonnois.Tests.UseCases.Common;
-using Bouchonnois.UseCases.Commands;
+using Bouchonnois.UseCases;
 using Bouchonnois.UseCases.Exceptions;
-
 using FsCheck;
 using FsCheck.Fluent;
 using FsCheck.Xunit;
-
 using static Bouchonnois.Tests.Builders.ChasseurBuilder;
 using static Bouchonnois.Tests.Builders.PartieDeChasseBuilder;
 using static Bouchonnois.Tests.Builders.TerrainBuilder;
 using static Bouchonnois.Tests.UseCases.Common.ArbitraryExtensions;
 
-namespace Bouchonnois.Tests.UseCases.Commands;
+namespace Bouchonnois.Tests.UseCases;
 
 using Terrain = (string nom, int nbGalinettes);
 using GroupDeChasseurs = (string nom, int nbBalles)[];

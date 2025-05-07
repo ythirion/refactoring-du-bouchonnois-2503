@@ -1,4 +1,6 @@
 using Bouchonnois.Domain;
+using Bouchonnois.Domain.Common;
+using CSharpFunctionalExtensions;
 
 namespace Bouchonnois.Tests.Doubles;
 
@@ -17,6 +19,15 @@ public class PartieDeChasseRepositoryForTests : IPartieDeChasseRepository
         => (_partiesDeChasse.ContainsKey(partieDeChasseId)
             ? _partiesDeChasse[partieDeChasseId]
             : null)!;
+
+    public Result<PartieDeChasse, Error> FindById(Guid partieDeChasseId)
+    {
+        var potentialPartieDeChasse = GetById(partieDeChasseId);
+        return potentialPartieDeChasse is not null
+            ? potentialPartieDeChasse
+            : Errors.LaPartieDeChasseNexistePas();
+    }
+
 
     public void Add(PartieDeChasse partieDeChasse) => _partiesDeChasse[partieDeChasse.Id] = partieDeChasse;
     public PartieDeChasse SavedPartieDeChasse() => _savedPartieDeChasse!;

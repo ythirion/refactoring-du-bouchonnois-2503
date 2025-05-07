@@ -1,7 +1,8 @@
 ﻿using Bouchonnois.Domain;
+using Bouchonnois.Domain.Common;
 using Bouchonnois.UseCases.Exceptions;
 
-namespace Bouchonnois.UseCases.Commands;
+namespace Bouchonnois.UseCases;
 
 public class TirerUseCase(IPartieDeChasseRepository repository, Func<DateTime> timeProvider)
 {

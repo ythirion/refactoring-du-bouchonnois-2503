@@ -1,7 +1,7 @@
 ﻿using Bouchonnois.Domain;
 using Bouchonnois.UseCases.Exceptions;
 
-namespace Bouchonnois.UseCases.Queries;
+namespace Bouchonnois.UseCases;
 
 public class ConsulterStatusUseCase(IPartieDeChasseRepository repository)
 {

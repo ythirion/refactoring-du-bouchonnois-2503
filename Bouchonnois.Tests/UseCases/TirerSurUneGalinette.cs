@@ -1,23 +1,20 @@
+using Bouchonnois.Domain.Common;
 using Bouchonnois.Tests.UseCases.Common;
 using Bouchonnois.Tests.Verifications;
-using Bouchonnois.UseCases.Commands;
-using Bouchonnois.UseCases.Exceptions;
-
 using static Bouchonnois.Tests.Builders.ChasseurBuilder;
 using static Bouchonnois.Tests.Builders.PartieDeChasseBuilder;
+using static Bouchonnois.UseCases.TirerSurGalinette;
 
-namespace Bouchonnois.Tests.UseCases.Commands;
+namespace Bouchonnois.Tests.UseCases;
 
 public class TirerSurUneGalinette : UseCaseTest
 {
-    private readonly TirerSurGalinetteUseCase _tirerSurGalinetteUseCase;
+    private readonly UseCase _tirerSurGalinette;
+
     public TirerSurUneGalinette()
-    {
-        _tirerSurGalinetteUseCase = new TirerSurGalinetteUseCase(
+        => _tirerSurGalinette = new UseCase(
             Repository,
-            () => Now
-        );
-    }
+            () => Now);
 
     [Fact]
     public void AvecUnChasseurAyantDesBallesEtAssezDeGalinettesSurLeTerrain()
@@ -28,7 +25,7 @@ public class TirerSurUneGalinette : UseCaseTest
                 .Avec(Bernard().AyantDesBalles(8).Brocouille())
                 .SurUnTerrainAyantGalinettes(3));
 
-        _tirerSurGalinetteUseCase.Handle(id, Bernard);
+        _tirerSurGalinette.Handle(new Request(id, Bernard));
 
         Repository.SavedPartieDeChasse()
             .DevraitAvoirEmis(Now, "Bernard tire sur une galinette")
@@ -41,9 +38,9 @@ public class TirerSurUneGalinette : UseCaseTest
     {
         var id = UnePartieDeChasseInexistante();
 
-        var tirerQuandPartieExistePas = () => _tirerSurGalinetteUseCase.Handle(id, "Bernard");
-
-        tirerQuandPartieExistePas.Should().Throw<LaPartieDeChasseNexistePas>();
+        _tirerSurGalinette.Handle(new Request(id, "Bernard"))
+            .Should()
+            .FailWith(Errors.LaPartieDeChasseNexistePas());
 
         Repository.SavedPartieDeChasse().Should().BeNull();
     }
@@ -57,9 +54,9 @@ public class TirerSurUneGalinette : UseCaseTest
                 .Avec(Bernard().SansBalles())
                 .SurUnTerrainAyantGalinettes(3));
 
-        var tirerSansBalle = () => _tirerSurGalinetteUseCase.Handle(id, Bernard);
-
-        tirerSansBalle.Should().Throw<TasPlusDeBallesMonVieuxChasseALaMain>();
+        _tirerSurGalinette.Handle(new Request(id, Bernard))
+            .Should()
+            .FailWith(Errors.TasPlusDeBallesMonVieuxChasseALaMain());
 
         Repository.SavedPartieDeChasse()
             .DevraitAvoirEmis(
@@ -76,11 +73,11 @@ public class TirerSurUneGalinette : UseCaseTest
                 .Avec(Bernard())
                 .SurUnTerrainSansGalinettes());
 
-        var tirerAlorsQuePasDeGalinettes = () => _tirerSurGalinetteUseCase.Handle(id, Bernard);
+        _tirerSurGalinette.Handle(new Request(id, Bernard))
+            .Should()
+            .FailWith(Errors.TasTropPicoléMonVieuxTasRienTouché());
 
-        tirerAlorsQuePasDeGalinettes.Should().Throw<TasTropPicoléMonVieuxTasRienTouché>();
-
-        Repository.SavedPartieDeChasse().Should().BeNull();
+        Repository.SavedPartieDeChasse().NeDevraitRienAvoirEmis();
     }
 
     [Fact]
@@ -91,11 +88,11 @@ public class TirerSurUneGalinette : UseCaseTest
                 .EnCours()
                 .SurUnTerrainRicheEnGalinettes());
 
-        var chasseurInconnuVeutTirer = () => _tirerSurGalinetteUseCase.Handle(id, ChasseurInconnu);
+        _tirerSurGalinette.Handle(new Request(id, ChasseurInconnu))
+            .Should()
+            .FailWith(Errors.ChasseurInconnu(ChasseurInconnu));
 
-        chasseurInconnuVeutTirer.Should().Throw<ChasseurInconnu>().WithMessage("Chasseur inconnu Chasseur inconnu");
-
-        Repository.SavedPartieDeChasse().Should().BeNull();
+        Repository.SavedPartieDeChasse().NeDevraitRienAvoirEmis();
     }
 
     [Fact]
@@ -104,26 +101,31 @@ public class TirerSurUneGalinette : UseCaseTest
         var id = UnePartieDeChasseExistante(
             UnePartieDeChasse()
                 .ALApéro()
+                .Avec(Bernard())
                 .SurUnTerrainRicheEnGalinettes());
 
-        var tirerEnPleinApéro = () => _tirerSurGalinetteUseCase.Handle(id, ChasseurInconnu);
-
-        tirerEnPleinApéro.Should().Throw<OnTirePasPendantLapéroCestSacré>();
+        _tirerSurGalinette.Handle(new Request(id, Bernard))
+            .Should()
+            .FailWith(Errors.OnTirePasPendantLapéroCestSacré());
 
         Repository.SavedPartieDeChasse()
-            .DevraitAvoirEmis(Now, "Chasseur inconnu veut tirer -> On tire pas pendant l'apéro, c'est sacré !!!");
+            .DevraitAvoirEmis(Now, "Bernard veut tirer -> On tire pas pendant l'apéro, c'est sacré !!!");
     }
 
     [Fact]
     public void EchoueSiLaPartieDeChasseEstTerminée()
     {
-        var id = UnePartieDeChasseExistante(UnePartieDeChasse().Terminée().SurUnTerrainRicheEnGalinettes());
+        var id = UnePartieDeChasseExistante(
+            UnePartieDeChasse()
+                .Terminée()
+                .Avec(Bernard())
+                .SurUnTerrainRicheEnGalinettes());
 
-        var tirerQuandTerminée = () => _tirerSurGalinetteUseCase.Handle(id, "Chasseur inconnu");
-
-        tirerQuandTerminée.Should().Throw<OnTirePasQuandLaPartieEstTerminée>();
+        _tirerSurGalinette.Handle(new Request(id, Bernard))
+            .Should()
+            .FailWith(Errors.OnTirePasQuandLaPartieEstTerminée());
 
         Repository.SavedPartieDeChasse()
-            .DevraitAvoirEmis(Now, "Chasseur inconnu veut tirer -> On tire pas quand la partie est terminée");
+            .DevraitAvoirEmis(Now, "Bernard veut tirer -> On tire pas quand la partie est terminée");
     }
 }
