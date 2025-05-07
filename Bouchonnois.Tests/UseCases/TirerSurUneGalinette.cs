@@ -77,7 +77,7 @@ public class TirerSurUneGalinette : UseCaseTest
             .Should()
             .FailWith(Errors.TasTropPicoléMonVieuxTasRienTouché());
 
-        Repository.SavedPartieDeChasse().Should().BeNull();
+        Repository.SavedPartieDeChasse().NeDevraitRienAvoirEmis();
     }
 
     [Fact]
@@ -92,7 +92,7 @@ public class TirerSurUneGalinette : UseCaseTest
             .Should()
             .FailWith(Errors.ChasseurInconnu(ChasseurInconnu));
 
-        Repository.SavedPartieDeChasse().Should().BeNull();
+        Repository.SavedPartieDeChasse().NeDevraitRienAvoirEmis();
     }
 
     [Fact]

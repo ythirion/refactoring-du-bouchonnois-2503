@@ -38,36 +38,36 @@ public class PartieDeChasse
         return this;
     }
 
-    public Result<PartieDeChasse, (Error, Maybe<PartieDeChasse>)> TirerSurGalinette(
+    public (PartieDeChasse, Maybe<Error>) TirerSurGalinette(
         string chasseur,
         Func<DateTime> timeProvider)
     {
         var result2 = Terrain.ChasseurTueUneGalinette();
-        if (result2.IsFailure) return (result2.Error, Maybe<PartieDeChasse>.None);
+        if (result2.IsFailure) return (this, result2.Error);
 
         if (LApéroEstEnCours())
         {
             Emet(new ChasseurAVouluTiréPendantLApéro(timeProvider(), chasseur));
-            return (OnTirePasPendantLapéroCestSacré(), this);
+            return (this, OnTirePasPendantLapéroCestSacré());
         }
 
         if (LaPartieEstTerminée())
         {
             Emet(new ChasseurAVouluTiréQuandPartieTerminée(timeProvider(), chasseur));
-            return (OnTirePasQuandLaPartieEstTerminée(), this);
+            return (this, OnTirePasQuandLaPartieEstTerminée());
         }
 
         var chasseurQuiTire = RetrieveChasseur(chasseur);
-        if (chasseurQuiTire.IsFailure) return (chasseurQuiTire.Error, Maybe<PartieDeChasse>.None);
-       
+        if (chasseurQuiTire.IsFailure) return (this, chasseurQuiTire.Error);
+
         var result = chasseurQuiTire
             .Bind(c => c.TireSurUneGalinette())
             .TapError(_ => Emet(new ChasseurSansBallesAVouluTiré(timeProvider(), chasseur)));
-        if (result.IsFailure) return (result.Error, this);
+        if (result.IsFailure) return (this, result.Error);
 
         Emet(new ChasseurATiréSurUneGalinette(timeProvider(), chasseur));
 
-        return this;
+        return (this, Maybe<Error>.None);
     }
 
     private Result<Chasseur, Error> RetrieveChasseur(string chasseur)
