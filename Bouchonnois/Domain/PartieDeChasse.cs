@@ -42,7 +42,8 @@ public class PartieDeChasse
         string chasseur,
         Func<DateTime> timeProvider)
     {
-        if (TerrainSansGalinettes()) return (TasTropPicoléMonVieuxTasRienTouché(), Maybe<PartieDeChasse>.None);
+        var result2 = Terrain.ChasseurTueUneGalinette();
+        if (result2.IsFailure) return (result2.Error, Maybe<PartieDeChasse>.None);
 
         if (LApéroEstEnCours())
         {
@@ -52,23 +53,19 @@ public class PartieDeChasse
 
         if (LaPartieEstTerminée())
         {
-            Events.Add(
-                new Event(
-                    timeProvider(),
-                    $"{chasseur} veut tirer -> On tire pas quand la partie est terminée"));
+            Emet(new ChasseurAVouluTiréQuandPartieTerminée(timeProvider(), chasseur));
             return (OnTirePasQuandLaPartieEstTerminée(), this);
         }
 
         var chasseurQuiTire = RetrieveChasseur(chasseur);
         if (chasseurQuiTire.IsFailure) return (chasseurQuiTire.Error, Maybe<PartieDeChasse>.None);
-
+       
         var result = chasseurQuiTire
-            .Bind(c => c.Tire())
+            .Bind(c => c.TireSurUneGalinette())
             .TapError(_ => Emet(new ChasseurSansBallesAVouluTiré(timeProvider(), chasseur)));
         if (result.IsFailure) return (result.Error, this);
 
-        Terrain.NbGalinettes--;
-        Events.Add(new Event(timeProvider(), $"{chasseur} tire sur une galinette"));
+        Emet(new ChasseurATiréSurUneGalinette(timeProvider(), chasseur));
 
         return this;
     }

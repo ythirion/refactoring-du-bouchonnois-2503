@@ -19,7 +19,7 @@ public class Chasseur
 
     public int NbGalinettes { get; set; }
 
-    public Result<Chasseur, Error> Tire()
+    public Result<Chasseur, Error> TireSurUneGalinette()
     {
         if (NaPlusDeBalles()) return TasPlusDeBallesMonVieuxChasseALaMain();
 
