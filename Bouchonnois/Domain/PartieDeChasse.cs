@@ -64,7 +64,7 @@ public class PartieDeChasse
 
         var result = chasseurQuiTire
             .Bind(c => c.Tire())
-            .TapError(c => Events.Add(new Event(timeProvider(), $"{chasseur} veut tirer sur une galinette -> T'as plus de balles mon vieux, chasse à la main")));
+            .TapError(_ => Emet(new ChasseurSansBallesAVouluTiré(timeProvider(), chasseur)));
         if (result.IsFailure) return (result.Error, this);
 
         Terrain.NbGalinettes--;
