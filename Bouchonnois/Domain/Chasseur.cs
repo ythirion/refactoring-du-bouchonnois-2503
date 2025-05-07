@@ -1,3 +1,7 @@
+using Bouchonnois.Domain.Common;
+using CSharpFunctionalExtensions;
+using static Bouchonnois.Domain.Common.Errors;
+
 namespace Bouchonnois.Domain;
 
 public class Chasseur
@@ -14,4 +18,16 @@ public class Chasseur
     public int BallesRestantes { get; set; }
 
     public int NbGalinettes { get; set; }
+
+    public Result<Chasseur, Error> Tire()
+    {
+        if (NaPlusDeBalles()) return TasPlusDeBallesMonVieuxChasseALaMain();
+
+        BallesRestantes--;
+        NbGalinettes++;
+
+        return this;
+    }
+
+    private bool NaPlusDeBalles() => BallesRestantes == 0;
 }

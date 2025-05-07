@@ -62,30 +62,15 @@ public class PartieDeChasse
         var chasseurQuiTire = RetrieveChasseur(chasseur);
         if (chasseurQuiTire.IsFailure) return (chasseurQuiTire.Error, Maybe<PartieDeChasse>.None);
 
-        var result = chasseurQuiTire.Bind(c => ChasseurTire(c, timeProvider));
+        var result = chasseurQuiTire
+            .Bind(c => c.Tire())
+            .TapError(c => Events.Add(new Event(timeProvider(), $"{chasseur} veut tirer sur une galinette -> T'as plus de balles mon vieux, chasse à la main")));
         if (result.IsFailure) return (result.Error, this);
 
         Terrain.NbGalinettes--;
         Events.Add(new Event(timeProvider(), $"{chasseur} tire sur une galinette"));
 
         return this;
-    }
-
-    private Result<Chasseur, Error> ChasseurTire(Chasseur chasseur, Func<DateTime> timeProvider)
-    {
-        if (chasseur.BallesRestantes == 0)
-        {
-            Events.Add(
-                new Event(
-                    timeProvider(),
-                    $"{chasseur.Nom} veut tirer sur une galinette -> T'as plus de balles mon vieux, chasse à la main"));
-            return TasPlusDeBallesMonVieuxChasseALaMain();
-        }
-
-        chasseur.BallesRestantes--;
-        chasseur.NbGalinettes++;
-
-        return chasseur;
     }
 
     private Result<Chasseur, Error> RetrieveChasseur(string chasseur)
