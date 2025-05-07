@@ -1,6 +1,7 @@
 ﻿using Bouchonnois.Domain.Common;
 using CSharpFunctionalExtensions;
 using static Bouchonnois.Domain.Common.Errors;
+using static CSharpFunctionalExtensions.UnitResult;
 
 namespace Bouchonnois.Domain;
 
@@ -38,36 +39,23 @@ public class PartieDeChasse
         return this;
     }
 
-    public (PartieDeChasse, Maybe<Error>) TirerSurGalinette(
-        string chasseur,
-        Func<DateTime> timeProvider)
+    public (PartieDeChasse, Maybe<Error>) TirerSurUneGalinette(string chasseur, Func<DateTime> timeProvider)
     {
-        var result2 = Terrain.ChasseurTueUneGalinette();
-        if (result2.IsFailure) return (this, result2.Error);
+        var (_, _, _, error) = Success<Error>()
+            .Bind(() => SAssurerQueLApéroEstEnCours().TapError(_ => Emet(new ChasseurAVouluTiréPendantLApéro(timeProvider(), chasseur))))
+            .Bind(() => SAssurerQueLaPartieEstTerminée().TapError(_ => Emet(new ChasseurAVouluTiréQuandPartieTerminée(timeProvider(), chasseur))))
+            .Bind(() => RetrieveChasseur(chasseur)
+                .Bind(c => c.TireSurUneGalinette().TapError(_ => Emet(new ChasseurSansBallesAVouluTiré(timeProvider(), chasseur))))
+                .Bind(_ => Terrain.ChasseurTueUneGalinette()))
+            .Tap(_ => Emet(new ChasseurATiréSurUneGalinette(timeProvider(), chasseur)));
 
-        if (LApéroEstEnCours())
-        {
-            Emet(new ChasseurAVouluTiréPendantLApéro(timeProvider(), chasseur));
-            return (this, OnTirePasPendantLapéroCestSacré());
-        }
+        return (this, error);
 
-        if (LaPartieEstTerminée())
-        {
-            Emet(new ChasseurAVouluTiréQuandPartieTerminée(timeProvider(), chasseur));
-            return (this, OnTirePasQuandLaPartieEstTerminée());
-        }
+        UnitResult<Error> SAssurerQueLApéroEstEnCours()
+            => FailureIf(LApéroEstEnCours, OnTirePasPendantLapéroCestSacré());
 
-        var chasseurQuiTire = RetrieveChasseur(chasseur);
-        if (chasseurQuiTire.IsFailure) return (this, chasseurQuiTire.Error);
-
-        var result = chasseurQuiTire
-            .Bind(c => c.TireSurUneGalinette())
-            .TapError(_ => Emet(new ChasseurSansBallesAVouluTiré(timeProvider(), chasseur)));
-        if (result.IsFailure) return (this, result.Error);
-
-        Emet(new ChasseurATiréSurUneGalinette(timeProvider(), chasseur));
-
-        return (this, Maybe<Error>.None);
+        UnitResult<Error> SAssurerQueLaPartieEstTerminée()
+            => FailureIf(LaPartieEstTerminée, OnTirePasQuandLaPartieEstTerminée());
     }
 
     private Result<Chasseur, Error> RetrieveChasseur(string chasseur)
@@ -81,6 +69,4 @@ public class PartieDeChasse
     private bool LaPartieEstTerminée() => Status == PartieStatus.Terminée;
 
     private bool LApéroEstEnCours() => Status == PartieStatus.Apéro;
-
-    private bool TerrainSansGalinettes() => Terrain.NbGalinettes == 0;
 }
