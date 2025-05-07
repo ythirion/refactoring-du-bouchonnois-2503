@@ -59,10 +59,10 @@ public class PartieDeChasse
             return (OnTirePasQuandLaPartieEstTerminée(), this);
         }
 
-        var chasseurQuiTire = Chasseurs.FirstOrDefault(c => c.Nom == chasseur);
-        if (chasseurQuiTire is null) return (ChasseurInconnu(chasseur), Maybe<PartieDeChasse>.None);
+        var chasseurQuiTire = RetrieveChasseur(chasseur);
+        if (chasseurQuiTire.IsFailure) return (chasseurQuiTire.Error, Maybe<PartieDeChasse>.None);
 
-        if (chasseurQuiTire.BallesRestantes == 0)
+        if (chasseurQuiTire.Value.BallesRestantes == 0)
         {
             Events.Add(
                 new Event(
@@ -71,12 +71,18 @@ public class PartieDeChasse
             return (TasPlusDeBallesMonVieuxChasseALaMain(), this);
         }
 
-        chasseurQuiTire.BallesRestantes--;
-        chasseurQuiTire.NbGalinettes++;
+        chasseurQuiTire.Value.BallesRestantes--;
+        chasseurQuiTire.Value.NbGalinettes++;
         Terrain.NbGalinettes--;
         Events.Add(new Event(timeProvider(), $"{chasseur} tire sur une galinette"));
 
         return this;
+    }
+
+    private Result<Chasseur, Error> RetrieveChasseur(string chasseur)
+    {
+        var result = Chasseurs.Find(c => c.Nom == chasseur);
+        return result is null ? ChasseurInconnu(chasseur) : result;
     }
 
     private void Emet(Event @event) => Events.Add(@event);
