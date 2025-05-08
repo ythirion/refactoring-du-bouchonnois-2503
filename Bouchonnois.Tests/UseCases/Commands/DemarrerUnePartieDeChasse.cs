@@ -1,5 +1,6 @@
 using Bouchonnois.Domain;
 using Bouchonnois.Tests.UseCases.Common;
+using Bouchonnois.Tests.Verifications;
 using Bouchonnois.UseCases.Commands;
 
 using FsCheck;
@@ -94,7 +95,8 @@ public class DemarrerUnePartieDeChasse : UseCaseTest
 
             _sut.Handle(new DemarrerRequest(terrainDeChasse, chasseurs))
                 .Should()
-                .FailWith(Error.ImpossibleDeDémarrerUnePartieSansChasseurError());
+                .FailWith(Error.ImpossibleDeDémarrerUnePartieSansChasseurError())
+                .ExpectMessageToBe("Impossible de démarrer une partie sans chasseur");
 
             Repository.SavedPartieDeChasse().Should().BeNull();
         }
@@ -107,7 +109,8 @@ public class DemarrerUnePartieDeChasse : UseCaseTest
 
             _sut.Handle(new DemarrerRequest(terrainDeChasse, chasseurs))
                 .Should()
-                .FailWith(Error.ImpossibleDeDémarrerUnePartieSansGalinettesError());
+                .FailWith(Error.ImpossibleDeDémarrerUnePartieSansGalinettesError())
+                .ExpectMessageToBe("Impossible de démarrer une partie sans galinettes");
 
             Repository.SavedPartieDeChasse().Should().BeNull();
         }
@@ -126,7 +129,8 @@ public class DemarrerUnePartieDeChasse : UseCaseTest
             _sut
                 .Handle(new DemarrerRequest(terrainDeChasse, chasseurs))
                 .Should()
-                .FailWith(Error.ImpossibleDeDémarrerUnePartieAvecUnChasseurSansBalleError());
+                .FailWith(Error.ImpossibleDeDémarrerUnePartieAvecUnChasseurSansBalleError())
+                .ExpectMessageToBe("Impossible de démarrer une partie avec un chasseur sans balle");
 
             Repository.SavedPartieDeChasse().Should().BeNull();
         }

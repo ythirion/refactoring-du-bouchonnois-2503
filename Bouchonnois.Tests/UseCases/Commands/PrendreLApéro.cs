@@ -47,7 +47,8 @@ public class PrendreLApéro : UseCaseTest
             _prendereLAperoUseCase
                 .Handle(id)
                 .Should()
-                .FailWith(UseCasesErrorMessages.LaPartieDeChasseNExistePas());
+                .FailWith(UseCasesErrorMessages.LaPartieDeChasseNExistePas())
+                .ExpectMessageToBe("La partie de chasse n'existe pas");
 
             Repository.SavedPartieDeChasse().Should().BeNull();
         }
@@ -60,7 +61,8 @@ public class PrendreLApéro : UseCaseTest
             _prendereLAperoUseCase
                 .Handle(id)
                 .Should()
-                .FailWith(Error.OnEstDéjàEnTrainDePrendreLApéroError());
+                .FailWith(Error.OnEstDéjàEnTrainDePrendreLApéroError())
+                .ExpectMessageToBe("On est déjà en train de prendre l'apéro");
 
             Repository.SavedPartieDeChasse().Should().BeNull();
         }
@@ -73,7 +75,8 @@ public class PrendreLApéro : UseCaseTest
             _prendereLAperoUseCase
                 .Handle(id)
                 .Should()
-                .FailWith(Error.OnNePrendPasLApéroQuandLaPartieEstTerminéeError());
+                .FailWith(Error.OnNePrendPasLApéroQuandLaPartieEstTerminéeError())
+                .ExpectMessageToBe("On ne prend pas l'apéro quand la partie est terminée");
 
             Repository.SavedPartieDeChasse().Should().BeNull();
         }

@@ -57,7 +57,9 @@ public class Tirer : UseCaseTest
             _tirerUseCase
                 .Handle(id, Bernard)
                 .Should()
-                .FailWith(UseCasesErrorMessages.LaPartieDeChasseNExistePas());
+                .FailWith(UseCasesErrorMessages.LaPartieDeChasseNExistePas())
+                .ExpectMessageToBe("La partie de chasse n'existe pas");
+
 
             Repository.SavedPartieDeChasse().Should().BeNull();
         }
@@ -73,7 +75,8 @@ public class Tirer : UseCaseTest
             _tirerUseCase
                 .Handle(id, Bernard)
                 .Should()
-                .FailWith(Error.TasPlusDeBallesMonVieuxChasseALaMainError());
+                .FailWith(Error.TasPlusDeBallesMonVieuxChasseALaMainError())
+                .ExpectMessageToBe("T'as plus de balles mon vieux, chasse à la main");
 
             Repository.SavedPartieDeChasse()
                 .DevraitAvoirEmis(Now, "Bernard tire -> T'as plus de balles mon vieux, chasse à la main");
@@ -87,7 +90,8 @@ public class Tirer : UseCaseTest
             _tirerUseCase
                 .Handle(id, ChasseurInconnu)
                 .Should()
-                .FailWith(Error.LeChasseurNestPasDansLaPartieError());
+                .FailWith(Error.LeChasseurNestPasDansLaPartieError())
+                .ExpectMessageToBe("Chasseur inconnu");
 
             Repository.SavedPartieDeChasse().Should().BeNull();
         }
@@ -100,7 +104,9 @@ public class Tirer : UseCaseTest
             _tirerUseCase
                 .Handle(id, ChasseurInconnu)
                 .Should()
-                .FailWith(Error.OnTirePasPendantLapéroCestSacréError());
+                .FailWith(Error.OnTirePasPendantLapéroCestSacréError())
+                .ExpectMessageToBe("On tire pas pendant l'apéro, c'est sacré !!!");
+            ;
 
             Repository.SavedPartieDeChasse()
                 .DevraitAvoirEmis(Now, "Chasseur inconnu veut tirer -> On tire pas pendant l'apéro, c'est sacré !!!");
@@ -113,7 +119,8 @@ public class Tirer : UseCaseTest
 
             _tirerUseCase.Handle(id, ChasseurInconnu)
                 .Should()
-                .FailWith(Error.OnTirePasQuandLaPartieEstTerminéeError());
+                .FailWith(Error.OnTirePasQuandLaPartieEstTerminéeError())
+                .ExpectMessageToBe("On tire pas quand la partie est terminée");
 
             Repository.SavedPartieDeChasse()
                 .DevraitAvoirEmis(Now, "Chasseur inconnu veut tirer -> On tire pas quand la partie est terminée");

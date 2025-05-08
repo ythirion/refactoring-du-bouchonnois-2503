@@ -137,7 +137,9 @@ public class TerminerLaPartieDeChasse : UseCaseTest
 
             var result = _sut.Handle(id);
 
-            result.Should().FailWith(Error.QuandCestFiniCestFiniError());
+            result.Should()
+                .FailWith(Error.QuandCestFiniCestFiniError())
+                .ExpectMessageToBe("Quand c'est fini c'est fini");
 
             Repository.SavedPartieDeChasse().Should().BeNull();
         }
@@ -149,7 +151,8 @@ public class TerminerLaPartieDeChasse : UseCaseTest
 
             var result = _sut.Handle(id);
 
-            result.Should().FailWith(UseCasesErrorMessages.LaPartieDeChasseNExistePas());
+            result.Should().FailWith(UseCasesErrorMessages.LaPartieDeChasseNExistePas())
+                .ExpectMessageToBe("La partie de chasse n'existe pas");
 
             Repository.SavedPartieDeChasse().Should().BeNull();
         }

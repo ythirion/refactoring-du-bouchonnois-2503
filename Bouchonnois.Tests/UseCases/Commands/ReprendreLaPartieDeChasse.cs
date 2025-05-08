@@ -40,7 +40,9 @@ public class ReprendreLaPartieDeChasse : UseCaseTest
 
             var result = _reprendreLaPartieUseCase.Handle(id);
 
-            result.Should().FailWith(UseCasesErrorMessages.LaPartieDeChasseNExistePas());
+            result.Should()
+                .FailWith(UseCasesErrorMessages.LaPartieDeChasseNExistePas())
+                .ExpectMessageToBe("La partie de chasse n'existe pas");
 
             Repository.SavedPartieDeChasse().Should().BeNull();
         }
@@ -52,7 +54,10 @@ public class ReprendreLaPartieDeChasse : UseCaseTest
 
             var result = _reprendreLaPartieUseCase.Handle(id);
 
-            result.Should().FailWith(Error.LaPartieDeChasseEstDejaEnCoursError());
+            result.Should()
+                .FailWith(Error.LaPartieDeChasseEstDejaEnCoursError())
+                .ExpectMessageToBe("La partie de chasse est déjà en cours");
+            ;
 
             Repository.SavedPartieDeChasse().Should().BeNull();
         }
@@ -64,7 +69,9 @@ public class ReprendreLaPartieDeChasse : UseCaseTest
 
             var result = _reprendreLaPartieUseCase.Handle(id);
 
-            result.Should().FailWith(Error.QuandCestFiniCestFiniError());
+            result.Should()
+                .FailWith(Error.QuandCestFiniCestFiniError())
+                .ExpectMessageToBe("Quand c'est fini c'est fini");
 
             Repository.SavedPartieDeChasse().Should().BeNull();
         }
