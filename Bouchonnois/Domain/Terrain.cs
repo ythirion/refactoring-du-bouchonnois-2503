@@ -22,6 +22,6 @@ public class Terrain
         }
 
         NbGalinettes--;
-        return UnitResult.Success<Error>();
+        return UnitResultExtensions.Success();
     }
 }

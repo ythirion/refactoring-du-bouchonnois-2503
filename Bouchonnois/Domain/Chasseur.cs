@@ -32,6 +32,6 @@ public class Chasseur
     private UnitResult<Error> ADesBalles()
         => BallesRestantes == 0
             ? Error.TasPlusDeBallesMonVieuxChasseALaMainError()
-            : UnitResult.Success<Error>();
+            : UnitResultExtensions.Success();
 
 }

@@ -30,8 +30,6 @@ public class PartieDeChasse
         => _groupeDeChasseurs.GetChasseurWithName(chasseur)
             .ToResult(Error.LeChasseurNestPasDansLaPartieError());
 
-    public bool EstSansChasseur() => _groupeDeChasseurs.Empty();
-
     public UnitResult<Error> PasserAlApéro(DateTime eventTime)
     {
         return Status switch
@@ -46,7 +44,7 @@ public class PartieDeChasse
             Status = PartieStatus.Apéro;
             Emet(new PetitAperoEvent(now));
 
-            return UnitResult.Success<Error>();
+            return UnitResultExtensions.Success();
         }
     }
     public UnitResult<Error> ReprendreLaPartie(DateTime eventTime)
@@ -63,7 +61,7 @@ public class PartieDeChasse
             Status = PartieStatus.EnCours;
             Emet(new RepriseDeLaChasseEvent(now));
 
-            return UnitResult.Success<Error>();
+            return UnitResultExtensions.Success();
         }
     }
 
@@ -78,55 +76,55 @@ public class PartieDeChasse
 
         return _groupeDeChasseurs
             .GetVainqueurs()
-            .TapError(brocouille => Emet(new TermineBrocouilleEvent(eventTime)))
             .Tap(vainqueurs => Emet(new TermineAvecDesVainqueursEvent(eventTime, vainqueurs)))
+            .TapError(_ => Emet(new TermineBrocouilleEvent(eventTime)))
             .Finally(result => result.IsSuccess
                 ? result.Value.VainqueursNames()
                 : result.Error.ToString());
     }
 
-    public UnitResult<Error> ChasseurTireSurUneGalinette(string nom, DateTime timeProvider, Action<PartieDeChasse> action)
+    public UnitResult<Error> ChasseurTireSurUneGalinette(DateTime eventTime, string nom, Action<PartieDeChasse> action)
         => AvecDeGalinettes()
-            .Ensure(() => EstEnCours(nom, timeProvider, action))
+            .Ensure(() => EstEnCours(nom, eventTime, action))
             .Bind(() => GetChasseur(nom))
-            .Bind(chasseur => TireSurLaGalinette(nom, timeProvider, action, chasseur));
+            .Bind(chasseur => TireSurLaGalinette(eventTime, chasseur, action));
 
-    private UnitResult<Error> TireSurLaGalinette(string nom, DateTime timeProvider, Action<PartieDeChasse> action, Chasseur chasseur)
+    private UnitResult<Error> TireSurLaGalinette(DateTime eventTime, Chasseur chasseur, Action<PartieDeChasse> action)
         => chasseur
             .TireSurUneGalinette()
             .Tap(() => Terrain.UneGalinetteEnMoins())
-            .Tap(() => { Emet(new TireSurUneGalinetteEvent(timeProvider, nom)); })
+            .Tap(() => Emet(new TireSurUneGalinetteEvent(eventTime, chasseur.Nom)))
             .TapError(_ =>
             {
-                Emet(new TireSurUneGalinetteEchoueSansBalleEvent(timeProvider, nom));
+                Emet(new TireSurUneGalinetteEchoueSansBalleEvent(eventTime, chasseur.Nom));
                 action(this);
             });
 
     public UnitResult<Error> EstEnCours(string chasseur,
-        DateTime timeProvider,
+        DateTime eventTime,
         Action<PartieDeChasse> action)
     {
         switch (Status)
         {
             case PartieStatus.Apéro:
-                Emet(new TireEchouePendantLAperoEvent(timeProvider, chasseur));
+                Emet(new TireEchouePendantLAperoEvent(eventTime, chasseur));
                 action(this);
 
                 return Error.OnTirePasPendantLapéroCestSacréError();
             case PartieStatus.Terminée:
-                Emet(new TireEchoueCarPartieTerminéeEvent(timeProvider, chasseur));
+                Emet(new TireEchoueCarPartieTerminéeEvent(eventTime, chasseur));
                 action(this);
 
                 return Error.OnTirePasQuandLaPartieEstTerminéeError();
             default:
-                return UnitResult.Success<Error>();
+                return UnitResultExtensions.Success();
         }
     }
 
     private UnitResult<Error> AvecDeGalinettes()
         => Terrain.NbGalinettes == 0
             ? Error.TasTropPicoléMonVieuxTasRienTouchéError()
-            : UnitResult.Success<Error>();
+            : UnitResultExtensions.Success();
 
     public void Emet(Event @event) => Events.Add(@event);
 }

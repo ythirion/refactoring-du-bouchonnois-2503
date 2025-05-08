@@ -24,7 +24,8 @@ public class TirerUseCase(IPartieDeChasseRepository repository, Func<DateTime> t
             .Map(c => (p, c));
 
     private UnitResult<Error> Tire((PartieDeChasse partie, Chasseur tireur) context)
-        => context.tireur.TireDansLeVide()
+        => context.tireur
+            .TireDansLeVide()
             .Tap(() =>
             {
                 context.partie

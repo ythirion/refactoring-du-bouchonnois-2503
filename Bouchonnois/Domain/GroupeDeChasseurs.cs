@@ -7,31 +7,21 @@ namespace Bouchonnois.Domain;
 public class GroupeDeChasseurs(List<Chasseur>? chasseurs)
 {
     private readonly List<Chasseur> _chasseurs = chasseurs ?? [];
-    public void Add(Chasseur chasseur) => _chasseurs.Add(chasseur);
-
-    public IReadOnlyCollection<Chasseur> Get()
-        => new ReadOnlyCollection<Chasseur>(_chasseurs.ToArray());
 
     public Result<GroupeDeVainqueurs, Brocouille> GetVainqueurs()
-    {
-        var classement = _chasseurs
+        => _chasseurs
             .GroupBy(c => c.NbGalinettes)
             .OrderByDescending(g => g.Key)
-            .ToList();
+            .First() is var meilleurs && meilleurs.Key == 0
+            ? PasDeVainqueurs()
+            : new GroupeDeVainqueurs(meilleurs.ToList());
 
-        if (classement.All(group => group.Key == 0))
-        {
-            return Result.Failure<GroupeDeVainqueurs, Brocouille>(new Brocouille());
-        }
-
-        return Result.Success<GroupeDeVainqueurs, Brocouille>(
-            new GroupeDeVainqueurs(classement.First().ToList()));
-    }
     public Maybe<Chasseur> GetChasseurWithName(string name) => _chasseurs
         .FirstOrDefault(c => c.Nom == name);
 
-    public bool Empty() => !_chasseurs.Any();
-
+    private Result<GroupeDeVainqueurs, Brocouille> PasDeVainqueurs() => new Brocouille();
+    internal IReadOnlyCollection<Chasseur> Get()
+        => new ReadOnlyCollection<Chasseur>(_chasseurs.ToArray());
 }
 
 public static class GroupeDeChasseursExtensions

@@ -12,8 +12,7 @@ public class TirerSurGalinetteUseCase(IPartieDeChasseRepository repository, Func
             .GetById(id)
             .ToResult(UseCasesErrorMessages.LaPartieDeChasseNExistePas())
             .Bind(p => p
-                .ChasseurTireSurUneGalinette(chasseur,
-                    timeProvider(),
-                    p => repository.Save(p))
+                .ChasseurTireSurUneGalinette(timeProvider(),
+                    chasseur, p => repository.Save(p))
                 .Tap(() => repository.Save(p)));
 }

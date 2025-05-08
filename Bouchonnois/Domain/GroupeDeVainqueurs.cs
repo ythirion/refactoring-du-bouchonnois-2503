@@ -2,9 +2,7 @@
 
 namespace Bouchonnois.Domain;
 
-public class GroupeDeVainqueurs(List<Chasseur> vainqueurs) : Collection<Chasseur>(vainqueurs)
-{
-}
+public class GroupeDeVainqueurs(List<Chasseur> vainqueurs) : Collection<Chasseur>(vainqueurs);
 
 public static class GroupeDeVainqueursExtensions
 {
