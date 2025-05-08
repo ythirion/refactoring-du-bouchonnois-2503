@@ -42,7 +42,7 @@ public class ScenarioTests
         var terrainDeChasse = ("Pitibon sur Sauldre", 4);
 
         var guidOrError = _demarrer
-            .Handle(terrainDeChasse, chasseurs);
+            .Handle(new DemarrerRequest(terrainDeChasse, chasseurs));
         guidOrError
             .Should()
             .Succeed();

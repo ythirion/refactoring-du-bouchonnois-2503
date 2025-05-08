@@ -39,7 +39,7 @@ public class DemarrerUnePartieDeChasse : UseCaseTest
         var terrainDeChasse = ("Pitibon sur Sauldre", 3);
 
         var guidOrError
-            = _sut.Handle(terrainDeChasse, chasseurs);
+            = _sut.Handle(new DemarrerRequest(terrainDeChasse, chasseurs));
         guidOrError
             .Should()
             .Succeed();
@@ -76,7 +76,7 @@ public class DemarrerUnePartieDeChasse : UseCaseTest
         => DémarrerLaPartieAvecSuccès(terrainRicheEnGalinettes, chasseursAvecDesBalles);
 
     private Property DémarrerLaPartieAvecSuccès(Terrain terrainDeChasse, GroupDeChasseurs chasseurs)
-        => (_sut.Handle(terrainDeChasse, chasseurs.ToList()).Value == Repository.SavedPartieDeChasse().Id)
+        => (_sut.Handle(new DemarrerRequest(terrainDeChasse, chasseurs.ToList())).Value == Repository.SavedPartieDeChasse().Id)
             .Label("Démarrer la partie avec succès");
 
     public class Failure : UseCaseTest
@@ -93,7 +93,7 @@ public class DemarrerUnePartieDeChasse : UseCaseTest
             var chasseurs = new List<(string, int)>();
             var terrainDeChasse = ("Pitibon sur Sauldre", 3);
 
-            _sut.Handle(terrainDeChasse, chasseurs)
+            _sut.Handle(new DemarrerRequest(terrainDeChasse, chasseurs))
                 .Should()
                 .FailWith(new Error(DomainErrorMessages.ImpossibleDeDémarrerUnePartieSansChasseur));
 
@@ -106,7 +106,7 @@ public class DemarrerUnePartieDeChasse : UseCaseTest
             var chasseurs = new List<(string, int)>();
             var terrainDeChasse = ("Pitibon sur Sauldre", 0);
 
-            _sut.Handle(terrainDeChasse, chasseurs)
+            _sut.Handle(new DemarrerRequest(terrainDeChasse, chasseurs))
                 .Should()
                 .FailWith(new Error(DomainErrorMessages.ImpossibleDeDémarrerUnePartieSansGalinettes));
 
@@ -125,7 +125,7 @@ public class DemarrerUnePartieDeChasse : UseCaseTest
             var terrainDeChasse = ("Pitibon sur Sauldre", 3);
 
             _sut
-                .Handle(terrainDeChasse, chasseurs)
+                .Handle(new DemarrerRequest(terrainDeChasse, chasseurs))
                 .Should()
                 .FailWith(new Error(DomainErrorMessages.ImpossibleDeDémarrerUnePartieAvecUnChasseurSansBalle));
 
