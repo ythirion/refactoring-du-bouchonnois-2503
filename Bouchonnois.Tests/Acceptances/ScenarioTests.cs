@@ -1,5 +1,4 @@
 using Bouchonnois.Tests.Doubles;
-using Bouchonnois.UseCases;
 using Bouchonnois.UseCases.Commands;
 using Bouchonnois.UseCases.Queries;
 
@@ -39,9 +38,16 @@ public class ScenarioTests
             ("Bernard", 8),
             ("Robert", 12)
         };
+
         var terrainDeChasse = ("Pitibon sur Sauldre", 4);
 
-        var id = _demarrer.Handle(terrainDeChasse, chasseurs);
+        var guidOrError = _demarrer
+            .Handle(new DemarrerRequest(terrainDeChasse, chasseurs));
+        guidOrError
+            .Should()
+            .Succeed();
+
+        var id = guidOrError.Value;
 
         After(10.MinutesLater(), () => _tirer.Handle(id, "Dédé"));
         After(30.MinutesLater(), () => _tirerSurGalinette.Handle(id, "Robert"));
@@ -64,7 +70,9 @@ public class ScenarioTests
         After(30.MinutesLater(), () => _terminerLaPartie.Handle(id));
         // @formatter:on
 
-        await Verify(_consulterStatus.Handle(id));
+        await Verify(_consulterStatus
+            .Handle(id)
+            .Value);
     }
 
     private void After(TimeSpan time, Action scenarioAction)

@@ -4,7 +4,7 @@ namespace Bouchonnois.Tests.Builders;
 
 public class PartieDeChasseBuilder
 {
-    private List<Chasseur> _chasseurs = [];
+    private List<Chasseur>? _chasseurs = [];
     private List<Event> _events = [];
     private Guid _id = Guid.NewGuid();
     private PartieStatus _status = PartieStatus.EnCours;
@@ -36,7 +36,7 @@ public class PartieDeChasseBuilder
         return this;
     }
 
-    public PartieDeChasseBuilder Avec(params List<Chasseur> chasseurs)
+    public PartieDeChasseBuilder Avec(params List<Chasseur>? chasseurs)
     {
         _chasseurs = chasseurs;
         return this;
@@ -73,10 +73,15 @@ public class PartieDeChasseBuilder
     }
 
     public PartieDeChasse Build()
-        => new(
+    {
+        var partie = new PartieDeChasse(
             _id,
-            chasseurs: _chasseurs,
+            getChasseurs: _chasseurs,
             terrain: _terrainBuilder.Build(),
-            status: _status,
-            events: _events);
+            status: _status);
+
+        _events.ForEach(@event => partie.Events.Add(@event));
+
+        return partie;
+    }
 }

@@ -1,3 +1,5 @@
+using CSharpFunctionalExtensions;
+
 namespace Bouchonnois.Domain;
 
 public class Chasseur
@@ -11,7 +13,25 @@ public class Chasseur
 
     public string Nom { get; }
 
-    public int BallesRestantes { get; set; }
+    public int BallesRestantes { get; private set; }
 
-    public int NbGalinettes { get; set; }
+    public int NbGalinettes { get; private set; }
+
+    public UnitResult<Error> TireDansLeVide()
+        => ADesBalles()
+            .Tap(() => BallesRestantes--);
+
+    public UnitResult<Error> TireSurUneGalinette()
+        => ADesBalles()
+            .Tap(() =>
+            {
+                BallesRestantes--;
+                NbGalinettes++;
+            });
+
+    private UnitResult<Error> ADesBalles()
+        => BallesRestantes == 0
+            ? Error.TasPlusDeBallesMonVieuxChasseALaMainError()
+            : UnitResultExtensions.Success();
+
 }

@@ -1,7 +1,8 @@
+using Bouchonnois.Domain;
 using Bouchonnois.Tests.UseCases.Common;
 using Bouchonnois.Tests.Verifications;
 using Bouchonnois.UseCases.Commands;
-using Bouchonnois.UseCases.Exceptions;
+using Bouchonnois.UseCases.Errors;
 
 using static Bouchonnois.Tests.Builders.ChasseurBuilder;
 using static Bouchonnois.Tests.Builders.PartieDeChasseBuilder;
@@ -27,12 +28,13 @@ public class TerminerLaPartieDeChasse : UseCaseTest
                     Bernard().Brocouille(),
                     Robert().AyantCapturéGalinettes(2)));
 
-        var meilleurChasseur = _sut.Handle(id);
-
-        meilleurChasseur.Should().Be(Robert);
+        _sut.Handle(id)
+            .Should()
+            .SucceedWith(Robert);
 
         Repository.SavedPartieDeChasse()
-            .DevraitAvoirEmis(Now, "La partie de chasse est terminée, vainqueur : Robert - 2 galinettes");
+            .DevraitAvoirEmis(Now, "La partie de chasse est terminée, vainqueur : Robert - 2 galinettes")
+            .DevraitEtreTerminé();
     }
 
     [Fact]
@@ -43,12 +45,13 @@ public class TerminerLaPartieDeChasse : UseCaseTest
                 .EnCours()
                 .Avec(Robert().AyantCapturéGalinettes(2)));
 
-        var meilleurChasseur = _sut.Handle(id);
-
-        meilleurChasseur.Should().Be(Robert);
+        _sut.Handle(id)
+            .Should()
+            .SucceedWith(Robert);
 
         Repository.SavedPartieDeChasse()
-            .DevraitAvoirEmis(Now, "La partie de chasse est terminée, vainqueur : Robert - 2 galinettes");
+            .DevraitAvoirEmis(Now, "La partie de chasse est terminée, vainqueur : Robert - 2 galinettes")
+            .DevraitEtreTerminé();
     }
 
     [Fact]
@@ -62,14 +65,15 @@ public class TerminerLaPartieDeChasse : UseCaseTest
                     Bernard().AyantCapturéGalinettes(2),
                     Robert().Brocouille()));
 
-        var meilleurChasseur = _sut.Handle(id);
-
-        meilleurChasseur.Should().Be("Dédé, Bernard");
+        _sut.Handle(id)
+            .Should()
+            .SucceedWith("Dédé, Bernard");
 
         Repository.SavedPartieDeChasse()
             .DevraitAvoirEmis(
                 Now,
-                "La partie de chasse est terminée, vainqueur : Dédé - 2 galinettes, Bernard - 2 galinettes");
+                "La partie de chasse est terminée, vainqueur : Dédé - 2 galinettes, Bernard - 2 galinettes")
+            .DevraitEtreTerminé();
     }
 
     [Fact]
@@ -83,14 +87,15 @@ public class TerminerLaPartieDeChasse : UseCaseTest
                     Bernard().Brocouille(),
                     Robert().Brocouille()));
 
-        var meilleurChasseur = _sut.Handle(id);
-
-        meilleurChasseur.Should().Be("Brocouille");
+        _sut.Handle(id)
+            .Should()
+            .SucceedWith("Brocouille");
 
         Repository.SavedPartieDeChasse()
             .DevraitAvoirEmis(
                 Now,
-                "La partie de chasse est terminée, vainqueur : Brocouille");
+                "La partie de chasse est terminée, vainqueur : Brocouille")
+            .DevraitEtreTerminé();
     }
 
     [Fact]
@@ -104,27 +109,52 @@ public class TerminerLaPartieDeChasse : UseCaseTest
                     Bernard().AyantCapturéGalinettes(3),
                     Robert().AyantCapturéGalinettes(3)));
 
-        var meilleurChasseur = _sut.Handle(id);
-
-        meilleurChasseur.Should().Be("Dédé, Bernard, Robert");
+        _sut.Handle(id)
+            .Should()
+            .SucceedWith("Dédé, Bernard, Robert");
 
         Repository.SavedPartieDeChasse()
             .DevraitAvoirEmis(
                 Now,
-                "La partie de chasse est terminée, vainqueur : Dédé - 3 galinettes, Bernard - 3 galinettes, Robert - 3 galinettes");
+                "La partie de chasse est terminée, vainqueur : Dédé - 3 galinettes, Bernard - 3 galinettes, Robert - 3 galinettes")
+            .DevraitEtreTerminé();
     }
 
-    [Fact]
-    public void EchoueSiLaPartieDeChasseEstDéjàTerminée()
+    public class Failure : UseCaseTest
     {
-        var id = UnePartieDeChasseExistante(
-            UnePartieDeChasse()
-                .Terminée());
+        private readonly TerminerLaPartieUseCase _sut;
+        public Failure()
+        {
+            _sut = new TerminerLaPartieUseCase(Repository, () => Now);
+        }
 
-        var prendreLapéroQuandTerminée = () => _sut.Handle(id);
+        [Fact]
+        public void EchoueSiLaPartieDeChasseEstDéjàTerminée()
+        {
+            var id = UnePartieDeChasseExistante(
+                UnePartieDeChasse()
+                    .Terminée());
 
-        prendreLapéroQuandTerminée.Should().Throw<QuandCestFiniCestFini>();
+            var result = _sut.Handle(id);
 
-        Repository.SavedPartieDeChasse().Should().BeNull();
+            result.Should()
+                .FailWith(Error.QuandCestFiniCestFiniError())
+                .ExpectMessageToBe("Quand c'est fini c'est fini");
+
+            Repository.SavedPartieDeChasse().Should().BeNull();
+        }
+
+        [Fact]
+        public void EchoueSiLaPartieDeChasseNExsitePas()
+        {
+            var id = UnePartieDeChasseInexistante();
+
+            var result = _sut.Handle(id);
+
+            result.Should().FailWith(UseCasesErrorMessages.LaPartieDeChasseNExistePas())
+                .ExpectMessageToBe("La partie de chasse n'existe pas");
+
+            Repository.SavedPartieDeChasse().Should().BeNull();
+        }
     }
 }

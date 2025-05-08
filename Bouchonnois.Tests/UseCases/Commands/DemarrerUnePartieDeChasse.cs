@@ -1,7 +1,7 @@
 using Bouchonnois.Domain;
 using Bouchonnois.Tests.UseCases.Common;
+using Bouchonnois.Tests.Verifications;
 using Bouchonnois.UseCases.Commands;
-using Bouchonnois.UseCases.Exceptions;
 
 using FsCheck;
 using FsCheck.Fluent;
@@ -19,10 +19,10 @@ using GroupDeChasseurs = (string nom, int nbBalles)[];
 
 public class DemarrerUnePartieDeChasse : UseCaseTest
 {
-    private readonly DemarrerUseCase sut;
+    private readonly DemarrerUseCase _sut;
     public DemarrerUnePartieDeChasse()
     {
-        sut = new DemarrerUseCase(Repository, () => Now);
+        _sut = new DemarrerUseCase(Repository, () => Now);
         ;
     }
 
@@ -38,13 +38,17 @@ public class DemarrerUnePartieDeChasse : UseCaseTest
 
         var terrainDeChasse = ("Pitibon sur Sauldre", 3);
 
-        var id = sut.Handle(terrainDeChasse, chasseurs);
+        var guidOrError
+            = _sut.Handle(new DemarrerRequest(terrainDeChasse, chasseurs));
+        guidOrError
+            .Should()
+            .Succeed();
 
         Repository.SavedPartieDeChasse()
             .Should()
             .BeEquivalentTo(
                 UnePartieDeChasse()
-                    .IdentifiéePar(id)
+                    .IdentifiéePar(guidOrError.Value)
                     .EnCours()
                     .Sur(UnTerrain().Nommé("Pitibon sur Sauldre").AyantGalinettes(3))
                     .Avec(
@@ -72,50 +76,63 @@ public class DemarrerUnePartieDeChasse : UseCaseTest
         => DémarrerLaPartieAvecSuccès(terrainRicheEnGalinettes, chasseursAvecDesBalles);
 
     private Property DémarrerLaPartieAvecSuccès(Terrain terrainDeChasse, GroupDeChasseurs chasseurs)
-        => (sut.Handle(terrainDeChasse, chasseurs.ToList()) == Repository.SavedPartieDeChasse().Id)
+        => (_sut.Handle(new DemarrerRequest(terrainDeChasse, chasseurs.ToList())).Value == Repository.SavedPartieDeChasse().Id)
             .Label("Démarrer la partie avec succès");
 
-    [Fact]
-    public void EchoueSansChasseurs()
+    public class Failure : UseCaseTest
     {
-        var chasseurs = new List<(string, int)>();
-        var terrainDeChasse = ("Pitibon sur Sauldre", 3);
-
-        var demarrerPartieSansChasseurs = () => sut.Handle(terrainDeChasse, chasseurs);
-
-        demarrerPartieSansChasseurs.Should().Throw<ImpossibleDeDémarrerUnePartieSansChasseur>();
-
-        Repository.SavedPartieDeChasse().Should().BeNull();
-    }
-
-    [Fact]
-    public void EchoueAvecUnTerrainSansGalinettes()
-    {
-        var chasseurs = new List<(string, int)>();
-        var terrainDeChasse = ("Pitibon sur Sauldre", 0);
-
-        var demarrerPartieSansChasseurs = () => sut.Handle(terrainDeChasse, chasseurs);
-
-        demarrerPartieSansChasseurs.Should().Throw<ImpossibleDeDémarrerUnePartieSansGalinettes>();
-
-        Repository.SavedPartieDeChasse().Should().BeNull();
-    }
-
-    [Fact]
-    public void EchoueSiChasseurSansBalle()
-    {
-        var chasseurs = new List<(string, int)>
+        private readonly DemarrerUseCase _sut;
+        public Failure()
         {
-            (Dédé, 20),
-            (Bernard, 0)
-        };
+            _sut = new DemarrerUseCase(Repository, () => Now);
+        }
 
-        var terrainDeChasse = ("Pitibon sur Sauldre", 3);
+        [Fact]
+        public void EchoueSansChasseurs()
+        {
+            var chasseurs = new List<(string, int)>();
+            var terrainDeChasse = ("Pitibon sur Sauldre", 3);
 
-        var demarrerPartieAvecChasseurSansBalle = () => sut.Handle(terrainDeChasse, chasseurs);
+            _sut.Handle(new DemarrerRequest(terrainDeChasse, chasseurs))
+                .Should()
+                .FailWith(Error.ImpossibleDeDémarrerUnePartieSansChasseurError())
+                .ExpectMessageToBe("Impossible de démarrer une partie sans chasseur");
 
-        demarrerPartieAvecChasseurSansBalle.Should().Throw<ImpossibleDeDémarrerUnePartieAvecUnChasseurSansBalle>();
+            Repository.SavedPartieDeChasse().Should().BeNull();
+        }
 
-        Repository.SavedPartieDeChasse().Should().BeNull();
+        [Fact]
+        public void EchoueAvecUnTerrainSansGalinettes()
+        {
+            var chasseurs = new List<(string, int)>();
+            var terrainDeChasse = ("Pitibon sur Sauldre", 0);
+
+            _sut.Handle(new DemarrerRequest(terrainDeChasse, chasseurs))
+                .Should()
+                .FailWith(Error.ImpossibleDeDémarrerUnePartieSansGalinettesError())
+                .ExpectMessageToBe("Impossible de démarrer une partie sans galinettes");
+
+            Repository.SavedPartieDeChasse().Should().BeNull();
+        }
+
+        [Fact]
+        public void EchoueSiChasseurSansBalle()
+        {
+            var chasseurs = new List<(string, int)>
+            {
+                (Dédé, 20),
+                (Bernard, 0)
+            };
+
+            var terrainDeChasse = ("Pitibon sur Sauldre", 3);
+
+            _sut
+                .Handle(new DemarrerRequest(terrainDeChasse, chasseurs))
+                .Should()
+                .FailWith(Error.ImpossibleDeDémarrerUnePartieAvecUnChasseurSansBalleError())
+                .ExpectMessageToBe("Impossible de démarrer une partie avec un chasseur sans balle");
+
+            Repository.SavedPartieDeChasse().Should().BeNull();
+        }
     }
 }

@@ -1,48 +1,43 @@
 ﻿using Bouchonnois.Domain;
-using Bouchonnois.UseCases.Exceptions;
+
+using CSharpFunctionalExtensions;
 
 namespace Bouchonnois.UseCases.Commands;
 
+public record DemarrerRequest((string nom, int nbGalinettes) TerrainDeChasse, List<(string nom, int nbBalles)> Chasseurs);
+
 public class DemarrerUseCase(IPartieDeChasseRepository repository, Func<DateTime> timeProvider)
 {
-    public Guid Handle((string nom, int nbGalinettes) terrainDeChasse, List<(string nom, int nbBalles)> chasseurs)
+    public Result<Guid, Error> Handle(DemarrerRequest request)
+        => TerrainDeChasseValide(request.TerrainDeChasse)
+            .Bind(terrain => DesChasseursValides(request.Chasseurs)
+                .Map(chasseurs => (terrain, chasseurs)))
+            .Ensure(result => result.chasseurs.Any(), Error.ImpossibleDeDémarrerUnePartieSansChasseurError())
+            .Bind(result => Démarrer(result.terrain, result.chasseurs));
+
+    private Result<Terrain, Error> TerrainDeChasseValide((string nom, int nbGalinettes) terrainDeChasse)
+        => terrainDeChasse.nbGalinettes <= 0
+            ? Error.ImpossibleDeDémarrerUnePartieSansGalinettesError()
+            : new Terrain(terrainDeChasse.nom, terrainDeChasse.nbGalinettes);
+
+    private static Result<List<Chasseur>, Error> DesChasseursValides(List<(string nom, int nbBalles)> chasseurs)
+        => chasseurs.Any(chasseur => chasseur.nbBalles == 0)
+            ? Error.ImpossibleDeDémarrerUnePartieAvecUnChasseurSansBalleError()
+            : chasseurs
+                .Select(chasseur => new Chasseur(chasseur.nom, chasseur.nbBalles))
+                .ToList();
+
+    private Result<Guid, Error> Démarrer(Terrain terrain, List<Chasseur> chasseurs)
     {
-        if (terrainDeChasse.nbGalinettes <= 0)
-        {
-            throw new ImpossibleDeDémarrerUnePartieSansGalinettes();
-        }
+        var partieDeChasse = new PartieDeChasse(
+            Guid.NewGuid(),
+            PartieStatus.EnCours,
+            chasseurs,
+            terrain);
 
-        var partieDeChasse = new PartieDeChasse(Guid.NewGuid(), PartieStatus.EnCours,
-            new List<Chasseur>(),
-            new Terrain(terrainDeChasse.nom, terrainDeChasse.nbGalinettes),
-            new List<Event>());
-
-        foreach (var chasseur in chasseurs)
-        {
-            if (chasseur.nbBalles == 0)
-            {
-                throw new ImpossibleDeDémarrerUnePartieAvecUnChasseurSansBalle();
-            }
-
-            partieDeChasse.Chasseurs.Add(new Chasseur(chasseur.nom, chasseur.nbBalles));
-        }
-
-        if (partieDeChasse.Chasseurs.Count == 0)
-        {
-            throw new ImpossibleDeDémarrerUnePartieSansChasseur();
-        }
-
-        var chasseursToString = string.Join(
-            ", ",
-            partieDeChasse.Chasseurs.Select(c => c.Nom + $" ({c.BallesRestantes} balles)")
-        );
-
-        partieDeChasse.Events.Add(new Event(timeProvider(),
-            $"La partie de chasse commence à {partieDeChasse.Terrain.Nom} avec {chasseursToString}")
-        );
-
+        partieDeChasse.Emet(new PartieDechasseDemarreEvent(timeProvider(), partieDeChasse));
         repository.Save(partieDeChasse);
 
-        return partieDeChasse.Id;
+        return Result.Success<Guid, Error>(partieDeChasse.Id);
     }
 }

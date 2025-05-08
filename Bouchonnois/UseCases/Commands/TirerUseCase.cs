@@ -1,62 +1,44 @@
 ﻿using Bouchonnois.Domain;
-using Bouchonnois.UseCases.Exceptions;
+using Bouchonnois.UseCases.Errors;
+
+using CSharpFunctionalExtensions;
 
 namespace Bouchonnois.UseCases.Commands;
 
 public class TirerUseCase(IPartieDeChasseRepository repository, Func<DateTime> timeProvider)
 {
+    public UnitResult<Error> Handle(Guid id, string chasseur)
+        => repository
+            .GetById(id)
+            .ToResult(UseCasesErrorMessages.LaPartieDeChasseNExistePas())
+            .Bind(partie => LaPartiePermetDeTirer(chasseur, partie))
+            .Bind(partie => PourLeTireur(chasseur, partie))
+            .Bind(context => Tire(context));
 
-    public void Handle(Guid id, string chasseur)
-    {
-        var partieDeChasse = repository.GetById(id);
+    private Result<PartieDeChasse, Error> LaPartiePermetDeTirer(string chasseur, PartieDeChasse p)
+        => p.EstEnCours(chasseur, timeProvider(), p => repository.Save(p))
+            .Map(() => p);
 
-        if (partieDeChasse == null)
-        {
-            throw new LaPartieDeChasseNexistePas();
-        }
+    private static Result<(PartieDeChasse partie, Chasseur tireur), Error> PourLeTireur(string nom, PartieDeChasse p)
+        => p.GetChasseur(nom)
+            .Map(c => (p, c));
 
-        if (partieDeChasse.Status != PartieStatus.Apéro)
-        {
-            if (partieDeChasse.Status != PartieStatus.Terminée)
+    private UnitResult<Error> Tire((PartieDeChasse partie, Chasseur tireur) context)
+        => context.tireur
+            .TireDansLeVide()
+            .Tap(() =>
             {
-                var chasseurQuiTire = partieDeChasse.Chasseurs.FirstOrDefault(c => c.Nom == chasseur);
-                if (chasseurQuiTire is not null)
-                {
-                    if (chasseurQuiTire.BallesRestantes == 0)
-                    {
-                        partieDeChasse.Events.Add(new Event(timeProvider(),
-                            $"{chasseur} tire -> T'as plus de balles mon vieux, chasse à la main"));
-                        repository.Save(partieDeChasse);
-
-                        throw new TasPlusDeBallesMonVieuxChasseALaMain();
-                    }
-
-                    partieDeChasse.Events.Add(new Event(timeProvider(), $"{chasseur} tire"));
-                    chasseurQuiTire.BallesRestantes--;
-                }
-                else
-                {
-                    throw new ChasseurInconnu(chasseur);
-                }
-            }
-            else
+                context.partie
+                    .Emet(new TireEvent(timeProvider(), context.tireur.Nom));
+            })
+            .TapError(_ =>
             {
-                partieDeChasse.Events.Add(new Event(timeProvider(),
-                    $"{chasseur} veut tirer -> On tire pas quand la partie est terminée"));
-                repository.Save(partieDeChasse);
-
-                throw new OnTirePasQuandLaPartieEstTerminée();
-            }
-        }
-        else
-        {
-            partieDeChasse.Events.Add(new Event(timeProvider(),
-                $"{chasseur} veut tirer -> On tire pas pendant l'apéro, c'est sacré !!!"));
-            repository.Save(partieDeChasse);
-
-            throw new OnTirePasPendantLapéroCestSacré();
-        }
-
-        repository.Save(partieDeChasse);
-    }
+                context.partie
+                    .Emet(new TireEchoueSansBalleEvent(timeProvider(), context.tireur.Nom));
+            })
+            .Finally(finalResult =>
+            {
+                repository.Save(context.partie);
+                return finalResult;
+            });
 }
