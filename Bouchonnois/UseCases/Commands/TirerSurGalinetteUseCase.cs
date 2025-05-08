@@ -10,7 +10,7 @@ public class TirerSurGalinetteUseCase(IPartieDeChasseRepository repository, Func
     public UnitResult<Error> Handle(Guid id, string chasseur)
         => repository
             .GetById(id)
-            .ToResult(new Error(UseCasesErrorMessages.LaPartieDeChasseNExistePas))
+            .ToResult(UseCasesErrorMessages.LaPartieDeChasseNExistePas())
             .Bind(p => p
                 .ChasseurTireSurUneGalinette(chasseur,
                     timeProvider(),

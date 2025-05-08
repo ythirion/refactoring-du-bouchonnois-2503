@@ -1,6 +1,4 @@
-﻿using Bouchonnois.Domain.Errors;
-
-using CSharpFunctionalExtensions;
+﻿using CSharpFunctionalExtensions;
 
 namespace Bouchonnois.Domain;
 
@@ -30,7 +28,7 @@ public class PartieDeChasse
 
     public Result<Chasseur, Error> GetChasseur(string chasseur)
         => _groupeDeChasseurs.GetChasseurWithName(chasseur)
-            .ToResult(new Error(DomainErrorMessages.LeChasseurNestPasDansLaPartie));
+            .ToResult(Error.LeChasseurNestPasDansLaPartieError());
 
     public bool EstSansChasseur() => _groupeDeChasseurs.Empty();
 
@@ -38,8 +36,8 @@ public class PartieDeChasse
     {
         return Status switch
         {
-            PartieStatus.Apéro => new Error(DomainErrorMessages.OnEstDéjàEnTrainDePrendreLApéro),
-            PartieStatus.Terminée => new Error(DomainErrorMessages.OnNePrendPasLApéroQuandLaPartieEstTerminée),
+            PartieStatus.Apéro => Error.OnEstDéjàEnTrainDePrendreLApéroError(),
+            PartieStatus.Terminée => Error.OnNePrendPasLApéroQuandLaPartieEstTerminéeError(),
             _ => AlApero(eventTime)
         };
 
@@ -55,8 +53,8 @@ public class PartieDeChasse
     {
         return Status switch
         {
-            PartieStatus.EnCours => new Error(DomainErrorMessages.LaPartieDeChasseEstDejaEnCours),
-            PartieStatus.Terminée => new Error(DomainErrorMessages.QuandCestFiniCestFini),
+            PartieStatus.EnCours => Error.LaPartieDeChasseEstDejaEnCoursError(),
+            PartieStatus.Terminée => Error.QuandCestFiniCestFiniError(),
             _ => Reprend(eventTime)
         };
 
@@ -73,7 +71,7 @@ public class PartieDeChasse
     {
         if (Status == PartieStatus.Terminée)
         {
-            return new Error(DomainErrorMessages.QuandCestFiniCestFini);
+            return Error.QuandCestFiniCestFiniError();
         }
 
         Status = PartieStatus.Terminée;
@@ -114,12 +112,12 @@ public class PartieDeChasse
                 Emet(new TireEchouePendantLAperoEvent(timeProvider, chasseur));
                 action(this);
 
-                return new Error(DomainErrorMessages.OnTirePasPendantLapéroCestSacré);
+                return Error.OnTirePasPendantLapéroCestSacréError();
             case PartieStatus.Terminée:
                 Emet(new TireEchoueCarPartieTerminéeEvent(timeProvider, chasseur));
                 action(this);
 
-                return new Error(DomainErrorMessages.OnTirePasQuandLaPartieEstTerminée);
+                return Error.OnTirePasQuandLaPartieEstTerminéeError();
             default:
                 return UnitResult.Success<Error>();
         }
@@ -127,7 +125,7 @@ public class PartieDeChasse
 
     private UnitResult<Error> AvecDeGalinettes()
         => Terrain.NbGalinettes == 0
-            ? new Error(DomainErrorMessages.TasTropPicoléMonVieuxTasRienTouché)
+            ? Error.TasTropPicoléMonVieuxTasRienTouchéError()
             : UnitResult.Success<Error>();
 
     public void Emet(Event @event) => Events.Add(@event);

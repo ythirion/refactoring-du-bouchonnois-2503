@@ -10,7 +10,7 @@ public class TerminerLaPartieUseCase(IPartieDeChasseRepository repository, Func<
     public Result<string, Error> Handle(Guid id)
         => repository
             .GetById(id)
-            .ToResult(new Error(UseCasesErrorMessages.LaPartieDeChasseNExistePas))
+            .ToResult(UseCasesErrorMessages.LaPartieDeChasseNExistePas())
             .Bind(p => p
                 .TerminerLaPartie(timeProvider())
                 .Tap(() => repository.Save(p)));

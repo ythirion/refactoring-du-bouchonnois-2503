@@ -1,5 +1,4 @@
 using Bouchonnois.Domain;
-using Bouchonnois.Domain.Errors;
 using Bouchonnois.Tests.UseCases.Common;
 using Bouchonnois.Tests.Verifications;
 using Bouchonnois.UseCases.Commands;
@@ -48,7 +47,7 @@ public class PrendreLApéro : UseCaseTest
             _prendereLAperoUseCase
                 .Handle(id)
                 .Should()
-                .FailWith(new Error(UseCasesErrorMessages.LaPartieDeChasseNExistePas));
+                .FailWith(UseCasesErrorMessages.LaPartieDeChasseNExistePas());
 
             Repository.SavedPartieDeChasse().Should().BeNull();
         }
@@ -61,7 +60,7 @@ public class PrendreLApéro : UseCaseTest
             _prendereLAperoUseCase
                 .Handle(id)
                 .Should()
-                .FailWith(new Error(DomainErrorMessages.OnEstDéjàEnTrainDePrendreLApéro));
+                .FailWith(Error.OnEstDéjàEnTrainDePrendreLApéroError());
 
             Repository.SavedPartieDeChasse().Should().BeNull();
         }
@@ -74,7 +73,7 @@ public class PrendreLApéro : UseCaseTest
             _prendereLAperoUseCase
                 .Handle(id)
                 .Should()
-                .FailWith(new Error(DomainErrorMessages.OnNePrendPasLApéroQuandLaPartieEstTerminée));
+                .FailWith(Error.OnNePrendPasLApéroQuandLaPartieEstTerminéeError());
 
             Repository.SavedPartieDeChasse().Should().BeNull();
         }

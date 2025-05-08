@@ -1,5 +1,4 @@
 using Bouchonnois.Domain;
-using Bouchonnois.Domain.Errors;
 using Bouchonnois.Tests.UseCases.Common;
 using Bouchonnois.Tests.Verifications;
 using Bouchonnois.UseCases.Commands;
@@ -61,7 +60,7 @@ public class TirerSurUneGalinette : UseCaseTest
             _sut
                 .Handle(id, "Bernard")
                 .Should()
-                .FailWith(new Error(UseCasesErrorMessages.LaPartieDeChasseNExistePas));
+                .FailWith(UseCasesErrorMessages.LaPartieDeChasseNExistePas());
 
             Repository.SavedPartieDeChasse()
                 .Should()
@@ -80,7 +79,7 @@ public class TirerSurUneGalinette : UseCaseTest
             _sut
                 .Handle(id, Bernard)
                 .Should()
-                .FailWith(new Error(DomainErrorMessages.TasPlusDeBallesMonVieuxChasseALaMain));
+                .FailWith(Error.TasPlusDeBallesMonVieuxChasseALaMainError());
 
             Repository.SavedPartieDeChasse()
                 .DevraitAvoirEmis(
@@ -100,7 +99,7 @@ public class TirerSurUneGalinette : UseCaseTest
             _sut
                 .Handle(id, Bernard)
                 .Should()
-                .FailWith(new Error(DomainErrorMessages.TasTropPicoléMonVieuxTasRienTouché));
+                .FailWith(Error.TasTropPicoléMonVieuxTasRienTouchéError());
 
             Repository.SavedPartieDeChasse().Should().BeNull();
         }
@@ -116,7 +115,7 @@ public class TirerSurUneGalinette : UseCaseTest
             _sut
                 .Handle(id, ChasseurInconnu)
                 .Should()
-                .FailWith(new Error(DomainErrorMessages.LeChasseurNestPasDansLaPartie));
+                .FailWith(Error.LeChasseurNestPasDansLaPartieError());
 
             Repository.SavedPartieDeChasse().Should().BeNull();
         }
@@ -132,7 +131,7 @@ public class TirerSurUneGalinette : UseCaseTest
             _sut
                 .Handle(id, ChasseurInconnu)
                 .Should()
-                .FailWith(new Error(DomainErrorMessages.OnTirePasPendantLapéroCestSacré));
+                .FailWith(Error.OnTirePasPendantLapéroCestSacréError());
 
             Repository.SavedPartieDeChasse()
                 .DevraitAvoirEmis(Now, "Chasseur inconnu veut tirer -> On tire pas pendant l'apéro, c'est sacré !!!");
@@ -146,7 +145,7 @@ public class TirerSurUneGalinette : UseCaseTest
             _sut
                 .Handle(id, "Chasseur inconnu")
                 .Should()
-                .FailWith(new Error(DomainErrorMessages.OnTirePasQuandLaPartieEstTerminée));
+                .FailWith(Error.OnTirePasQuandLaPartieEstTerminéeError());
 
             Repository.SavedPartieDeChasse()
                 .DevraitAvoirEmis(Now, "Chasseur inconnu veut tirer -> On tire pas quand la partie est terminée");

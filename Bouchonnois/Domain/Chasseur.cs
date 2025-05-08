@@ -1,5 +1,3 @@
-using Bouchonnois.Domain.Errors;
-
 using CSharpFunctionalExtensions;
 
 namespace Bouchonnois.Domain;
@@ -33,7 +31,7 @@ public class Chasseur
 
     private UnitResult<Error> ADesBalles()
         => BallesRestantes == 0
-            ? new Error(DomainErrorMessages.TasPlusDeBallesMonVieuxChasseALaMain)
+            ? Error.TasPlusDeBallesMonVieuxChasseALaMainError()
             : UnitResult.Success<Error>();
 
 }

@@ -13,7 +13,7 @@ public class ConsulterStatusUseCase(IPartieDeChasseRepository repository)
 
         if (partieDeChasse.HasNoValue)
         {
-            return new Error(UseCasesErrorMessages.LaPartieDeChasseNExistePas);
+            return UseCasesErrorMessages.LaPartieDeChasseNExistePas();
         }
 
         return string.Join(

@@ -1,5 +1,4 @@
 using Bouchonnois.Domain;
-using Bouchonnois.Domain.Errors;
 using Bouchonnois.Tests.UseCases.Common;
 using Bouchonnois.UseCases.Commands;
 
@@ -95,7 +94,7 @@ public class DemarrerUnePartieDeChasse : UseCaseTest
 
             _sut.Handle(new DemarrerRequest(terrainDeChasse, chasseurs))
                 .Should()
-                .FailWith(new Error(DomainErrorMessages.ImpossibleDeDémarrerUnePartieSansChasseur));
+                .FailWith(Error.ImpossibleDeDémarrerUnePartieSansChasseurError());
 
             Repository.SavedPartieDeChasse().Should().BeNull();
         }
@@ -108,7 +107,7 @@ public class DemarrerUnePartieDeChasse : UseCaseTest
 
             _sut.Handle(new DemarrerRequest(terrainDeChasse, chasseurs))
                 .Should()
-                .FailWith(new Error(DomainErrorMessages.ImpossibleDeDémarrerUnePartieSansGalinettes));
+                .FailWith(Error.ImpossibleDeDémarrerUnePartieSansGalinettesError());
 
             Repository.SavedPartieDeChasse().Should().BeNull();
         }
@@ -127,7 +126,7 @@ public class DemarrerUnePartieDeChasse : UseCaseTest
             _sut
                 .Handle(new DemarrerRequest(terrainDeChasse, chasseurs))
                 .Should()
-                .FailWith(new Error(DomainErrorMessages.ImpossibleDeDémarrerUnePartieAvecUnChasseurSansBalle));
+                .FailWith(Error.ImpossibleDeDémarrerUnePartieAvecUnChasseurSansBalleError());
 
             Repository.SavedPartieDeChasse().Should().BeNull();
         }

@@ -1,5 +1,4 @@
 using Bouchonnois.Domain;
-using Bouchonnois.Domain.Errors;
 using Bouchonnois.Tests.UseCases.Common;
 using Bouchonnois.Tests.Verifications;
 using Bouchonnois.UseCases.Commands;
@@ -41,7 +40,7 @@ public class ReprendreLaPartieDeChasse : UseCaseTest
 
             var result = _reprendreLaPartieUseCase.Handle(id);
 
-            result.Should().FailWith(new Error(UseCasesErrorMessages.LaPartieDeChasseNExistePas));
+            result.Should().FailWith(UseCasesErrorMessages.LaPartieDeChasseNExistePas());
 
             Repository.SavedPartieDeChasse().Should().BeNull();
         }
@@ -53,7 +52,7 @@ public class ReprendreLaPartieDeChasse : UseCaseTest
 
             var result = _reprendreLaPartieUseCase.Handle(id);
 
-            result.Should().FailWith(new Error(DomainErrorMessages.LaPartieDeChasseEstDejaEnCours));
+            result.Should().FailWith(Error.LaPartieDeChasseEstDejaEnCoursError());
 
             Repository.SavedPartieDeChasse().Should().BeNull();
         }
@@ -65,7 +64,7 @@ public class ReprendreLaPartieDeChasse : UseCaseTest
 
             var result = _reprendreLaPartieUseCase.Handle(id);
 
-            result.Should().FailWith(new Error(DomainErrorMessages.QuandCestFiniCestFini));
+            result.Should().FailWith(Error.QuandCestFiniCestFiniError());
 
             Repository.SavedPartieDeChasse().Should().BeNull();
         }

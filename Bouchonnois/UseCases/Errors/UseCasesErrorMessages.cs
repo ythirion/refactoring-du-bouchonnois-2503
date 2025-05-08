@@ -1,6 +1,8 @@
-﻿namespace Bouchonnois.UseCases.Errors;
+﻿using Bouchonnois.Domain;
+
+namespace Bouchonnois.UseCases.Errors;
 
 public static class UseCasesErrorMessages
 {
-    public const string LaPartieDeChasseNExistePas = "La partie de chasse n'existe pas";
+    public static Error LaPartieDeChasseNExistePas() => new("La partie de chasse n'existe pas");
 }

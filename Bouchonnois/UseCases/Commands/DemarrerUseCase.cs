@@ -1,5 +1,4 @@
 ﻿using Bouchonnois.Domain;
-using Bouchonnois.Domain.Errors;
 
 using CSharpFunctionalExtensions;
 
@@ -10,13 +9,23 @@ public record DemarrerRequest((string nom, int nbGalinettes) TerrainDeChasse, Li
 public class DemarrerUseCase(IPartieDeChasseRepository repository, Func<DateTime> timeProvider)
 {
     public Result<Guid, Error> Handle(DemarrerRequest request)
-    {
-        var terrainDeChasse = new Terrain(request.TerrainDeChasse.nom, request.TerrainDeChasse.nbGalinettes);
+        => TerrainDeChasseValide(request.TerrainDeChasse)
+            .Bind(terrain => DesChasseursValides(request.Chasseurs)
+                .Map(chasseurs => (terrain, chasseurs)))
+            .Ensure(result => result.chasseurs.Any(), Error.ImpossibleDeDémarrerUnePartieSansChasseurError())
+            .Bind(result => Démarrer(result.terrain, result.chasseurs));
 
-        return AvecDesGalinettes(terrainDeChasse)
-            .Bind(() => PourLesChasseurs(request.Chasseurs))
-            .Bind(chasseurs => Démarrer(terrainDeChasse, chasseurs));
-    }
+    private Result<Terrain, Error> TerrainDeChasseValide((string nom, int nbGalinettes) terrainDeChasse)
+        => terrainDeChasse.nbGalinettes <= 0
+            ? Error.ImpossibleDeDémarrerUnePartieSansGalinettesError()
+            : new Terrain(terrainDeChasse.nom, terrainDeChasse.nbGalinettes);
+
+    private static Result<List<Chasseur>, Error> DesChasseursValides(List<(string nom, int nbBalles)> chasseurs)
+        => chasseurs.Any(chasseur => chasseur.nbBalles == 0)
+            ? Error.ImpossibleDeDémarrerUnePartieAvecUnChasseurSansBalleError()
+            : chasseurs
+                .Select(chasseur => new Chasseur(chasseur.nom, chasseur.nbBalles))
+                .ToList();
 
     private Result<Guid, Error> Démarrer(Terrain terrain, List<Chasseur> chasseurs)
     {
@@ -26,26 +35,9 @@ public class DemarrerUseCase(IPartieDeChasseRepository repository, Func<DateTime
             chasseurs,
             terrain);
 
-        if (partieDeChasse.EstSansChasseur())
-        {
-            return new Error(DomainErrorMessages.ImpossibleDeDémarrerUnePartieSansChasseur);
-        }
-
         partieDeChasse.Emet(new PartieDechasseDemarreEvent(timeProvider(), partieDeChasse));
         repository.Save(partieDeChasse);
 
         return Result.Success<Guid, Error>(partieDeChasse.Id);
     }
-
-    private static UnitResult<Error> AvecDesGalinettes(Terrain terrainDeChasse)
-        => terrainDeChasse.NbGalinettes <= 0
-            ? new Error(DomainErrorMessages.ImpossibleDeDémarrerUnePartieSansGalinettes)
-            : UnitResult.Success<Error>();
-
-    private static Result<List<Chasseur>, Error> PourLesChasseurs(List<(string nom, int nbBalles)> chasseurs)
-        => chasseurs.Any(chasseur => chasseur.nbBalles == 0)
-            ? new Error(DomainErrorMessages.ImpossibleDeDémarrerUnePartieAvecUnChasseurSansBalle)
-            : chasseurs
-                .Select(chasseur => new Chasseur(chasseur.nom, chasseur.nbBalles))
-                .ToList();
 }

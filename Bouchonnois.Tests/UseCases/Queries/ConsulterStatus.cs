@@ -114,7 +114,7 @@ public class ConsulterStatus : UseCaseTest
 
             _sut.Handle(id)
                 .Should()
-                .FailWith(new Error(UseCasesErrorMessages.LaPartieDeChasseNExistePas));
+                .FailWith(UseCasesErrorMessages.LaPartieDeChasseNExistePas());
 
             Repository
                 .SavedPartieDeChasse()

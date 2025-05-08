@@ -1,5 +1,3 @@
-using Bouchonnois.Domain.Errors;
-
 using CSharpFunctionalExtensions;
 
 namespace Bouchonnois.Domain;
@@ -20,7 +18,7 @@ public class Terrain
     {
         if (NbGalinettes <= 0)
         {
-            return new Error(DomainErrorMessages.IlNyAPlusDeGalinettesSurCeTerrain);
+            return Error.IlNyAPlusDeGalinettesSurCeTerrainError();
         }
 
         NbGalinettes--;

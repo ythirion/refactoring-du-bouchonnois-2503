@@ -1,6 +1,7 @@
 ﻿using Bouchonnois.Domain;
-using Bouchonnois.Domain.Errors;
 using Bouchonnois.Tests.Builders;
+
+namespace Bouchonnois.Tests.Domain;
 
 public class TerrainTests
 {
@@ -25,6 +26,6 @@ public class TerrainTests
 
         terrain.UneGalinetteEnMoins()
             .Should()
-            .FailWith(new Error(DomainErrorMessages.IlNyAPlusDeGalinettesSurCeTerrain));
+            .FailWith(Error.IlNyAPlusDeGalinettesSurCeTerrainError());
     }
 }

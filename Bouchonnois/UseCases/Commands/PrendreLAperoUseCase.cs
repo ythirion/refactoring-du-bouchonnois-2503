@@ -10,7 +10,7 @@ public class PrendreLAperoUseCase(IPartieDeChasseRepository repository, Func<Dat
     public UnitResult<Error> Handle(Guid id)
         => repository
             .GetById(id)
-            .ToResult(new Error(UseCasesErrorMessages.LaPartieDeChasseNExistePas))
+            .ToResult(UseCasesErrorMessages.LaPartieDeChasseNExistePas())
             .Bind(p => p.PasserAlApéro(timeProvider()).Map(() => p))
             .Tap(p => repository.Save(p));
 }

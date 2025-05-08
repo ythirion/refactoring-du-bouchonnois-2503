@@ -10,7 +10,7 @@ public class TirerUseCase(IPartieDeChasseRepository repository, Func<DateTime> t
     public UnitResult<Error> Handle(Guid id, string chasseur)
         => repository
             .GetById(id)
-            .ToResult(new Error(UseCasesErrorMessages.LaPartieDeChasseNExistePas))
+            .ToResult(UseCasesErrorMessages.LaPartieDeChasseNExistePas())
             .Bind(partie => LaPartiePermetDeTirer(chasseur, partie))
             .Bind(partie => PourLeTireur(chasseur, partie))
             .Bind(context => Tire(context));

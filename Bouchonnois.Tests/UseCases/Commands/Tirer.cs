@@ -1,5 +1,4 @@
 using Bouchonnois.Domain;
-using Bouchonnois.Domain.Errors;
 using Bouchonnois.Tests.UseCases.Common;
 using Bouchonnois.Tests.Verifications;
 using Bouchonnois.UseCases.Commands;
@@ -58,7 +57,7 @@ public class Tirer : UseCaseTest
             _tirerUseCase
                 .Handle(id, Bernard)
                 .Should()
-                .FailWith(new Error(UseCasesErrorMessages.LaPartieDeChasseNExistePas));
+                .FailWith(UseCasesErrorMessages.LaPartieDeChasseNExistePas());
 
             Repository.SavedPartieDeChasse().Should().BeNull();
         }
@@ -74,7 +73,7 @@ public class Tirer : UseCaseTest
             _tirerUseCase
                 .Handle(id, Bernard)
                 .Should()
-                .FailWith(new Error(DomainErrorMessages.TasPlusDeBallesMonVieuxChasseALaMain));
+                .FailWith(Error.TasPlusDeBallesMonVieuxChasseALaMainError());
 
             Repository.SavedPartieDeChasse()
                 .DevraitAvoirEmis(Now, "Bernard tire -> T'as plus de balles mon vieux, chasse à la main");
@@ -88,7 +87,7 @@ public class Tirer : UseCaseTest
             _tirerUseCase
                 .Handle(id, ChasseurInconnu)
                 .Should()
-                .FailWith(new Error(DomainErrorMessages.LeChasseurNestPasDansLaPartie));
+                .FailWith(Error.LeChasseurNestPasDansLaPartieError());
 
             Repository.SavedPartieDeChasse().Should().BeNull();
         }
@@ -101,7 +100,7 @@ public class Tirer : UseCaseTest
             _tirerUseCase
                 .Handle(id, ChasseurInconnu)
                 .Should()
-                .FailWith(new Error(DomainErrorMessages.OnTirePasPendantLapéroCestSacré));
+                .FailWith(Error.OnTirePasPendantLapéroCestSacréError());
 
             Repository.SavedPartieDeChasse()
                 .DevraitAvoirEmis(Now, "Chasseur inconnu veut tirer -> On tire pas pendant l'apéro, c'est sacré !!!");
@@ -114,7 +113,7 @@ public class Tirer : UseCaseTest
 
             _tirerUseCase.Handle(id, ChasseurInconnu)
                 .Should()
-                .FailWith(new Error(DomainErrorMessages.OnTirePasQuandLaPartieEstTerminée));
+                .FailWith(Error.OnTirePasQuandLaPartieEstTerminéeError());
 
             Repository.SavedPartieDeChasse()
                 .DevraitAvoirEmis(Now, "Chasseur inconnu veut tirer -> On tire pas quand la partie est terminée");
