@@ -10,14 +10,12 @@ public class PartieDeChasse
     public PartieDeChasse(Guid id,
         PartieStatus status,
         List<Chasseur>? getChasseurs,
-        Terrain terrain,
-        List<Event> events)
+        Terrain terrain)
     {
         Id = id;
         Status = status;
         _groupeDeChasseurs = new GroupeDeChasseurs(getChasseurs);
         Terrain = terrain;
-        Events = events;
     }
 
     public Guid Id { get; }
@@ -26,11 +24,10 @@ public class PartieDeChasse
 
     public PartieStatus Status { get; private set; }
 
-    public List<Event> Events { get; }
+    public List<Event> Events { get; } = [];
 
     internal string Chasseurs() => _groupeDeChasseurs.ChasseursToString();
 
-    public void AddChasseur(Chasseur chasseur) => _groupeDeChasseurs.Add(chasseur);
     public Result<Chasseur, Error> GetChasseur(string chasseur)
         => _groupeDeChasseurs.GetChasseurWithName(chasseur)
             .ToResult(new Error(DomainErrorMessages.LeChasseurNestPasDansLaPartie));
@@ -49,7 +46,7 @@ public class PartieDeChasse
         UnitResult<Error> AlApero(DateTime now)
         {
             Status = PartieStatus.Apéro;
-            Events.Add(new Event(now, "Petit apéro"));
+            Emet(new PetitAperoEvent(now));
 
             return UnitResult.Success<Error>();
         }
@@ -66,11 +63,12 @@ public class PartieDeChasse
         UnitResult<Error> Reprend(DateTime now)
         {
             Status = PartieStatus.EnCours;
-            Events.Add(new Event(now, "Reprise de la chasse"));
+            Emet(new RepriseDeLaChasseEvent(now));
 
             return UnitResult.Success<Error>();
         }
     }
+
     public Result<string, Error> TerminerLaPartie(DateTime eventTime)
     {
         if (Status == PartieStatus.Terminée)
@@ -82,36 +80,29 @@ public class PartieDeChasse
 
         return _groupeDeChasseurs
             .GetVainqueurs()
-            .TapError(brocouille => Events.Add(new Event(eventTime, brocouille.EventMessage())))
-            .Tap(vainqueurs => Events.Add(new Event(eventTime, vainqueurs.EventMessage())))
+            .TapError(brocouille => Emet(new TermineBrocouilleEvent(eventTime)))
+            .Tap(vainqueurs => Emet(new TermineAvecDesVainqueursEvent(eventTime, vainqueurs)))
             .Finally(result => result.IsSuccess
                 ? result.Value.VainqueursNames()
                 : result.Error.ToString());
     }
 
-    public UnitResult<Error> ChasseurTireSurUneGalinette(string chasseur, DateTime timeProvider, Action<PartieDeChasse> action)
+    public UnitResult<Error> ChasseurTireSurUneGalinette(string nom, DateTime timeProvider, Action<PartieDeChasse> action)
         => AvecDeGalinettes()
-            .Ensure(() => EstEnCours(chasseur, timeProvider, action))
-            .Bind(() =>
-                GetChasseur(chasseur)
-                    .Bind(chasseurQuiTire =>
-                        chasseurQuiTire
-                            .TireSurUneGalinette()
-                            .Tap(() =>
-                            {
-                                Terrain
-                                    .UneGalinetteEnMoins()
-                                    .Tap(() => Events.Add(new Event(timeProvider, $"{chasseur} tire sur une galinette")));
-                            })
-                            .TapError(_ =>
-                            {
-                                Events.Add(new Event(timeProvider,
-                                    $"{chasseur} veut tirer sur une galinette -> T'as plus de balles mon vieux, chasse à la main"));
-                                action(this);
-                            })
-                    )
-            );
+            .Ensure(() => EstEnCours(nom, timeProvider, action))
+            .Bind(() => GetChasseur(nom))
+            .Bind(chasseur => TireSurLaGalinette(nom, timeProvider, action, chasseur));
 
+    private UnitResult<Error> TireSurLaGalinette(string nom, DateTime timeProvider, Action<PartieDeChasse> action, Chasseur chasseur)
+        => chasseur
+            .TireSurUneGalinette()
+            .Tap(() => Terrain.UneGalinetteEnMoins())
+            .Tap(() => { Emet(new TireSurUneGalinetteEvent(timeProvider, nom)); })
+            .TapError(_ =>
+            {
+                Emet(new TireSurUneGalinetteEchoueSansBalleEvent(timeProvider, nom));
+                action(this);
+            });
 
     public UnitResult<Error> EstEnCours(string chasseur,
         DateTime timeProvider,
@@ -120,18 +111,12 @@ public class PartieDeChasse
         switch (Status)
         {
             case PartieStatus.Apéro:
-                Events.Add(
-                    new Event(
-                        timeProvider,
-                        $"{chasseur} veut tirer -> On tire pas pendant l'apéro, c'est sacré !!!"));
+                Emet(new TireEchouePendantLAperoEvent(timeProvider, chasseur));
                 action(this);
 
                 return new Error(DomainErrorMessages.OnTirePasPendantLapéroCestSacré);
             case PartieStatus.Terminée:
-                Events.Add(
-                    new Event(
-                        timeProvider,
-                        $"{chasseur} veut tirer -> On tire pas quand la partie est terminée"));
+                Emet(new TireEchoueCarPartieTerminéeEvent(timeProvider, chasseur));
                 action(this);
 
                 return new Error(DomainErrorMessages.OnTirePasQuandLaPartieEstTerminée);
@@ -144,10 +129,6 @@ public class PartieDeChasse
         => Terrain.NbGalinettes == 0
             ? new Error(DomainErrorMessages.TasTropPicoléMonVieuxTasRienTouché)
             : UnitResult.Success<Error>();
-}
 
-public static class PartieDeChasseExtensions
-{
-    public static string EventMessage(this PartieDeChasse partieDeChasse)
-        => $"La partie de chasse commence à {partieDeChasse.Terrain.Nom} avec {partieDeChasse.Chasseurs()}";
+    public void Emet(Event @event) => Events.Add(@event);
 }

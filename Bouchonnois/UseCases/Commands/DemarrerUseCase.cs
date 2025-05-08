@@ -23,25 +23,18 @@ public class DemarrerUseCase(IPartieDeChasseRepository repository, Func<DateTime
             }
         }
 
-        var partieDeChasse = new PartieDeChasse(Guid.NewGuid(), PartieStatus.EnCours,
-            new List<Chasseur>(),
-            new Terrain(terrainDeChasse.nom, terrainDeChasse.nbGalinettes),
-            new List<Event>());
-
-        foreach (var chasseur in chasseurs)
-        {
-            partieDeChasse.AddChasseur(new Chasseur(chasseur.nom, chasseur.nbBalles));
-        }
+        var partieDeChasse = new PartieDeChasse(
+            Guid.NewGuid(),
+            PartieStatus.EnCours,
+            chasseurs.Select(chasseur => new Chasseur(chasseur.nom, chasseur.nbBalles)).ToList(),
+            new Terrain(terrainDeChasse.nom, terrainDeChasse.nbGalinettes));
 
         if (partieDeChasse.EstSansChasseur())
         {
             return new Error(DomainErrorMessages.ImpossibleDeDémarrerUnePartieSansChasseur);
         }
 
-        partieDeChasse
-            .Events
-            .Add(new Event(timeProvider(), partieDeChasse.EventMessage()));
-
+        partieDeChasse.Emet(new PartieDechasseDemarreEvent(timeProvider(), partieDeChasse));
         repository.Save(partieDeChasse);
 
         return partieDeChasse.Id;

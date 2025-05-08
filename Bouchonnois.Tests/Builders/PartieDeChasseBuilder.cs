@@ -73,10 +73,15 @@ public class PartieDeChasseBuilder
     }
 
     public PartieDeChasse Build()
-        => new(
+    {
+        var partie = new PartieDeChasse(
             _id,
             getChasseurs: _chasseurs,
             terrain: _terrainBuilder.Build(),
-            status: _status,
-            events: _events);
+            status: _status);
+
+        _events.ForEach(@event => partie.Events.Add(@event));
+
+        return partie;
+    }
 }

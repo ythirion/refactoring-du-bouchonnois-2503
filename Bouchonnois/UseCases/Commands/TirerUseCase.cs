@@ -27,14 +27,13 @@ public class TirerUseCase(IPartieDeChasseRepository repository, Func<DateTime> t
         => context.tireur.TireDansLeVide()
             .Tap(() =>
             {
-                context.partie.Events.Add(
-                    new Event(timeProvider(), $"{context.tireur.Nom} tire"));
+                context.partie
+                    .Emet(new TireEvent(timeProvider(), context.tireur.Nom));
             })
             .TapError(_ =>
             {
-                context.partie.Events.Add(
-                    new Event(timeProvider(),
-                        $"{context.tireur.Nom} tire -> T'as plus de balles mon vieux, chasse à la main"));
+                context.partie
+                    .Emet(new TireEchoueSansBalleEvent(timeProvider(), context.tireur.Nom));
             })
             .Finally(finalResult =>
             {
